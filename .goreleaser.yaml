@@ -1,0 +1,90 @@
+version: 2
+
+project_name: rift
+
+before:
+  hooks:
+    # optional: you can add go mod tidy, tests, etc. here if you want
+    - go mod tidy
+
+builds:
+  - id: rift
+    main: ./main.go
+    binary: rift
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
+    ldflags:
+      - -s -w # strip debug symbols (smaller binary)
+      - -X github.com/gohyuhan/rift/constant.APPVERSION=v{{.Version}}
+
+archives:
+  - id: rift-archives
+    format_overrides:
+      - goos: windows
+        formats: ["zip"]
+    files:
+      - LICENSE*
+      - README.md
+    name_template: >-
+      {{- .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}
+
+snapshot:
+  version_template: "v{{ .Version }}-SNAPSHOT"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "(?i)^docs:?"
+      - "(?i)^test:?"
+      - "(?i)^ci:?"
+      - "(?i)^chore:?"
+      - "(?i)Merge pull request"
+      - "(?i)Merge branch"
+      - "(?i)^Revert"
+      - "(?i)^release:?"
+  groups:
+    # 1. Features
+    # Display Order: 0 (Top)
+    - title: "🚀 Features"
+      regexp: "(?i)^(feature|feat|new|add|impl)(\\(.*\\))?!?:"
+      order: 0
+
+    # 2. Optimization
+    # Display Order: 1
+    - title: "♻️ Optimization"
+      regexp: "(?i)^(refactor|opt|perf|style|performance)(\\(.*\\))?!?:"
+      order: 1
+
+    # 3. Bug Fixes
+    # Display Order: 2
+    - title: "🐛 Bug Fixes"
+      regexp: "(?i)^(fix|hotfix|bug|fixes|hotfixes)(\\(.*\\))?!?:"
+      order: 2
+
+    # 4. Others
+    # Display Order: 3
+    # Logic: Catch-all for anything else.
+    - title: "Others"
+      regexp: ".*"
+      order: 3
+
+release:
+  github:
+    owner: gohyuhan
+    name: rift
+  mode: append
+  draft: false
+  prerelease: auto
+  extra_files:
+    - glob: ./install.sh
+    - glob: ./install.ps1

@@ -1,0 +1,224 @@
+name: Release & Publish to Homebrew + Scoop
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+      - "v*.*.*-*"
+
+permissions:
+  contents: write      # for GitHub Release + uploading assets
+  packages: write      # optional, for GitHub Packages
+  pull-requests: write # optional
+
+jobs:
+  release-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      # ── 1. Checkout the actual project (with full history & tags) ─────────────────────
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      # ── 2. Set up Go ─────────────────────────────────────────────────────────────────────
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      # ── 3. Run GoReleaser (creates release + artifacts + checksums.txt) ───────────────
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "~> v2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # ── 4. Extract SHA256 checksums ────────────────────────────────────────────────────
+      - name: Extract checksums
+        id: checksums
+        run: |
+          cd dist
+          DARWIN_AMD64=$(grep darwin-amd64 checksums.txt | awk '{print $1}')
+          DARWIN_ARM64=$(grep darwin-arm64 checksums.txt | awk '{print $1}')
+          LINUX_AMD64=$(grep linux-amd64 checksums.txt | awk '{print $1}')
+          LINUX_ARM64=$(grep linux-arm64 checksums.txt | awk '{print $1}')
+          WIN_AMD64=$(grep windows-amd64 checksums.txt | awk '{print $1}')
+          WIN_ARM64=$(grep windows-arm64 checksums.txt | awk '{print $1}')
+
+          echo "darwin_amd64=$DARWIN_AMD64" >> $GITHUB_OUTPUT
+          echo "darwin_arm64=$DARWIN_ARM64" >> $GITHUB_OUTPUT
+          echo "linux_amd64=$LINUX_AMD64" >> $GITHUB_OUTPUT
+          echo "linux_arm64=$LINUX_ARM64" >> $GITHUB_OUTPUT
+          echo "win_amd64=$WIN_AMD64" >> $GITHUB_OUTPUT
+          echo "win_arm64=$WIN_ARM64" >> $GITHUB_OUTPUT
+
+      # ── 5. Update Homebrew tap (gohyuhan/homebrew-rift) ─────────────────────────────────
+      - name: Checkout Homebrew tap
+        uses: actions/checkout@v4
+        with:
+          repository: gohyuhan/homebrew-rift
+          token: ${{ secrets.RIFT_PAT }}
+          path: homebrew-tap
+
+      - name: Generate Homebrew formula (Formula/rift.rb at repo root)
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION_CLEAN=${VERSION#v}
+          mkdir -p homebrew-tap/Formula
+
+          # Versioned formula: rift@<VERSION_CLEAN>.rb
+          cat > homebrew-tap/Formula/rift@${VERSION_CLEAN}.rb <<EOF
+          class RiftAT${VERSION_CLEAN//./} < Formula
+            desc "A cli tool to simplify path navigation (v${VERSION_CLEAN})"
+            homepage "https://github.com/gohyuhan/rift"
+            license "MIT"
+
+            on_arm do
+              url "https://github.com/gohyuhan/rift/releases/download/${VERSION}/rift-${VERSION}-darwin-arm64.tar.gz"
+              sha256 "${{ steps.checksums.outputs.darwin_arm64 }}"
+            end
+
+            on_intel do
+              url "https://github.com/gohyuhan/rift/releases/download/${VERSION}/rift-${VERSION}-darwin-amd64.tar.gz"
+              sha256 "${{ steps.checksums.outputs.darwin_amd64 }}"
+            end
+
+            version "${VERSION_CLEAN}"
+
+            def install
+              bin.install "rift"
+            end
+
+            test do
+              system "#{bin}/rift", "--version"
+            end
+          end
+          EOF
+
+          # latest version
+          cat > homebrew-tap/Formula/rift.rb <<EOF
+          class Rift < Formula
+            desc "A cli tool to simplify path navigation"
+            homepage "https://github.com/gohyuhan/rift"
+            license "MIT"
+
+            on_arm do
+              url "https://github.com/gohyuhan/rift/releases/download/${VERSION}/rift-${VERSION}-darwin-arm64.tar.gz"
+              sha256 "${{ steps.checksums.outputs.darwin_arm64 }}"
+            end
+
+            on_intel do
+              url "https://github.com/gohyuhan/rift/releases/download/${VERSION}/rift-${VERSION}-darwin-amd64.tar.gz"
+              sha256 "${{ steps.checksums.outputs.darwin_amd64 }}"
+            end
+
+            version "${VERSION_CLEAN}"
+
+            def install
+              bin.install "rift"
+            end
+
+            test do
+              system "#{bin}/rift", "--version"
+            end
+          end
+          EOF
+
+      - name: Commit & push Homebrew formula
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION_CLEAN=${VERSION#v}
+          cd homebrew-tap
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/rift.rb Formula/rift@${VERSION_CLEAN}.rb
+          git commit -m "rift: update to ${VERSION}" || echo "No changes to commit"
+          git push origin main
+
+      # ── 6. Update Scoop bucket (gohyuhan/scoop-rift) ─────────────────────────────────────
+      - name: Checkout Scoop bucket
+        uses: actions/checkout@v4
+        with:
+          repository: gohyuhan/scoop-rift
+          token: ${{ secrets.RIFT_PAT }}
+          path: scoop-bucket
+
+      - name: Generate Scoop manifest (bucket/rift.json at repo root)
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION_CLEAN=${VERSION#v}
+          mkdir -p scoop-bucket/bucket
+
+          # Versioned manifest
+          cat > scoop-bucket/bucket/rift@${VERSION_CLEAN}.json <<EOF
+          {
+            "version": "$VERSION_CLEAN",
+            "description": "A cli tool to simplify path navigation (v${VERSION_CLEAN})",
+            "homepage": "https://github.com/gohyuhan/rift",
+            "license": "MIT",
+            "architecture": {
+              "64bit": {
+                "url": "https://github.com/gohyuhan/rift/releases/download/${VERSION}/rift-${VERSION}-windows-amd64.zip",
+                "hash": "${{ steps.checksums.outputs.win_amd64 }}"
+              },
+              "arm64": {
+                "url": "https://github.com/gohyuhan/rift/releases/download/${VERSION}/rift-${VERSION}-windows-arm64.zip",
+                "hash": "${{ steps.checksums.outputs.win_arm64 }}"
+              }
+            },
+            "bin": "rift.exe"
+          }
+          EOF
+
+          # latest manifest
+          cat > scoop-bucket/bucket/rift.json <<EOF
+          {
+            "version": "$VERSION_CLEAN",
+            "description": "A cli tool to simplify path navigation",
+            "homepage": "https://github.com/gohyuhan/rift",
+            "license": "MIT",
+            "architecture": {
+              "64bit": {
+                "url": "https://github.com/gohyuhan/rift/releases/download/${VERSION}/rift-${VERSION}-windows-amd64.zip",
+                "hash": "${{ steps.checksums.outputs.win_amd64 }}"
+              },
+              "arm64": {
+                "url": "https://github.com/gohyuhan/rift/releases/download/${VERSION}/rift-${VERSION}-windows-arm64.zip",
+                "hash": "${{ steps.checksums.outputs.win_arm64 }}"
+              }
+            },
+            "bin": "rift.exe",
+            "checkver": "github",
+            "autoupdate": {
+              "architecture": {
+                "64bit": {
+                  "url": "https://github.com/gohyuhan/rift/releases/download/v\$version/rift-v\$version-windows-amd64.zip"
+                },
+                "arm64": {
+                  "url": "https://github.com/gohyuhan/rift/releases/download/v\$version/rift-v\$version-windows-arm64.zip"
+                }
+              }
+            }
+          }
+          EOF
+
+      - name: Commit & push Scoop manifest
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION_CLEAN=${VERSION#v}
+          cd scoop-bucket
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add bucket/rift.json bucket/rift@${VERSION_CLEAN}.json
+          git commit -m "rift: update to ${VERSION}" || echo "No changes to commit"
+          git push origin main
+
+      # ── 7. Cleanup temporary checkouts ───────────────────────────────────────────────────
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -rf homebrew-tap scoop-bucket
