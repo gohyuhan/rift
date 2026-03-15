@@ -1,0 +1,486 @@
+package updater
+
+import (
+	"archive/tar"
+	"archive/zip"
+	"compress/gzip"
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"runtime"
+	"strings"
+	"time"
+
+	"github.com/gohyuhan/rift/constant"
+	"github.com/gohyuhan/rift/i18n"
+	"github.com/gohyuhan/rift/logger"
+	"github.com/gohyuhan/rift/settings"
+	"github.com/gohyuhan/rift/style"
+
+	"golang.org/x/mod/semver"
+)
+
+const RiftRepoUrl = "https://api.github.com/repos/gohyuhan/rift/releases/latest"
+
+// ----------------------------------
+//
+//	CheckForUpdates checks if a new version is available
+//
+// ----------------------------------
+func CheckForUpdates() (string, bool, error) {
+	// Use GitHub API to fetch the latest release information
+	client := &http.Client{Timeout: 10 * time.Second}
+	req, err := http.NewRequest("GET", RiftRepoUrl, nil)
+	if err != nil {
+		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToCreateRequest, err)
+	}
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToFetchRelease, err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterDownloadUnexpectedStatusCode, resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToReadResponse, err)
+	}
+
+	var release struct {
+		TagName string `json:"tag_name"`
+	}
+	if err := json.Unmarshal(body, &release); err != nil {
+		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToParseJSON, err)
+	}
+
+	currentVersion := constant.APPVERSION
+	latestVersion := release.TagName
+	isNewer := compareVersions(currentVersion, latestVersion)
+	// Update the last fetch time after a successful update check
+	SaveUpdateInfo()
+	return latestVersion, isNewer, nil
+}
+
+// ----------------------------------
+//
+//	compareVersions compares two version strings to determine if the latest is newer
+//
+// ----------------------------------
+func compareVersions(current, latest string) bool {
+	// Add 'v' prefix if missing (common for GitHub tags)
+	if !strings.HasPrefix(current, "v") {
+		current = "v" + current
+	}
+	if !strings.HasPrefix(latest, "v") {
+		latest = "v" + latest
+	}
+
+	// Validate both
+	if !semver.IsValid(current) || !semver.IsValid(latest) {
+		return false // or handle error as needed
+	}
+
+	return semver.Compare(latest, current) > 0 // true if latest > current
+}
+
+// ----------------------------------
+//
+//	ShouldCheckForUpdate determines if an update check is due based on last fetch time
+//
+// ----------------------------------
+func ShouldCheckForUpdate() bool {
+	lastFetchTime := LoadLastFetchTime()
+
+	sevenDaysAgo := time.Now().UTC().AddDate(0, 0, -7)
+	return lastFetchTime.Before(sevenDaysAgo) || lastFetchTime.IsZero()
+}
+
+// ----------------------------------
+//
+//	LoadUpdateInfo reads the last fetch time from the settings file
+//
+// ----------------------------------
+func LoadLastFetchTime() time.Time {
+	return settings.RIFTSETTINGS.LastUpdateCheckTime
+}
+
+// ----------------------------------
+//
+//	SaveUpdateInfo saves the current time as the last fetch time
+//
+// ----------------------------------
+func SaveUpdateInfo() {
+	settings.UpdateLastFetchTime()
+}
+
+// ----------------------------------
+//
+//	PromptUserForUpdate prompts the user to download the latest version
+//
+// ----------------------------------
+func PromptUserForUpdate(latestVersion string) bool {
+	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadPrompt, latestVersion), style.ColorCyanSoft, false)})
+	var response string
+	fmt.Scanln(&response)
+	return response == "y" || response == "Y"
+}
+
+// ----------------------------------
+//
+//	Update handles the download and replacement of the current TUI application with the latest version
+//
+// ----------------------------------
+func Update() {
+	// Fetch the latest version information
+	latestVersion, isNewer, err := CheckForUpdates()
+	if err != nil {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterFailToCheckForUpdate, err), style.ColorError, false)})
+		os.Exit(1)
+	}
+
+	if !isNewer {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterAlreadyLatest, constant.APPVERSION), style.ColorGreenSoft, false)})
+		os.Exit(0)
+	}
+
+	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloading, latestVersion), style.ColorCyanSoft, false)})
+	// Determine the correct binary URL based on OS and architecture
+	osName := runtime.GOOS
+	arch := runtime.GOARCH
+	binaryURL := getBinaryURL(osName, arch, latestVersion)
+	if binaryURL == "" {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterUnSupportedOS, osName, arch), style.ColorError, false)})
+		os.Exit(1)
+	}
+
+	// Download the archive
+	archivePath, err := downloadBinary(binaryURL)
+	if err != nil {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadFail, err), style.ColorError, false)})
+		os.Exit(1)
+	}
+	defer os.Remove(archivePath) // Clean up archive file
+
+	// Extract the binary
+	binaryPath, err := extractBinary(archivePath, binaryURL)
+	if err != nil {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterFailToExtractBinary, err), style.ColorError, false)})
+		os.Exit(1)
+	}
+	defer os.Remove(binaryPath)
+
+	// Replace the current binary with the extracted one
+	err = replaceBinary(binaryPath)
+	if err != nil {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterBinaryReplaceFail, err), style.ColorError, false)})
+		os.Exit(1)
+	}
+
+	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadSuccess, latestVersion), style.ColorGreenSoft, false)})
+
+	os.Exit(0)
+}
+
+// ----------------------------------
+//
+//	getBinaryURL constructs the URL for the binary based on OS, architecture, and version
+//
+// ----------------------------------
+func getBinaryURL(osName, arch, version string) string {
+	// Map of OS and architecture to binary suffix
+	binarySuffixes := map[string]map[string]string{
+		"darwin": {
+			"amd64": "rift-%s-darwin-amd64.tar.gz",
+			"arm64": "rift-%s-darwin-arm64.tar.gz",
+		},
+		"linux": {
+			"amd64": "rift-%s-linux-amd64.tar.gz",
+			"arm64": "rift-%s-linux-arm64.tar.gz",
+		},
+		"windows": {
+			"amd64": "rift-%s-windows-amd64.zip",
+			"arm64": "rift-%s-windows-arm64.zip",
+		},
+	}
+
+	if osMap, ok := binarySuffixes[osName]; ok {
+		if suffix, ok := osMap[arch]; ok {
+			fileName := fmt.Sprintf(suffix, version)
+			return fmt.Sprintf("https://github.com/gohyuhan/rift/releases/download/%s/%s", version, fileName)
+		}
+	}
+	return ""
+}
+
+// ----------------------------------
+//
+//	downloadBinary downloads the binary from the specified URL to a temporary file
+//
+// ----------------------------------
+func downloadBinary(url string) (string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterDownloadUnexpectedStatusCode, resp.StatusCode)
+	}
+
+	tempFile, err := os.CreateTemp("", "rift-update-*.tmp")
+	if err != nil {
+		return "", err
+	}
+	defer tempFile.Close()
+
+	_, err = io.Copy(tempFile, resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return tempFile.Name(), nil
+}
+
+// ----------------------------------
+//
+//	replaceBinary replaces the current executable with the downloaded binary
+//
+// ----------------------------------
+func replaceBinary(tempFile string) error {
+	// Get the path of the current executable
+	execPath, err := os.Executable()
+	if err != nil {
+		return err
+	}
+
+	// Handle different OS behaviors
+	if runtime.GOOS == "windows" {
+		return replaceBinaryWindows(tempFile, execPath)
+	}
+
+	// Unix-like systems (Linux, macOS)
+	return replaceBinaryUnix(tempFile, execPath)
+}
+
+// ----------------------------------
+//
+//	replaceBinaryWindows handles binary replacement on Windows
+//
+// ----------------------------------
+func replaceBinaryWindows(tempFile, execPath string) error {
+	// On Windows, we can't replace a running executable, so rename the old one and move the new one
+	backupPath := execPath + ".old"
+	err := os.Rename(execPath, backupPath)
+	if err != nil {
+		return err
+	}
+	err = os.Rename(tempFile, execPath)
+	if err != nil {
+		// Try to restore the original if rename fails
+		os.Rename(backupPath, execPath)
+		return err
+	}
+	os.Remove(backupPath) // Clean up backup if successful
+	return nil
+}
+
+// ----------------------------------
+//
+//	replaceBinaryUnix handles binary replacement on Unix-like systems with automatic sudo fallback
+//
+// ----------------------------------
+func replaceBinaryUnix(tempFile, execPath string) error {
+	// First, try to replace the binary directly (works for user-owned binaries)
+	err := os.Rename(tempFile, execPath)
+	if err == nil {
+		// Successfully replaced, set executable permissions
+		return os.Chmod(execPath, 0755)
+	}
+
+	// If we got a permission error, try using sudo
+	if os.IsPermission(err) {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(i18n.LANGUAGEMAPPING.UpdaterRequiresSudo, style.ColorYellowWarm, false)})
+		return replaceBinaryWithSudo(tempFile, execPath)
+	}
+
+	return err
+}
+
+// ----------------------------------
+//
+//	replaceBinaryWithSudo uses sudo to replace the binary when permission is denied
+//
+// ----------------------------------
+func replaceBinaryWithSudo(tempFile, execPath string) error {
+	// Import needed for running commands
+	// Note: We're using os/exec which needs to be imported at the top
+
+	// Copy the temp file to a predictable location that sudo can access
+	sudoTempPath := "/tmp/rift-update.tmp"
+
+	// Copy tempFile to sudoTempPath
+	srcFile, err := os.Open(tempFile)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+
+	dstFile, err := os.Create(sudoTempPath)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+
+	_, err = io.Copy(dstFile, srcFile)
+	if err != nil {
+		return err
+	}
+	dstFile.Close()
+
+	// Set executable permissions on the temp file
+	if err := os.Chmod(sudoTempPath, 0755); err != nil {
+		return err
+	}
+
+	// Use sudo to move the file and set permissions
+	// We need to import os/exec for this
+	cmd := fmt.Sprintf("sudo mv %s %s && sudo chmod 755 %s", sudoTempPath, execPath, execPath)
+
+	// Execute the command using sh -c to handle the command chain
+	return runCommand("sh", "-c", cmd)
+}
+
+// ----------------------------------
+//
+//	runCommand executes a command and waits for it to complete
+//
+// ----------------------------------
+func runCommand(name string, args ...string) error {
+	cmd := exec.Command(name, args...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
+// ----------------------------------
+//
+//	extractBinary extracts the binary from the archive based on the URL extension
+//
+// ----------------------------------
+func extractBinary(archivePath, url string) (string, error) {
+	if strings.HasSuffix(url, ".zip") {
+		return extractZip(archivePath)
+	} else if strings.HasSuffix(url, ".tar.gz") {
+		return extractTarGz(archivePath)
+	}
+	return "", fmt.Errorf("%s", i18n.LANGUAGEMAPPING.UpdaterUnsupportedArchiveFormat)
+}
+
+// ----------------------------------
+//
+//	extractZip extracts the binary from a zip archive
+//
+// ----------------------------------
+func extractZip(archivePath string) (string, error) {
+	r, err := zip.OpenReader(archivePath)
+	if err != nil {
+		return "", err
+	}
+	defer r.Close()
+
+	for _, f := range r.File {
+		if isBinaryFile(f.Name) {
+			rc, err := f.Open()
+			if err != nil {
+				return "", err
+			}
+			defer rc.Close()
+			return saveTempBinary(rc)
+		}
+	}
+	return "", fmt.Errorf("%s", i18n.LANGUAGEMAPPING.UpdaterBinaryNotFoundInArchive)
+}
+
+// ----------------------------------
+//
+//	extractTarGz extracts the binary from a tar.gz archive
+//
+// ----------------------------------
+func extractTarGz(archivePath string) (string, error) {
+	f, err := os.Open(archivePath)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	gzr, err := gzip.NewReader(f)
+	if err != nil {
+		return "", err
+	}
+	defer gzr.Close()
+
+	tr := tar.NewReader(gzr)
+
+	for {
+		header, err := tr.Next()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return "", err
+		}
+
+		if header.Typeflag == tar.TypeReg && isBinaryFile(header.Name) {
+			return saveTempBinary(tr)
+		}
+	}
+	return "", fmt.Errorf("%s", i18n.LANGUAGEMAPPING.UpdaterBinaryNotFoundInArchive)
+}
+
+// ----------------------------------
+//
+//	isBinaryFile checks if the file name matches the expected binary name
+//
+// ----------------------------------
+func isBinaryFile(name string) bool {
+	base := filepath.Base(name)
+	return base == "rift" || base == "rift.exe"
+}
+
+// ----------------------------------
+//
+//	saveTempBinary saves the content from the reader to a temporary file
+//
+// ----------------------------------
+func saveTempBinary(r io.Reader) (string, error) {
+	tempFile, err := os.CreateTemp("", "rift-binary-*.tmp")
+	if err != nil {
+		return "", err
+	}
+	defer tempFile.Close()
+
+	_, err = io.Copy(tempFile, r)
+	if err != nil {
+		return "", err
+	}
+
+	// Make it executable on Unix-like systems
+	if runtime.GOOS != "windows" {
+		if err := os.Chmod(tempFile.Name(), 0755); err != nil {
+			return "", err
+		}
+	}
+
+	return tempFile.Name(), nil
+}

@@ -1,27 +1,22 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-
-	"github.com/gohyuhan/rift/internal/shell"
+	"github.com/gohyuhan/rift/api"
+	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
 )
 
-var awakenCmd = &cobra.Command{
-	Use:   "awaken",
-	Short: "Awaken rift within your shell",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		if !shell.BinaryInPath() {
-			fmt.Fprintln(os.Stderr, "rift: warning: rift binary not found in PATH — make sure it is installed before awakening")
-		}
+const awakenKeyword = "awaken"
 
-		sh := shell.Detect()
-		fmt.Fprintf(os.Stderr, "rift: detected shell: %s\n", sh)
-		return shell.Install(sh)
-	},
+var awakenCmd = &cobra.Command{
+	Use:  awakenKeyword,
+	RunE: api.RiftAwakenFunc,
 }
 
 func init() {
 	rootCmd.AddCommand(awakenCmd)
+}
+
+func initAwakenI18n() {
+	awakenCmd.Short = i18n.LANGUAGEMAPPING.RiftAwakenDescription
 }

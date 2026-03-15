@@ -12,7 +12,7 @@ rift uses [Cobra](https://github.com/spf13/cobra) as its CLI framework. Cobra mo
 main.go
   └── cmd.Execute()          ← single entry point, always called on root
 
-rootCmd                      ← rift [nickname] / rift --memorize <nickname>
+rootCmd                      ← rift [checkpoint name] / rift --memorize <checkpoint name>
   └── awakenCmd              ← rift awaken
 ```
 
@@ -26,8 +26,8 @@ Adding a new subcommand means creating a new file in `cmd/`, defining the comman
 
 | Input | Behaviour |
 |---|---|
-| `rift <nickname>` | look up path, print `cd <path>` to stdout for shell eval |
-| `rift --memorize <nickname>` | save current directory under the nickname |
+| `rift <checkpoint name>` | look up path, print `cd <path>` to stdout for shell eval |
+| `rift --memorize <checkpoint name>` | save current directory under the checkpoint name |
 | `rift` (no args, no flag) | print help |
 
 ## File structure
@@ -49,11 +49,11 @@ Go allows multiple `init()` functions across files in the same package, so each 
 ```go
 // cmd/remove.go
 var removeCmd = &cobra.Command{
-    Use:   "remove <nickname>",
-    Short: "Remove a saved nickname",
+    Use:   "remove <checkpoint name>",
+    Short: "Remove a saved checkpoint name",
     Args:  cobra.ExactArgs(1),
     RunE: func(cmd *cobra.Command, args []string) error {
-        // args[0] is the nickname
+        // args[0] is the checkpoint name
         return nil
     },
 }
@@ -100,7 +100,7 @@ package cmd
 var forceRemove bool
 
 var removeCmd = &cobra.Command{
-    Use:  "remove <nickname>",
+    Use:  "remove <checkpoint name>",
     Args: cobra.ExactArgs(1),
     RunE: func(cmd *cobra.Command, args []string) error {
         // forceRemove is already populated by cobra via BoolVarP binding
@@ -145,7 +145,7 @@ This gives you full control over the relationship without the symmetric constrai
 
 ## Stdout discipline
 
-Because `rift <nickname>` emits a raw `cd <path>` to stdout for the shell wrapper to `eval`, all other output — help text, error messages, subcommand output — must go to stderr.
+Because `rift <checkpoint name>` emits a raw `cd <path>` to stdout for the shell wrapper to `eval`, all other output — help text, error messages, subcommand output — must go to stderr.
 
 This is enforced at the root level:
 

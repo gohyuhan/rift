@@ -1,7 +1,9 @@
 package constant
 
 const (
-	APPNAME = "rift"
+	APPNAME         = "rift"
+	APPDBNAME       = "rift.db"
+	APPSETTINGSNAME = "rift_settings.json"
 )
 
 // this will be injected during build

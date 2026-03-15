@@ -4,17 +4,19 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/gohyuhan/rift/i18n"
+	"github.com/gohyuhan/rift/logger"
+	"github.com/gohyuhan/rift/style"
 	"github.com/spf13/cobra"
 )
 
 var memorize string
 
 var rootCmd = &cobra.Command{
-	Use:   "rift [nickname]",
-	Short: "Navigate to saved paths by nickname",
-	Args:  cobra.MaximumNArgs(1),
+	Use:  "rift [checkpoint name]",
+	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		// --memorize <nickname>: save current directory
+		// --memorize <checkpoint name>: save current directory
 		if memorize != "" {
 			cwd, err := os.Getwd()
 			if err != nil {
@@ -22,11 +24,11 @@ var rootCmd = &cobra.Command{
 			}
 			// TODO: store.Set(memorize, cwd)
 			_ = cwd
-			fmt.Fprintf(os.Stderr, "rift: saved %q -> %s\n", memorize, cwd)
+			logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSavedCheckpoint, memorize, cwd), style.ColorGreenSoft, false)})
 			return nil
 		}
 
-		// rift <nickname>: emit cd command for the shell wrapper to eval
+		// rift <checkpoint name>: emit cd command for the shell wrapper to eval
 		if len(args) == 0 {
 			return cmd.Help()
 		}
@@ -34,7 +36,7 @@ var rootCmd = &cobra.Command{
 		// TODO: path, err := store.Get(args[0])
 		path := ""
 		if path == "" {
-			fmt.Fprintf(os.Stderr, "rift: unknown nickname %q\n", args[0])
+			logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftUnknownCheckpoint, args[0]), style.ColorError, false)})
 			os.Exit(1)
 		}
 
@@ -45,14 +47,20 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.Flags().StringVar(&memorize, "memorize", "", "save current directory under this nickname")
+	rootCmd.Flags().StringVar(&memorize, "memorize", "", "save current directory under this checkpoint name")
 	// Redirect all cobra output (help, usage, errors) to stderr so the shell
 	// wrapper never tries to eval anything other than an intentional cd command.
 	rootCmd.SetOut(os.Stderr)
 	rootCmd.SetErr(os.Stderr)
 }
 
+func InitCmdI18n() {
+	rootCmd.Short = i18n.LANGUAGEMAPPING.RiftDescription
+	initAwakenI18n()
+}
+
 func Execute() {
+	InitCmdI18n()
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}

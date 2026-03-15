@@ -1,0 +1,57 @@
+package i18n
+
+var zH_HANT = LanguageMapping{
+	// General
+	ConfigPathError:          "設定路徑無效，[ERROR: %s]",
+	RiftReservedKeywordError: "`%s` 是 rift 的保留關鍵字",
+	RiftDetectedShell:        "rift：偵測到的 Shell：%s",
+
+	// Settings related
+	SettingsPathError:  "無法存取設定目錄，[ERROR: %s]",
+	SettingsReadError:  "讀取設定檔失敗，[ERROR: %s]",
+	SettingsParseError: "解析設定檔失敗，已重置為預設值，[ERROR: %s]",
+	SettingsWriteError: "寫入設定檔失敗，[ERROR: %s]",
+
+	// DB related
+	DBPathError:                   "無法存取資料庫目錄，[ERROR: %s]",
+	DBSetupError:                  "資料庫初始化失敗，[ERROR: %s]",
+	DBOpenError:                   "資料庫開啟失敗，請確認是否已初始化，執行 `rift awaken` 進行初始化",
+	SettingsBucketNotFoundError:   "在資料庫中找不到設定儲存區，請重新執行 `rift awaken`",
+	CheckpointBucketNotFoundError: "在資料庫中找不到檢查點儲存區，請重新執行 `rift awaken`",
+
+	// Updater related
+	UpdaterDownloadPrompt:               "發現新版本 %s，是否立即下載？(y/n): ",
+	UpdaterFailToCheckForUpdate:         "檢查更新失敗：%v",
+	UpdaterFailToCreateRequest:          "無法建立請求：%v",
+	UpdaterFailToFetchRelease:           "無法取得最新版本資訊：%v",
+	UpdaterFailToReadResponse:           "無法讀取回應內容：%v",
+	UpdaterFailToParseJSON:              "無法解析 JSON 回應：%v",
+	UpdaterFailToExtractBinary:          "無法解壓縮執行檔：%v",
+	UpdaterUnsupportedArchiveFormat:     "不支援的壓縮格式",
+	UpdaterBinaryNotFoundInArchive:      "在壓縮檔中找不到執行檔",
+	UpdaterAlreadyLatest:                "您已是最新版本（%s）",
+	UpdaterDownloading:                  "正在下載版本 %s...",
+	UpdaterUnSupportedOS:                "不支援的作業系統/架構：%s/%s",
+	UpdaterDownloadFail:                 "下載更新失敗：%v",
+	UpdaterBinaryReplaceFail:            "替換執行檔失敗：%v",
+	UpdaterDownloadSuccess:              "成功更新至版本 %s",
+	UpdaterDownloadUnexpectedStatusCode: "非預期的狀態碼：%d",
+	UpdaterRequiresSudo:                 "權限不足，嘗試以 sudo 重試...",
+
+	// Shell related
+	ShellCMDNotSupported:  "Windows 命令提示字元不支援 Shell 函式。\n請改用 PowerShell、Git Bash 或 WSL，然後重新執行 `rift awaken`。",
+	ShellUnsupported:      "rift 不支援 Shell %q。\n支援的 Shell：bash、zsh、fish、ksh、PowerShell。\n您可以手動新增整合 — 請參閱 docs/shell-integration.md",
+	ShellNoConfigFile:     "Shell %q 沒有已知的設定檔",
+	ShellAlreadyInstalled: "rift：Shell 整合已存在於 %s",
+	ShellInstallSuccess:   "rift：Shell 整合已新增至 %s",
+	ShellInstallReload:    "rift：請重新啟動 Shell 或執行：%s",
+	BinaryNotInPath:       "rift：在 PATH 中找不到執行檔 — 請將 rift 加入 PATH 以便在此工作階段後繼續使用",
+
+	// cmd description
+	RiftDescription:       "透過您預先定義的檢查點名稱輕鬆導航路徑",
+	RiftAwakenDescription: "在您的 Shell 中喚醒 rift【首次使用前請執行此指令進行設定與初始化】",
+
+	// cmd root
+	RiftSavedCheckpoint:   "rift：已儲存 %q -> %s",
+	RiftUnknownCheckpoint: "rift：未知的檢查點名稱 %q",
+}

@@ -7,6 +7,10 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+
+	"github.com/gohyuhan/rift/i18n"
+	"github.com/gohyuhan/rift/logger"
+	"github.com/gohyuhan/rift/style"
 )
 
 type Shell string
@@ -92,7 +96,7 @@ func ConfigFile(sh Shell) (string, error) {
 		return powerShellProfile(home), nil
 
 	default:
-		return "", fmt.Errorf("shell %q does not have a known config file", sh)
+		return "", fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellNoConfigFile, sh), style.ColorError, false))
 	}
 }
 
@@ -188,17 +192,9 @@ func IsInstalled(configFile string) (bool, error) {
 func Install(sh Shell) error {
 	switch sh {
 	case CMD:
-		return fmt.Errorf(
-			"Windows Command Prompt does not support shell functions.\n" +
-				"Please use PowerShell, Git Bash, or WSL instead, then re-run `rift awaken`.",
-		)
+		return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ShellCMDNotSupported, style.ColorError, false))
 	case Unsupported:
-		return fmt.Errorf(
-			"shell %q is not supported by rift.\n"+
-				"Supported shells: bash, zsh, fish, ksh, PowerShell.\n"+
-				"You can add the integration manually — see docs/shell-integration.md",
-			os.Getenv("SHELL"),
-		)
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellUnsupported, os.Getenv("SHELL")), style.ColorError, false))
 	}
 
 	cfgFile, err := ConfigFile(sh)
@@ -216,7 +212,7 @@ func Install(sh Shell) error {
 		return err
 	}
 	if installed {
-		fmt.Fprintf(os.Stderr, "rift: shell integration already present in %s\n", cfgFile)
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellAlreadyInstalled, cfgFile), style.ColorGreenSoft, false)})
 		return nil
 	}
 
@@ -230,8 +226,8 @@ func Install(sh Shell) error {
 		return err
 	}
 
-	fmt.Fprintf(os.Stderr, "rift: shell integration added to %s\n", cfgFile)
-	fmt.Fprintf(os.Stderr, "rift: restart your shell or run:  %s\n", reloadHint(sh, cfgFile))
+	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallSuccess, cfgFile), style.ColorGreenSoft, false)})
+	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallReload, reloadHint(sh, cfgFile)), style.ColorCyanSoft, false)})
 	return nil
 }
 
