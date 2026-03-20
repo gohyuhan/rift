@@ -5,6 +5,7 @@ var zH_HANT = LanguageMapping{
 	ConfigPathError:          "設定路徑無效，[ERROR: %s]",
 	RiftReservedKeywordError: "`%s` 是 rift 的保留關鍵字",
 	RiftDetectedShell:        "rift：偵測到的 Shell：%s",
+	CWDIsNotDirError:         "目前工作目錄不是一個有效的目錄",
 
 	// Settings related
 	SettingsPathError:  "無法存取設定目錄，[ERROR: %s]",
@@ -48,12 +49,14 @@ var zH_HANT = LanguageMapping{
 	BinaryNotInPath:       "rift：在 PATH 中找不到執行檔 — 請將 rift 加入 PATH 以便在此工作階段後繼續使用",
 
 	// cmd description
-	RiftDescription:       "透過您預先定義的檢查點名稱輕鬆導航路徑",
-	RiftAwakenDescription: "在您的 Shell 中喚醒 rift【首次使用前請執行此指令進行設定與初始化】",
+	RiftDescription:         "透過您預先定義的檢查點名稱輕鬆導航路徑",
+	RiftAwakenDescription:   "在您的 Shell 中喚醒 rift【首次使用前請執行此指令進行設定與初始化】",
+	RiftDiscoverDescription: "為目前工作目錄指定一個航點名稱",
 
-	// cmd root
-	RiftSavedWaypoint:   "rift：已儲存 %q -> %s",
-	RiftUnknownWaypoint: "rift：未知的航點名稱 %q",
+	// Waypoint related
+	RiftSavedWaypoint:              "rift：已儲存 %q -> %s",
+	RiftUnknownWaypoint:            "rift：未知的航點名稱 %q",
+	RiftWaypointAlreadyExistsError: "航點 %q 已存在，指向 %s",
 
 	// Setup related
 	CheckAndRunSetupError: "rift：設定失敗，[ERROR: %s]",

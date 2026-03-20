@@ -5,6 +5,7 @@ var eN = LanguageMapping{
 	ConfigPathError:          "Invalid configuration path, [ERROR: %s]",
 	RiftReservedKeywordError: "`%s` is a reserved keyword for rift",
 	RiftDetectedShell:        "rift: detected shell: %s",
+	CWDIsNotDirError:         "Current working directory is not a valid directory",
 
 	// Settings related
 	SettingsPathError:  "Failed to access settings directory, [ERROR: %s]",
@@ -48,12 +49,14 @@ var eN = LanguageMapping{
 	BinaryNotInPath:       "rift: binary not found in PATH — add rift to your PATH to use it after this session",
 
 	// cmd description
-	RiftDescription:       "Navigate path easily by your predefined waypoint name",
-	RiftAwakenDescription: "Awaken rift within your shell [setup and initialize for the first time for using rift]",
+	RiftDescription:         "Navigate path easily by your predefined waypoint name",
+	RiftAwakenDescription:   "Awaken rift within your shell [setup and initialize for the first time for using rift]",
+	RiftDiscoverDescription: "Assign a waypoint name to the current working directory",
 
-	// cmd root
-	RiftSavedWaypoint:   "rift: saved %q -> %s",
-	RiftUnknownWaypoint: "rift: unknown waypoint name %q",
+	// Waypoint related
+	RiftSavedWaypoint:              "rift: saved %q -> %s",
+	RiftUnknownWaypoint:            "rift: unknown waypoint name %q",
+	RiftWaypointAlreadyExistsError: "Waypoint %q already exists, pointing to %s",
 
 	// Setup related
 	CheckAndRunSetupError: "rift: setup failed, [ERROR: %s]",

@@ -66,3 +66,34 @@ func GetRiftSettingsFilePath() (string, error) {
 	settingsPath := filepath.Join(settingsDirPath, constant.APPSETTINGSNAME)
 	return settingsPath, nil
 }
+
+func GetCWD() (string, error) {
+	cwd, err := os.Getwd()
+	if err != nil {
+		return "", err
+	}
+	return cwd, nil
+}
+
+func CheckIsDir(path string) (bool, error) {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false, err
+	}
+
+	if info.IsDir() {
+		return true, nil
+	}
+	return false, nil
+}
+
+func CheckIsPathExist(path string) (bool, error) {
+	_, pathErr := os.Stat(path)
+	if pathErr == nil {
+		return true, nil
+	}
+	if os.IsNotExist(pathErr) {
+		return false, nil
+	}
+	return false, pathErr
+}

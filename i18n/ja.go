@@ -5,6 +5,7 @@ var jA = LanguageMapping{
 	ConfigPathError:          "設定パスが無効です、[ERROR: %s]",
 	RiftReservedKeywordError: "`%s` は rift の予約済みキーワードです",
 	RiftDetectedShell:        "rift：検出されたシェル：%s",
+	CWDIsNotDirError:         "現在の作業ディレクトリは有効なディレクトリではありません",
 
 	// Settings related
 	SettingsPathError:  "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
@@ -48,12 +49,14 @@ var jA = LanguageMapping{
 	BinaryNotInPath:       "rift：PATH にバイナリが見つかりません — このセッション後も使用するには rift を PATH に追加してください",
 
 	// cmd description
-	RiftDescription:       "事前に定義したチェックポイント名でパスを簡単に移動できます",
-	RiftAwakenDescription: "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
+	RiftDescription:         "事前に定義したチェックポイント名でパスを簡単に移動できます",
+	RiftAwakenDescription:   "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
+	RiftDiscoverDescription: "現在の作業ディレクトリにウェイポイント名を割り当てます",
 
-	// cmd root
-	RiftSavedWaypoint:   "rift：%q -> %s を保存しました",
-	RiftUnknownWaypoint: "rift：不明なウェイポイント名 %q",
+	// Waypoint related
+	RiftSavedWaypoint:              "rift：%q -> %s を保存しました",
+	RiftUnknownWaypoint:            "rift：不明なウェイポイント名 %q",
+	RiftWaypointAlreadyExistsError: "ウェイポイント %q は既に存在し、%s を指しています",
 
 	// Setup related
 	CheckAndRunSetupError: "rift：セットアップに失敗しました、[ERROR: %s]",

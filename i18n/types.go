@@ -11,6 +11,7 @@ type LanguageMapping struct {
 	ConfigPathError          string
 	RiftReservedKeywordError string
 	RiftDetectedShell        string
+	CWDIsNotDirError         string
 
 	// Settings related
 	SettingsPathError  string
@@ -54,12 +55,14 @@ type LanguageMapping struct {
 	BinaryNotInPath       string
 
 	// cmd description
-	RiftDescription       string
-	RiftAwakenDescription string
+	RiftDescription         string
+	RiftAwakenDescription   string
+	RiftDiscoverDescription string
 
-	// cmd root
-	RiftSavedWaypoint   string
-	RiftUnknownWaypoint string
+	// Waypoint related
+	RiftSavedWaypoint              string
+	RiftUnknownWaypoint            string
+	RiftWaypointAlreadyExistsError string
 
 	// Setup related
 	CheckAndRunSetupError string
