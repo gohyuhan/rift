@@ -52,7 +52,7 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 // ----------------------------------
 func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error) {
 	retrievedPath := ""
-	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
+	viewErr := bboltDb.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.WaypointBucket)
 		if bucket == nil {
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
@@ -67,6 +67,10 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 		existingWaypoint := &pb.Waypoint{}
 		protoErr := proto.Unmarshal(existing, existingWaypoint)
 		if protoErr != nil {
+			waypointCorruptedBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
+			if waypointCorruptedBucket != nil {
+				waypointCorruptedBucket.Put([]byte(waypointName), []byte(waypointName))
+			}
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
 		}
 

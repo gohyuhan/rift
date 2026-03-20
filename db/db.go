@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	SettingsBucket = []byte("rift-settings")
-	WaypointBucket = []byte("rift-waypoint")
+	WaypointBucket                    = []byte("rift-waypoint")
+	WaypointDataCorruptedBucketRecord = []byte("rift-waypoint-data-corrupted")
 )
 
 // ----------------------------------
@@ -29,7 +29,7 @@ func SetupDB() error {
 		return dbPathErr
 	}
 
-	if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
+	if err := os.MkdirAll(filepath.Dir(dbPath), 0o755); err != nil {
 		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.DBSetupError, err.Error()), style.ColorError, false)
 		return fmt.Errorf("%s", errorMessage)
 	}
@@ -55,10 +55,10 @@ func SetupDB() error {
 // ----------------------------------
 func SetupBuckets(db *bbolt.DB) error {
 	return db.Update(func(tx *bbolt.Tx) error {
-		if _, err := tx.CreateBucketIfNotExists(SettingsBucket); err != nil {
+		if _, err := tx.CreateBucketIfNotExists(WaypointBucket); err != nil {
 			return err
 		}
-		if _, err := tx.CreateBucketIfNotExists(WaypointBucket); err != nil {
+		if _, err := tx.CreateBucketIfNotExists(WaypointDataCorruptedBucketRecord); err != nil {
 			return err
 		}
 		return nil
@@ -76,7 +76,7 @@ func OpenDB() (*bbolt.DB, error) {
 	if dbPathErr != nil {
 		return nil, dbPathErr
 	}
-	db, err := bbolt.Open(dbPath, 0600, &bbolt.Options{Timeout: 2 * time.Second})
+	db, err := bbolt.Open(dbPath, 0o600, &bbolt.Options{Timeout: 2 * time.Second})
 	if err != nil {
 		errorMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.DBOpenError, style.ColorError, false)
 		return nil, fmt.Errorf("%s", errorMessage)
