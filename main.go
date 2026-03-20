@@ -32,8 +32,8 @@ func main() {
 	}
 	cARErr := api.CheckAndRunSetup()
 	if cARErr != nil {
-		errMsg := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.CheckAndRunSetupError, cARErr.Error()), style.ColorError, false)
-		logger.LOGGER.LogToTerminal([]string{errMsg})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.CheckAndRunSetupError, cARErr.Error()), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 	}
 	cmd.Execute()
 }

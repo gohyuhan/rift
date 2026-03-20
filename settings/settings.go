@@ -56,16 +56,16 @@ func InitOrReadSettings() {
 
 	data, err := os.ReadFile(settingsPath)
 	if err != nil {
-		errMsg := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsReadError, err.Error()), style.ColorError, false)
-		logger.LOGGER.LogToTerminal([]string{errMsg})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsReadError, err.Error()), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		writeDefaultSettings(settingsPath)
 		return
 	}
 
 	var settings RiftSettings
 	if err := json.Unmarshal(data, &settings); err != nil {
-		errMsg := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsParseError, err.Error()), style.ColorError, false)
-		logger.LOGGER.LogToTerminal([]string{errMsg})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsParseError, err.Error()), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		writeDefaultSettings(settingsPath)
 		return
 	}
@@ -143,8 +143,8 @@ func UpdateLastFetchTime() {
 func saveSettings(settingsPath string, settings RiftSettings) {
 	file, err := os.Create(settingsPath)
 	if err != nil {
-		errMsg := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsWriteError, err.Error()), style.ColorError, false)
-		logger.LOGGER.LogToTerminal([]string{errMsg})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsWriteError, err.Error()), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		return
 	}
 	defer file.Close()
@@ -171,7 +171,8 @@ func writeDefaultSettings(settingsPath string) {
 func UpdateLanguageCode(languageCode string) {
 	langCode := strings.ToUpper(languageCode)
 	if !slices.Contains(i18n.SUPPORTED_LANGUAGE_CODE, langCode) {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsLanguageNotSupported, langCode, strings.Join(i18n.SUPPORTED_LANGUAGE_CODE, ", ")), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsLanguageNotSupported, langCode, strings.Join(i18n.SUPPORTED_LANGUAGE_CODE, ", ")), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		return
 	}
 	RIFTSETTINGS.LanguageCode = langCode
@@ -180,9 +181,11 @@ func UpdateLanguageCode(languageCode string) {
 		saveSettings(settingsPath, *RIFTSETTINGS)
 		// update the current language mapping
 		i18n.InitRiftLanguageMapping(RIFTSETTINGS.LanguageCode)
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsLanguageUpdated, langCode), style.ColorGreenSoft, false)})
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsLanguageUpdated, langCode), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 	} else {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 	}
 }
 
@@ -209,9 +212,11 @@ func UpdateDownloadPreRelease(downloadPreRelease bool) {
 	settingsPath, err := utils.GetRiftSettingsFilePath()
 	if err == nil {
 		saveSettings(settingsPath, *RIFTSETTINGS)
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsDownloadPreReleaseUpdated, downloadPreRelease), style.ColorGreenSoft, false)})
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsDownloadPreReleaseUpdated, downloadPreRelease), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 	} else {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 	}
 }
 
@@ -225,8 +230,10 @@ func UpdateAutoUpdate(autoUpdate bool) {
 	settingsPath, err := utils.GetRiftSettingsFilePath()
 	if err == nil {
 		saveSettings(settingsPath, *RIFTSETTINGS)
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsAutoUpdateUpdated, autoUpdate), style.ColorGreenSoft, false)})
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsAutoUpdateUpdated, autoUpdate), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 	} else {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 	}
 }

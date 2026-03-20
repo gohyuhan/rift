@@ -212,7 +212,8 @@ func Install(sh Shell) error {
 		return err
 	}
 	if installed {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellAlreadyInstalled, cfgFile), style.ColorGreenSoft, false)})
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellAlreadyInstalled, cfgFile), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 		return nil
 	}
 
@@ -226,8 +227,10 @@ func Install(sh Shell) error {
 		return err
 	}
 
-	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallSuccess, cfgFile), style.ColorGreenSoft, false)})
-	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallReload, reloadHint(sh, cfgFile)), style.ColorCyanSoft, false)})
+	message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallSuccess, cfgFile), style.ColorGreenSoft, false)
+	logger.LOGGER.LogToTerminal([]string{message})
+	message = style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallReload, reloadHint(sh, cfgFile)), style.ColorCyanSoft, false)
+	logger.LOGGER.LogToTerminal([]string{message})
 	return nil
 }
 

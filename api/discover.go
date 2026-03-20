@@ -58,8 +58,8 @@ var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
 		return saveWaypointErr
 	}
 
-	successMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSavedWaypoint, waypointName, cwd), style.ColorGreenSoft, false)
-	logger.LOGGER.LogToTerminal([]string{successMessage})
+	message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSavedWaypoint, waypointName, cwd), style.ColorGreenSoft, false)
+	logger.LOGGER.LogToTerminal([]string{message})
 
 	return nil
 }

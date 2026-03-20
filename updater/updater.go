@@ -24,8 +24,10 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-const RiftRepoLatestUrl = "https://api.github.com/repos/gohyuhan/rift/releases/latest"
-const RiftRepoAllReleasesUrl = "https://api.github.com/repos/gohyuhan/rift/releases"
+const (
+	RiftRepoLatestUrl      = "https://api.github.com/repos/gohyuhan/rift/releases/latest"
+	RiftRepoAllReleasesUrl = "https://api.github.com/repos/gohyuhan/rift/releases"
+)
 
 // ----------------------------------
 //
@@ -190,7 +192,8 @@ func SaveUpdateInfo() {
 //
 // ----------------------------------
 func PromptUserForUpdate(latestVersion string) bool {
-	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadPrompt, latestVersion), style.ColorCyanSoft, false)})
+	message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadPrompt, latestVersion), style.ColorCyanSoft, false)
+	logger.LOGGER.LogToTerminal([]string{message})
 	var response string
 	fmt.Scanln(&response)
 	return response == "y" || response == "Y"
@@ -205,29 +208,34 @@ func Update() {
 	// Fetch the latest version information
 	latestVersion, isNewer, err := CheckForUpdates()
 	if err != nil {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterFailToCheckForUpdate, err), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterFailToCheckForUpdate, err), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		os.Exit(1)
 	}
 
 	if !isNewer {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterAlreadyLatest, constant.APPVERSION), style.ColorGreenSoft, false)})
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterAlreadyLatest, constant.APPVERSION), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 		os.Exit(0)
 	}
 
-	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloading, latestVersion), style.ColorCyanSoft, false)})
+	message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloading, latestVersion), style.ColorCyanSoft, false)
+	logger.LOGGER.LogToTerminal([]string{message})
 	// Determine the correct binary URL based on OS and architecture
 	osName := runtime.GOOS
 	arch := runtime.GOARCH
 	binaryURL := getBinaryURL(osName, arch, latestVersion)
 	if binaryURL == "" {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterUnSupportedOS, osName, arch), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterUnSupportedOS, osName, arch), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		os.Exit(1)
 	}
 
 	// Download the archive
 	archivePath, err := downloadBinary(binaryURL)
 	if err != nil {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadFail, err), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadFail, err), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		os.Exit(1)
 	}
 	defer os.Remove(archivePath) // Clean up archive file
@@ -235,7 +243,8 @@ func Update() {
 	// Extract the binary
 	binaryPath, err := extractBinary(archivePath, binaryURL)
 	if err != nil {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterFailToExtractBinary, err), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterFailToExtractBinary, err), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		os.Exit(1)
 	}
 	defer os.Remove(binaryPath)
@@ -243,11 +252,13 @@ func Update() {
 	// Replace the current binary with the extracted one
 	err = replaceBinary(binaryPath)
 	if err != nil {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterBinaryReplaceFail, err), style.ColorError, false)})
+		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterBinaryReplaceFail, err), style.ColorError, false)
+		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		os.Exit(1)
 	}
 
-	logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadSuccess, latestVersion), style.ColorGreenSoft, false)})
+	message = style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.UpdaterDownloadSuccess, latestVersion), style.ColorGreenSoft, false)
+	logger.LOGGER.LogToTerminal([]string{message})
 
 	os.Exit(0)
 }
@@ -366,12 +377,13 @@ func replaceBinaryUnix(tempFile, execPath string) error {
 	err := os.Rename(tempFile, execPath)
 	if err == nil {
 		// Successfully replaced, set executable permissions
-		return os.Chmod(execPath, 0755)
+		return os.Chmod(execPath, 0o755)
 	}
 
 	// If we got a permission error, try using sudo
 	if os.IsPermission(err) {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(i18n.LANGUAGEMAPPING.UpdaterRequiresSudo, style.ColorYellowWarm, false)})
+		message := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.UpdaterRequiresSudo, style.ColorYellowWarm, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 		return replaceBinaryWithSudo(tempFile, execPath)
 	}
 
@@ -410,7 +422,7 @@ func replaceBinaryWithSudo(tempFile, execPath string) error {
 	dstFile.Close()
 
 	// Set executable permissions on the temp file
-	if err := os.Chmod(sudoTempPath, 0755); err != nil {
+	if err := os.Chmod(sudoTempPath, 0o755); err != nil {
 		return err
 	}
 
@@ -539,7 +551,7 @@ func saveTempBinary(r io.Reader) (string, error) {
 
 	// Make it executable on Unix-like systems
 	if runtime.GOOS != "windows" {
-		if err := os.Chmod(tempFile.Name(), 0755); err != nil {
+		if err := os.Chmod(tempFile.Name(), 0o755); err != nil {
 			return "", err
 		}
 	}

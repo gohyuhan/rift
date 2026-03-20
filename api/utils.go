@@ -24,7 +24,8 @@ import (
 // ----------------------------------
 func RiftSetup() error {
 	if !shell.BinaryInPath() {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(i18n.LANGUAGEMAPPING.BinaryNotInPath, style.ColorYellowWarm, false)})
+		message := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.BinaryNotInPath, style.ColorYellowWarm, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 	}
 
 	sh := shell.Detect()
@@ -43,7 +44,8 @@ func RiftSetup() error {
 	}
 
 	if installed {
-		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellAlreadyInstalled, cfgFile), style.ColorGreenSoft, false)})
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellAlreadyInstalled, cfgFile), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 	} else {
 		if err := shell.Install(sh); err != nil {
 			return err
