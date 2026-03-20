@@ -15,6 +15,12 @@ import (
 	"google.golang.org/protobuf/proto"
 )
 
+// ----------------------------------
+//
+//	Validates the current working directory, checks for reserved keywords,
+//	opens the DB, and saves the given waypoint name mapped to the CWD.
+//
+// ----------------------------------
 var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
 	cwd, cwdErr := utils.GetCWD()
 	if cwdErr != nil {
@@ -58,6 +64,11 @@ var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
 	return nil
 }
 
+// ----------------------------------
+//
+//	Persists a new waypoint entry into the DB bucket, rejecting duplicates.
+//
+// ----------------------------------
 func saveWaypoint(bboltDb *bbolt.DB, waypointName string, path string) error {
 	return bboltDb.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.WaypointBucket)

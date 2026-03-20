@@ -6,6 +6,7 @@ var zH_HANT = LanguageMapping{
 	RiftReservedKeywordError: "`%s` 是 rift 的保留關鍵字",
 	RiftDetectedShell:        "rift：偵測到的 Shell：%s",
 	CWDIsNotDirError:         "目前工作目錄不是一個有效的目錄",
+	PathNotAbsoluteError:     "路徑必須為絕對路徑，收到: %s",
 
 	// Settings related
 	SettingsPathError:  "無法存取設定目錄，[ERROR: %s]",
@@ -57,6 +58,8 @@ var zH_HANT = LanguageMapping{
 	RiftSavedWaypoint:              "rift：已儲存 %q -> %s",
 	RiftUnknownWaypoint:            "rift：未知的航點名稱 %q",
 	RiftWaypointAlreadyExistsError: "航點 %q 已存在，指向 %s",
+	RiftWaypointDoNotExistsError:   "rift：航點 %q 不存在",
+	RiftWaypointUpdateError:        "rift：更新航點 %q 失敗",
 
 	// Setup related
 	CheckAndRunSetupError: "rift：設定失敗，[ERROR: %s]",

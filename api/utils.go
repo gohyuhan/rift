@@ -16,6 +16,12 @@ import (
 	"golang.org/x/mod/semver"
 )
 
+// ----------------------------------
+//
+//	Runs the full rift setup: checks binary is in PATH, detects the shell,
+//	installs the shell integration if not already present, and initializes the DB.
+//
+// ----------------------------------
 func RiftSetup() error {
 	if !shell.BinaryInPath() {
 		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(i18n.LANGUAGEMAPPING.BinaryNotInPath, style.ColorYellowWarm, false)})
@@ -94,11 +100,20 @@ func CheckAndRunSetup() error {
 	return nil
 }
 
-// isVersionGreater returns true if a is a valid semver string greater than b.
+// ----------------------------------
+//
+//	Returns true if binaryVersion is a valid semver string greater than settingsVersion.
+//
+// ----------------------------------
 func isVersionGreater(binaryVersion, settingsVersion string) bool {
 	return semver.IsValid(binaryVersion) && semver.IsValid(settingsVersion) && semver.Compare(binaryVersion, settingsVersion) > 0
 }
 
+// ----------------------------------
+//
+//	The list of keywords reserved by rift that cannot be used as waypoint names.
+//
+// ----------------------------------
 var ReservedCommandKeywords = []string{
 	"rift",
 	"awaken",

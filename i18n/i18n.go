@@ -12,6 +12,12 @@ var SUPPORTED_LANGUAGE_CODE = []string{"EN", "JA", "ZH-HANT", "ZH-HANS"}
 
 var LANGUAGEMAPPING *LanguageMapping
 
+// ----------------------------------
+//
+//	Sets the global LANGUAGEMAPPING to the matching language pack based on the
+//	given language code. Defaults to English if the code is unrecognized.
+//
+// ----------------------------------
 func InitRiftLanguageMapping(languageCode string) {
 	languageCode = strings.ToUpper(languageCode)
 	switch languageCode {
@@ -28,6 +34,11 @@ func InitRiftLanguageMapping(languageCode string) {
 	}
 }
 
+// ----------------------------------
+//
+//	Reports whether the given language code is in the supported language list.
+//
+// ----------------------------------
 func IsLanguageCodeSupported(languageCode string) bool {
 	if slices.Contains(SUPPORTED_LANGUAGE_CODE, strings.ToUpper(languageCode)) {
 		return true

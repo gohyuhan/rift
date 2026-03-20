@@ -20,6 +20,12 @@ var (
 	ColorCyanSoft      = lipgloss.Color("#7DD3FC")
 )
 
+// ----------------------------------
+//
+//	Renders text with the given foreground color. If faint is true, the text
+//	is rendered with reduced intensity.
+//
+// ----------------------------------
 func RenderStringWithColor(text string, color color.Color, faint bool) string {
 	style := lipgloss.NewStyle().Foreground(color).Faint(faint)
 	return style.Render(text)

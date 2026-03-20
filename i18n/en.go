@@ -6,6 +6,7 @@ var eN = LanguageMapping{
 	RiftReservedKeywordError: "`%s` is a reserved keyword for rift",
 	RiftDetectedShell:        "rift: detected shell: %s",
 	CWDIsNotDirError:         "Current working directory is not a valid directory",
+	PathNotAbsoluteError:     "Path must be absolute, got: %s",
 
 	// Settings related
 	SettingsPathError:  "Failed to access settings directory, [ERROR: %s]",
@@ -57,6 +58,8 @@ var eN = LanguageMapping{
 	RiftSavedWaypoint:              "rift: saved %q -> %s",
 	RiftUnknownWaypoint:            "rift: unknown waypoint name %q",
 	RiftWaypointAlreadyExistsError: "Waypoint %q already exists, pointing to %s",
+	RiftWaypointDoNotExistsError:   "rift: waypoint %q does not exist",
+	RiftWaypointUpdateError:        "rift: failed to update waypoint %q",
 
 	// Setup related
 	CheckAndRunSetupError: "rift: setup failed, [ERROR: %s]",

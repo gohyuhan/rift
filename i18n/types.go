@@ -12,6 +12,7 @@ type LanguageMapping struct {
 	RiftReservedKeywordError string
 	RiftDetectedShell        string
 	CWDIsNotDirError         string
+	PathNotAbsoluteError     string
 
 	// Settings related
 	SettingsPathError  string
@@ -63,6 +64,8 @@ type LanguageMapping struct {
 	RiftSavedWaypoint              string
 	RiftUnknownWaypoint            string
 	RiftWaypointAlreadyExistsError string
+	RiftWaypointDoNotExistsError   string
+	RiftWaypointUpdateError        string
 
 	// Setup related
 	CheckAndRunSetupError string
