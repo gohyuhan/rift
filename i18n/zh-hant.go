@@ -9,10 +9,14 @@ var zH_HANT = LanguageMapping{
 	PathNotAbsoluteError:     "路徑必須為絕對路徑，收到: %s",
 
 	// Settings related
-	SettingsPathError:  "無法存取設定目錄，[ERROR: %s]",
-	SettingsReadError:  "讀取設定檔失敗，[ERROR: %s]",
-	SettingsParseError: "解析設定檔失敗，已重置為預設值，[ERROR: %s]",
-	SettingsWriteError: "寫入設定檔失敗，[ERROR: %s]",
+	SettingsPathError:                 "無法存取設定目錄，[ERROR: %s]",
+	SettingsReadError:                 "讀取設定檔失敗，[ERROR: %s]",
+	SettingsParseError:                "解析設定檔失敗，已重置為預設值，[ERROR: %s]",
+	SettingsWriteError:                "寫入設定檔失敗，[ERROR: %s]",
+	SettingsLanguageUpdated:           "rift: 語言已設定為 %s",
+	SettingsLanguageNotSupported:      "rift: 語言 %q 不受支援（支援的語言: %s）",
+	SettingsAutoUpdateUpdated:         "rift: 自動更新已設定為 %t",
+	SettingsDownloadPreReleaseUpdated: "rift: 下載預發布版本已設定為 %t",
 
 	// DB related
 	DBPathError:                 "無法存取資料庫目錄，[ERROR: %s]",
@@ -52,9 +56,12 @@ var zH_HANT = LanguageMapping{
 	BinaryNotInPath:       "rift：在 PATH 中找不到執行檔 — 請將 rift 加入 PATH 以便在此工作階段後繼續使用",
 
 	// cmd description
-	RiftDescription:         "透過您預先定義的檢查點名稱輕鬆導航路徑",
-	RiftAwakenDescription:   "在您的 Shell 中喚醒 rift【首次使用前請執行此指令進行設定與初始化】",
-	RiftDiscoverDescription: "為目前工作目錄指定一個航點名稱",
+	RiftDescription:                       "透過您預先定義的檢查點名稱輕鬆導航路徑",
+	RiftAwakenDescription:                 "在您的 Shell 中喚醒 rift【首次使用前請執行此指令進行設定與初始化】",
+	RiftDiscoverDescription:               "為目前工作目錄指定一個航點名稱",
+	RiftFlagLanguageDescription:           "設定 rift 的語言（支援：EN、JA、ZH-HANS、ZH-HANT）",
+	RiftFlagAutoUpdateDescription:         "設定 rift 是否自動檢查更新（使用 --autoupdate 設為啟用，--autoupdate=false 設為停用）",
+	RiftFlagDownloadPreReleaseDescription: "設定 rift 是否也下載預發布版本，或僅限穩定版本（使用 --download-pre-release 設為啟用，--download-pre-release=false 設為停用）",
 
 	// Waypoint related
 	RiftSavedWaypoint:              "rift：已儲存 %q -> %s",
@@ -62,6 +69,9 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "航點 %q 已存在，指向 %s",
 	RiftWaypointDoNotExistsError:   "rift：航點 %q 不存在",
 	RiftWaypointUpdateError:        "rift：更新航點 %q 失敗",
+
+	// Flag related
+	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",
 
 	// Setup related
 	CheckAndRunSetupError: "rift：設定失敗，[ERROR: %s]",

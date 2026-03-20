@@ -21,6 +21,10 @@ func init() {
 	// wrapper never tries to eval anything other than an intentional cd command.
 	rootCmd.SetOut(os.Stderr)
 	rootCmd.SetErr(os.Stderr)
+
+	rootCmd.Flags().String("language", "", "")
+	rootCmd.Flags().Bool("autoupdate", false, "")
+	rootCmd.Flags().Bool("download-pre-release", false, "")
 }
 
 // ----------------------------------
@@ -31,6 +35,9 @@ func init() {
 // ----------------------------------
 func InitCmdI18n() {
 	rootCmd.Short = i18n.LANGUAGEMAPPING.RiftDescription
+	rootCmd.Flags().Lookup("language").Usage = i18n.LANGUAGEMAPPING.RiftFlagLanguageDescription
+	rootCmd.Flags().Lookup("autoupdate").Usage = i18n.LANGUAGEMAPPING.RiftFlagAutoUpdateDescription
+	rootCmd.Flags().Lookup("download-pre-release").Usage = i18n.LANGUAGEMAPPING.RiftFlagDownloadPreReleaseDescription
 	initAwakenI18n()
 	initDiscoverI18n()
 }

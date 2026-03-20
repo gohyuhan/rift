@@ -9,10 +9,14 @@ var zH_HANS = LanguageMapping{
 	PathNotAbsoluteError:     "路径必须为绝对路径，收到: %s",
 
 	// Settings related
-	SettingsPathError:  "无法访问设置目录，[ERROR: %s]",
-	SettingsReadError:  "读取设置文件失败，[ERROR: %s]",
-	SettingsParseError: "解析设置文件失败，已重置为默认值，[ERROR: %s]",
-	SettingsWriteError: "写入设置文件失败，[ERROR: %s]",
+	SettingsPathError:                 "无法访问设置目录，[ERROR: %s]",
+	SettingsReadError:                 "读取设置文件失败，[ERROR: %s]",
+	SettingsParseError:                "解析设置文件失败，已重置为默认值，[ERROR: %s]",
+	SettingsWriteError:                "写入设置文件失败，[ERROR: %s]",
+	SettingsLanguageUpdated:           "rift: 语言已设置为 %s",
+	SettingsLanguageNotSupported:      "rift: 语言 %q 不受支持（支持的语言: %s）",
+	SettingsAutoUpdateUpdated:         "rift: 自动更新已设置为 %t",
+	SettingsDownloadPreReleaseUpdated: "rift: 下载预发布版本已设置为 %t",
 
 	// DB related
 	DBPathError:                 "无法访问数据库目录，[ERROR: %s]",
@@ -52,9 +56,12 @@ var zH_HANS = LanguageMapping{
 	BinaryNotInPath:       "rift：在 PATH 中找不到可执行文件 — 请将 rift 添加到 PATH 以便在此会话后继续使用",
 
 	// cmd description
-	RiftDescription:         "通过您预先定义的检查点名称轻松导航路径",
-	RiftAwakenDescription:   "在您的 Shell 中唤醒 rift【首次使用前请执行此命令进行设置与初始化】",
-	RiftDiscoverDescription: "为当前工作目录指定一个航点名称",
+	RiftDescription:                       "通过您预先定义的检查点名称轻松导航路径",
+	RiftAwakenDescription:                 "在您的 Shell 中唤醒 rift【首次使用前请执行此命令进行设置与初始化】",
+	RiftDiscoverDescription:               "为当前工作目录指定一个航点名称",
+	RiftFlagLanguageDescription:           "设置 rift 的语言（支持：EN、JA、ZH-HANS、ZH-HANT）",
+	RiftFlagAutoUpdateDescription:         "设置 rift 是否自动检查更新（使用 --autoupdate 设为启用，--autoupdate=false 设为禁用）",
+	RiftFlagDownloadPreReleaseDescription: "设置 rift 是否也下载预发布版本，或仅限稳定版本（使用 --download-pre-release 设为启用，--download-pre-release=false 设为禁用）",
 
 	// Waypoint related
 	RiftSavedWaypoint:              "rift：已保存 %q -> %s",
@@ -62,6 +69,9 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "航点 %q 已存在，指向 %s",
 	RiftWaypointDoNotExistsError:   "rift：航点 %q 不存在",
 	RiftWaypointUpdateError:        "rift：更新航点 %q 失败",
+
+	// Flag related
+	RiftFlagRetrieveError: "rift：获取标志 %q 失败，[ERROR: %s]",
 
 	// Setup related
 	CheckAndRunSetupError: "rift：设置失败，[ERROR: %s]",

@@ -9,10 +9,14 @@ var jA = LanguageMapping{
 	PathNotAbsoluteError:     "パスは絶対パスである必要があります。指定されたパス: %s",
 
 	// Settings related
-	SettingsPathError:  "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
-	SettingsReadError:  "設定ファイルの読み込みに失敗しました、[ERROR: %s]",
-	SettingsParseError: "設定ファイルの解析に失敗しました。デフォルトにリセットします、[ERROR: %s]",
-	SettingsWriteError: "設定ファイルの書き込みに失敗しました、[ERROR: %s]",
+	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
+	SettingsReadError:                 "設定ファイルの読み込みに失敗しました、[ERROR: %s]",
+	SettingsParseError:                "設定ファイルの解析に失敗しました。デフォルトにリセットします、[ERROR: %s]",
+	SettingsWriteError:                "設定ファイルの書き込みに失敗しました、[ERROR: %s]",
+	SettingsLanguageUpdated:           "rift: 言語を %s に設定しました",
+	SettingsLanguageNotSupported:      "rift: 言語 %q はサポートされていません（対応言語: %s）",
+	SettingsAutoUpdateUpdated:         "rift: 自動アップデートを %t に設定しました",
+	SettingsDownloadPreReleaseUpdated: "rift: プレリリースのダウンロードを %t に設定しました",
 
 	// DB related
 	DBPathError:                 "データベースディレクトリへのアクセスに失敗しました、[ERROR: %s]",
@@ -52,9 +56,12 @@ var jA = LanguageMapping{
 	BinaryNotInPath:       "rift：PATH にバイナリが見つかりません — このセッション後も使用するには rift を PATH に追加してください",
 
 	// cmd description
-	RiftDescription:         "事前に定義したチェックポイント名でパスを簡単に移動できます",
-	RiftAwakenDescription:   "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
-	RiftDiscoverDescription: "現在の作業ディレクトリにウェイポイント名を割り当てます",
+	RiftDescription:                       "事前に定義したチェックポイント名でパスを簡単に移動できます",
+	RiftAwakenDescription:                 "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
+	RiftDiscoverDescription:               "現在の作業ディレクトリにウェイポイント名を割り当てます",
+	RiftFlagLanguageDescription:           "rift の言語を設定します（対応言語：EN、JA、ZH-HANS、ZH-HANT）",
+	RiftFlagAutoUpdateDescription:         "rift が自動的にアップデートを確認するかどうかを設定します（有効にするには --autoupdate、無効にするには --autoupdate=false）",
+	RiftFlagDownloadPreReleaseDescription: "rift がプレリリース版もダウンロードするか、安定版のみにするかを設定します（有効にするには --download-pre-release、無効にするには --download-pre-release=false）",
 
 	// Waypoint related
 	RiftSavedWaypoint:              "rift：%q -> %s を保存しました",
@@ -62,6 +69,9 @@ var jA = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:   "rift：ウェイポイント %q は存在しません",
 	RiftWaypointUpdateError:        "rift：ウェイポイント %q の更新に失敗しました",
+
+	// Flag related
+	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 
 	// Setup related
 	CheckAndRunSetupError: "rift：セットアップに失敗しました、[ERROR: %s]",

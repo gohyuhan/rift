@@ -25,7 +25,6 @@ import (
 func main() {
 	logger.InitLogger()
 	settings.InitOrReadSettings()
-	i18n.InitRiftLanguageMapping(settings.RIFTSETTINGS.LanguageCode)
 
 	// check for update if user allows it
 	if settings.RIFTSETTINGS.AutoUpdate {

@@ -10,7 +10,7 @@ const discoverKeyword = "discover [waypoint name]"
 
 var discoverCmd = &cobra.Command{
 	Use:  discoverKeyword,
-	Args: cobra.MaximumNArgs(1),
+	Args: cobra.ExactArgs(1),
 	RunE: api.RiftDiscoverFunc,
 }
 

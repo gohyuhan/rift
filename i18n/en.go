@@ -9,10 +9,14 @@ var eN = LanguageMapping{
 	PathNotAbsoluteError:     "Path must be absolute, got: %s",
 
 	// Settings related
-	SettingsPathError:  "Failed to access settings directory, [ERROR: %s]",
-	SettingsReadError:  "Failed to read settings file, [ERROR: %s]",
-	SettingsParseError: "Failed to parse settings file, resetting to defaults, [ERROR: %s]",
-	SettingsWriteError: "Failed to write settings file, [ERROR: %s]",
+	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",
+	SettingsReadError:                 "Failed to read settings file, [ERROR: %s]",
+	SettingsParseError:                "Failed to parse settings file, resetting to defaults, [ERROR: %s]",
+	SettingsWriteError:                "Failed to write settings file, [ERROR: %s]",
+	SettingsLanguageUpdated:           "rift: language set to %s",
+	SettingsLanguageNotSupported:      "rift: language %q is not supported (supported: %s)",
+	SettingsAutoUpdateUpdated:         "rift: auto-update set to %t",
+	SettingsDownloadPreReleaseUpdated: "rift: download pre-release set to %t",
 
 	// DB related
 	DBPathError:                 "Failed to access database directory, [ERROR: %s]",
@@ -52,9 +56,12 @@ var eN = LanguageMapping{
 	BinaryNotInPath:       "rift: binary not found in PATH — add rift to your PATH to use it after this session",
 
 	// cmd description
-	RiftDescription:         "Navigate path easily by your predefined waypoint name",
-	RiftAwakenDescription:   "Awaken rift within your shell [setup and initialize for the first time for using rift]",
-	RiftDiscoverDescription: "Assign a waypoint name to the current working directory",
+	RiftDescription:                       "Navigate path easily by your predefined waypoint name",
+	RiftAwakenDescription:                 "Awaken rift within your shell [setup and initialize for the first time for using rift]",
+	RiftDiscoverDescription:               "Assign a waypoint name to the current working directory",
+	RiftFlagLanguageDescription:           "Set the language for rift (supported: EN, JA, ZH-HANS, ZH-HANT)",
+	RiftFlagAutoUpdateDescription:         "Set whether rift should automatically check for updates (use --autoupdate to set true, --autoupdate=false to set false)",
+	RiftFlagDownloadPreReleaseDescription: "Set whether rift should also download pre-release versions, or only stable releases (use --download-pre-release to set true, --download-pre-release=false to set false)",
 
 	// Waypoint related
 	RiftSavedWaypoint:              "rift: saved %q -> %s",
@@ -62,6 +69,9 @@ var eN = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "Waypoint %q already exists, pointing to %s",
 	RiftWaypointDoNotExistsError:   "rift: waypoint %q does not exist",
 	RiftWaypointUpdateError:        "rift: failed to update waypoint %q",
+
+	// Flag related
+	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",
 
 	// Setup related
 	CheckAndRunSetupError: "rift: setup failed, [ERROR: %s]",

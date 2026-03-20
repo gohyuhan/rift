@@ -15,10 +15,14 @@ type LanguageMapping struct {
 	PathNotAbsoluteError     string
 
 	// Settings related
-	SettingsPathError  string
-	SettingsReadError  string
-	SettingsParseError string
-	SettingsWriteError string
+	SettingsPathError                 string
+	SettingsReadError                 string
+	SettingsParseError                string
+	SettingsWriteError                string
+	SettingsLanguageUpdated           string
+	SettingsLanguageNotSupported      string
+	SettingsAutoUpdateUpdated         string
+	SettingsDownloadPreReleaseUpdated string
 
 	// DB related
 	DBPathError                 string
@@ -58,9 +62,12 @@ type LanguageMapping struct {
 	BinaryNotInPath       string
 
 	// cmd description
-	RiftDescription         string
-	RiftAwakenDescription   string
-	RiftDiscoverDescription string
+	RiftDescription                       string
+	RiftAwakenDescription                 string
+	RiftDiscoverDescription               string
+	RiftFlagLanguageDescription           string
+	RiftFlagAutoUpdateDescription         string
+	RiftFlagDownloadPreReleaseDescription string
 
 	// Waypoint related
 	RiftSavedWaypoint              string
@@ -68,6 +75,9 @@ type LanguageMapping struct {
 	RiftWaypointAlreadyExistsError string
 	RiftWaypointDoNotExistsError   string
 	RiftWaypointUpdateError        string
+
+	// Flag related
+	RiftFlagRetrieveError string
 
 	// Setup related
 	CheckAndRunSetupError string

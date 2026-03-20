@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"reflect"
+	"slices"
 	"strings"
 	"time"
 
@@ -40,6 +41,7 @@ var RiftDefaultConfigSettings = RiftSettings{
 // ----------------------------------
 func InitOrReadSettings() {
 	RIFTSETTINGS = &RiftDefaultConfigSettings
+	i18n.InitRiftLanguageMapping(RIFTSETTINGS.LanguageCode)
 
 	settingsPath, err := utils.GetRiftSettingsFilePath()
 	if err != nil {
@@ -60,8 +62,8 @@ func InitOrReadSettings() {
 		return
 	}
 
-	var sttings RiftSettings
-	if err := json.Unmarshal(data, &sttings); err != nil {
+	var settings RiftSettings
+	if err := json.Unmarshal(data, &settings); err != nil {
 		errMsg := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsParseError, err.Error()), style.ColorError, false)
 		logger.LOGGER.LogToTerminal([]string{errMsg})
 		writeDefaultSettings(settingsPath)
@@ -69,12 +71,13 @@ func InitOrReadSettings() {
 	}
 
 	// Validate and fix missing or invalid fields
-	changed := ensureConfigIntegrity(&sttings, &RiftDefaultConfigSettings)
+	changed := ensureConfigIntegrity(&settings, &RiftDefaultConfigSettings)
 	if changed {
-		saveSettings(settingsPath, sttings)
+		saveSettings(settingsPath, settings)
 	}
 
-	RIFTSETTINGS = &sttings
+	RIFTSETTINGS = &settings
+	i18n.InitRiftLanguageMapping(RIFTSETTINGS.LanguageCode)
 }
 
 // ----------------------------------
@@ -166,10 +169,20 @@ func writeDefaultSettings(settingsPath string) {
 //
 // ----------------------------------
 func UpdateLanguageCode(languageCode string) {
-	RIFTSETTINGS.LanguageCode = strings.ToUpper(languageCode)
+	langCode := strings.ToUpper(languageCode)
+	if !slices.Contains(i18n.SUPPORTED_LANGUAGE_CODE, langCode) {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsLanguageNotSupported, langCode, strings.Join(i18n.SUPPORTED_LANGUAGE_CODE, ", ")), style.ColorError, false)})
+		return
+	}
+	RIFTSETTINGS.LanguageCode = langCode
 	settingsPath, err := utils.GetRiftSettingsFilePath()
 	if err == nil {
 		saveSettings(settingsPath, *RIFTSETTINGS)
+		// update the current language mapping
+		i18n.InitRiftLanguageMapping(RIFTSETTINGS.LanguageCode)
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsLanguageUpdated, langCode), style.ColorGreenSoft, false)})
+	} else {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)})
 	}
 }
 
@@ -196,5 +209,24 @@ func UpdateDownloadPreRelease(downloadPreRelease bool) {
 	settingsPath, err := utils.GetRiftSettingsFilePath()
 	if err == nil {
 		saveSettings(settingsPath, *RIFTSETTINGS)
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsDownloadPreReleaseUpdated, downloadPreRelease), style.ColorGreenSoft, false)})
+	} else {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)})
+	}
+}
+
+// ----------------------------------
+//
+//	Update autoUpdate setting
+//
+// ----------------------------------
+func UpdateAutoUpdate(autoUpdate bool) {
+	RIFTSETTINGS.AutoUpdate = autoUpdate
+	settingsPath, err := utils.GetRiftSettingsFilePath()
+	if err == nil {
+		saveSettings(settingsPath, *RIFTSETTINGS)
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsAutoUpdateUpdated, autoUpdate), style.ColorGreenSoft, false)})
+	} else {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.SettingsPathError, err.Error()), style.ColorError, false)})
 	}
 }
