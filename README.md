@@ -29,59 +29,17 @@ A tool forged for those who refuse to waste their power on traversal. Memorize a
 
 | Spell        | Incantation              | Effect                                                 |
 | ------------ | ------------------------ | ------------------------------------------------------ |
-| **Travel**   | `rift <name>`            | Tear open a rift and teleport to a memorized location  |
-| **Memorize** | `rift --memorize <name>` | Inscribe your current location into memory             |
-| **Awaken**   | `rift awaken`            | Awaken rift within your shell — run once after install |
+| **Travel**   | `rift <name>`            | Tear open a rift and teleport to a memorized waypoint  |
+| **Discover** | `rift discover <name>`   | Inscribe your current location as a waypoint           |
+| **Awaken**   | `rift awaken`            | Repair shell integration or database if something breaks |
 
-> More spells incoming — `rift atlas`, `rift forget`, `rift rebind`.
-
----
-
-## Casting
-
-### Travel — tear open a rift
-
-```sh
-rift <name>
-```
-
-```sh
-# Lost deep in /Users/alice/projects/frontend/src/components/ui
-rift api
-
-# Rift tears open. You step through.
-# You are now at /Users/alice/projects/backend/src/api
-```
-
-### Memorize — inscribe a location
-
-Memorize your current directory and bind it to a name. Like a mage preparing spells before a long journey — do it once, call upon it forever.
-
-```sh
-rift --memorize <name>
-```
-
-```sh
-cd /Users/alice/projects/backend/src/api
-rift --memorize api
-# Memorized: api -> /Users/alice/projects/backend/src/api
-```
-
-### Awaken — bind rift to your shell
-
-Run once after installation. `rift awaken` detects your shell and inscribes the invocation function into its config file — the ritual that allows rift to manipulate your shell's path from within.
-
-```sh
-rift awaken
-```
-
-Supports **zsh**, **bash**, **fish**, **ksh**, and **PowerShell** across macOS, Linux, and Windows. After awakening, restart your shell or source the config.
+> Full usage, examples, and settings flags → **[usage.md](usage.md)**
 
 ---
 
 ## The Mechanics Behind the Magic
 
-A child process cannot alter the working directory of its parent shell — this is a hard constraint of every OS. `rift awaken` works around it by inscribing a shell function into your config. When you cast `rift <name>`, the function runs the binary and captures its output, then hands the `cd` command back to your live shell session via `eval`.
+A child process cannot alter the working directory of its parent shell — this is a hard constraint of every OS. Rift works around it by inscribing a shell function into your config on first run. When you cast `rift <name>`, the function runs the binary and captures its output, then hands the `cd` command back to your live shell session via `eval`.
 
 ```
 You cast: rift api
