@@ -20,12 +20,14 @@ var zH_HANT = LanguageMapping{
 	DBOpenError:                 "資料庫開啟失敗，請確認是否已初始化，執行 `rift awaken` 進行初始化",
 	SettingsBucketNotFoundError: "在資料庫中找不到設定儲存區，請重新執行 `rift awaken`",
 	WaypointBucketNotFoundError: "在資料庫中找不到航點儲存區，請重新執行 `rift awaken`",
+	WaypointDataCorruptedError:  "航點 %q 的資料已損毀，無法讀取",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "發現新版本 %s，是否立即下載？(y/n): ",
 	UpdaterFailToCheckForUpdate:         "檢查更新失敗：%v",
 	UpdaterFailToCreateRequest:          "無法建立請求：%v",
 	UpdaterFailToFetchRelease:           "無法取得最新版本資訊：%v",
+	UpdaterNoReleasesFound:              "找不到任何版本",
 	UpdaterFailToReadResponse:           "無法讀取回應內容：%v",
 	UpdaterFailToParseJSON:              "無法解析 JSON 回應：%v",
 	UpdaterFailToExtractBinary:          "無法解壓縮執行檔：%v",

@@ -20,12 +20,14 @@ var jA = LanguageMapping{
 	DBOpenError:                 "データベースのオープンに失敗しました。初期化されていない可能性があります。`rift awaken` を実行してください",
 	SettingsBucketNotFoundError: "データベースに設定バケットが見つかりません。`rift awaken` を再実行してください",
 	WaypointBucketNotFoundError: "データベースにウェイポイントバケットが見つかりません。`rift awaken` を再実行してください",
+	WaypointDataCorruptedError:  "ウェイポイント %q のデータが破損しており、読み込めません",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
 	UpdaterFailToCheckForUpdate:         "アップデートの確認に失敗しました：%v",
 	UpdaterFailToCreateRequest:          "リクエストの作成に失敗しました：%v",
 	UpdaterFailToFetchRelease:           "最新リリース情報の取得に失敗しました：%v",
+	UpdaterNoReleasesFound:              "リリースが見つかりません",
 	UpdaterFailToReadResponse:           "レスポンスボディの読み取りに失敗しました：%v",
 	UpdaterFailToParseJSON:              "JSON レスポンスの解析に失敗しました：%v",
 	UpdaterFailToExtractBinary:          "バイナリの展開に失敗しました：%v",

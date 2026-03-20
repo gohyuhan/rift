@@ -20,12 +20,14 @@ var eN = LanguageMapping{
 	DBOpenError:                 "Failed to open database, perhaps you haven't setup rift yet, run `rift awaken` for initialization",
 	SettingsBucketNotFoundError: "Settings bucket not found in database, perhaps rerun `rift awaken`",
 	WaypointBucketNotFoundError: "Waypoint bucket not found in database, perhaps rerun `rift awaken`",
+	WaypointDataCorruptedError:  "Waypoint data for %q is corrupted and could not be read",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
 	UpdaterFailToCheckForUpdate:         "Failed to check for updates: %v",
 	UpdaterFailToCreateRequest:          "failed to create request: %v",
 	UpdaterFailToFetchRelease:           "failed to fetch latest release: %v",
+	UpdaterNoReleasesFound:              "no releases found",
 	UpdaterFailToReadResponse:           "failed to read response body: %v",
 	UpdaterFailToParseJSON:              "failed to parse JSON response: %v",
 	UpdaterFailToExtractBinary:          "failed to extract binary: %v",

@@ -26,12 +26,14 @@ type LanguageMapping struct {
 	DBOpenError                 string
 	SettingsBucketNotFoundError string
 	WaypointBucketNotFoundError string
+	WaypointDataCorruptedError  string
 
 	// Updater related
 	UpdaterDownloadPrompt               string
 	UpdaterFailToCheckForUpdate         string
 	UpdaterFailToCreateRequest          string
 	UpdaterFailToFetchRelease           string
+	UpdaterNoReleasesFound              string
 	UpdaterFailToReadResponse           string
 	UpdaterFailToParseJSON              string
 	UpdaterFailToExtractBinary          string

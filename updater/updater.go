@@ -126,7 +126,7 @@ func fetchLatestFromAllReleases(client *http.Client) (string, error) {
 	}
 
 	if len(releases) == 0 {
-		return "", fmt.Errorf("%s", i18n.LANGUAGEMAPPING.UpdaterFailToFetchRelease)
+		return "", fmt.Errorf("%s", i18n.LANGUAGEMAPPING.UpdaterNoReleasesFound)
 	}
 
 	return releases[0].TagName, nil

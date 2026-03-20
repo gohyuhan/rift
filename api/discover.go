@@ -81,7 +81,7 @@ func saveWaypoint(bboltDb *bbolt.DB, waypointName string, path string) error {
 			existingWaypoint := &pb.Waypoint{}
 			protoErr := proto.Unmarshal(existing, existingWaypoint)
 			if protoErr != nil {
-				return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
 			}
 			errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointAlreadyExistsError, waypointName, existingWaypoint.WaypointPath), style.ColorError, false)
 			return fmt.Errorf("%s", errorMessage)

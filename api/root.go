@@ -67,7 +67,7 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 		existingWaypoint := &pb.Waypoint{}
 		protoErr := proto.Unmarshal(existing, existingWaypoint)
 		if protoErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
 		}
 
 		retrievedPath = existingWaypoint.WaypointPath
@@ -96,7 +96,7 @@ func updateWaypointTravelledCount(bboltDb *bbolt.DB, waypointName string) error 
 			existingWaypoint := &pb.Waypoint{}
 			protoErr := proto.Unmarshal(existing, existingWaypoint)
 			if protoErr != nil {
-				return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
 			}
 
 			existingWaypoint.WaypointTravelledCount += 1
