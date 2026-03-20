@@ -215,3 +215,15 @@ rm -rf "$HOME/.config/rift"
 ```powershell
 Remove-Item -Path "$env:APPDATA\rift" -Recurse -Force
 ```
+
+---
+
+## Changelog
+
+### v0.1.0-pr.1
+
+Initial pre-release.
+
+- Path navigation using predefined waypoint names — tear open a rift to any saved location instantly
+- Waypoint assignment — bind a name to any directory for fast recall
+- Settings configurable via command flags — control language, auto-update behaviour, and pre-release preferences directly from the terminal
