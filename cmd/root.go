@@ -13,10 +13,10 @@ import (
 var memorize string
 
 var rootCmd = &cobra.Command{
-	Use:  "rift [checkpoint name]",
+	Use:  "rift [waypoint name]",
 	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		// --memorize <checkpoint name>: save current directory
+		// --memorize <waypoint name>: save current directory
 		if memorize != "" {
 			cwd, err := os.Getwd()
 			if err != nil {
@@ -24,11 +24,11 @@ var rootCmd = &cobra.Command{
 			}
 			// TODO: store.Set(memorize, cwd)
 			_ = cwd
-			logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSavedCheckpoint, memorize, cwd), style.ColorGreenSoft, false)})
+			logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSavedWaypoint, memorize, cwd), style.ColorGreenSoft, false)})
 			return nil
 		}
 
-		// rift <checkpoint name>: emit cd command for the shell wrapper to eval
+		// rift <waypoint name>: emit cd command for the shell wrapper to eval
 		if len(args) == 0 {
 			return cmd.Help()
 		}
@@ -36,7 +36,7 @@ var rootCmd = &cobra.Command{
 		// TODO: path, err := store.Get(args[0])
 		path := ""
 		if path == "" {
-			logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftUnknownCheckpoint, args[0]), style.ColorError, false)})
+			logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftUnknownWaypoint, args[0]), style.ColorError, false)})
 			os.Exit(1)
 		}
 
@@ -47,7 +47,7 @@ var rootCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.Flags().StringVar(&memorize, "memorize", "", "save current directory under this checkpoint name")
+	rootCmd.Flags().StringVar(&memorize, "memorize", "", "save current directory under this waypoint name")
 	// Redirect all cobra output (help, usage, errors) to stderr so the shell
 	// wrapper never tries to eval anything other than an intentional cd command.
 	rootCmd.SetOut(os.Stderr)

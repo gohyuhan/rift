@@ -13,8 +13,8 @@ import (
 )
 
 var (
-	SettingsBucket   = []byte("rift-settings")
-	CheckpointBucket = []byte("rift-checkpoint")
+	SettingsBucket = []byte("rift-settings")
+	WaypointBucket = []byte("rift-waypoint")
 )
 
 func SetupDB() error {
@@ -47,7 +47,7 @@ func SetupBuckets(db *bbolt.DB) error {
 		if _, err := tx.CreateBucketIfNotExists(SettingsBucket); err != nil {
 			return err
 		}
-		if _, err := tx.CreateBucketIfNotExists(CheckpointBucket); err != nil {
+		if _, err := tx.CreateBucketIfNotExists(WaypointBucket); err != nil {
 			return err
 		}
 		return nil

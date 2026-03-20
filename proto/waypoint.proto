@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package store;
+
+option go_package = "github.com/gohyuhan/rift/proto";
+
+// waypoint represent metadata for a dir in user's system with a user defined waypoint name and other metadata that will be used by rift
+message Waypoint {
+  string waypoint_name = 1; // waypoint name for waypoint
+  string waypoint_path = 2; // the actual dir path
+  string waypoint_added_at = 3; // when was this waypoint added
+  int64 waypoint_travelled_count = 4; // represent how many time user have traveled to this waypoint
+  bool waypoint_is_sealed = 5; // represent if this waypoint no longer exist in user's system
+}

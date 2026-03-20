@@ -24,7 +24,8 @@ import (
 	"golang.org/x/mod/semver"
 )
 
-const RiftRepoUrl = "https://api.github.com/repos/gohyuhan/rift/releases/latest"
+const RiftRepoLatestUrl = "https://api.github.com/repos/gohyuhan/rift/releases/latest"
+const RiftRepoAllReleasesUrl = "https://api.github.com/repos/gohyuhan/rift/releases"
 
 // ----------------------------------
 //
@@ -32,42 +33,103 @@ const RiftRepoUrl = "https://api.github.com/repos/gohyuhan/rift/releases/latest"
 //
 // ----------------------------------
 func CheckForUpdates() (string, bool, error) {
-	// Use GitHub API to fetch the latest release information
 	client := &http.Client{Timeout: 10 * time.Second}
-	req, err := http.NewRequest("GET", RiftRepoUrl, nil)
+
+	var latestVersion string
+	var err error
+
+	if settings.RIFTSETTINGS.DownloadPreRelease {
+		latestVersion, err = fetchLatestFromAllReleases(client)
+	} else {
+		latestVersion, err = fetchLatestStableRelease(client)
+	}
 	if err != nil {
-		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToCreateRequest, err)
+		return "", false, err
+	}
+
+	currentVersion := constant.APPVERSION
+	isNewer := compareVersions(currentVersion, latestVersion)
+	// Update the last fetch time after a successful update check
+	SaveUpdateInfo()
+	return latestVersion, isNewer, nil
+}
+
+// ----------------------------------
+//
+//	fetchLatestStableRelease fetches the latest stable (non-pre-release) release
+//
+// ----------------------------------
+func fetchLatestStableRelease(client *http.Client) (string, error) {
+	req, err := http.NewRequest("GET", RiftRepoLatestUrl, nil)
+	if err != nil {
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToCreateRequest, err)
 	}
 	req.Header.Set("Accept", "application/vnd.github.v3+json")
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToFetchRelease, err)
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToFetchRelease, err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterDownloadUnexpectedStatusCode, resp.StatusCode)
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterDownloadUnexpectedStatusCode, resp.StatusCode)
 	}
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToReadResponse, err)
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToReadResponse, err)
 	}
 
 	var release struct {
 		TagName string `json:"tag_name"`
 	}
 	if err := json.Unmarshal(body, &release); err != nil {
-		return "", false, fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToParseJSON, err)
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToParseJSON, err)
 	}
 
-	currentVersion := constant.APPVERSION
-	latestVersion := release.TagName
-	isNewer := compareVersions(currentVersion, latestVersion)
-	// Update the last fetch time after a successful update check
-	SaveUpdateInfo()
-	return latestVersion, isNewer, nil
+	return release.TagName, nil
+}
+
+// ----------------------------------
+//
+//	fetchLatestFromAllReleases fetches the most recently published release including pre-releases
+//
+// ----------------------------------
+func fetchLatestFromAllReleases(client *http.Client) (string, error) {
+	req, err := http.NewRequest("GET", RiftRepoAllReleasesUrl+"?per_page=1", nil)
+	if err != nil {
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToCreateRequest, err)
+	}
+	req.Header.Set("Accept", "application/vnd.github.v3+json")
+
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToFetchRelease, err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterDownloadUnexpectedStatusCode, resp.StatusCode)
+	}
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToReadResponse, err)
+	}
+
+	var releases []struct {
+		TagName string `json:"tag_name"`
+	}
+	if err := json.Unmarshal(body, &releases); err != nil {
+		return "", fmt.Errorf(i18n.LANGUAGEMAPPING.UpdaterFailToParseJSON, err)
+	}
+
+	if len(releases) == 0 {
+		return "", fmt.Errorf("%s", i18n.LANGUAGEMAPPING.UpdaterFailToFetchRelease)
+	}
+
+	return releases[0].TagName, nil
 }
 
 // ----------------------------------

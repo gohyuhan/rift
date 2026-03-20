@@ -1,0 +1,99 @@
+package api
+
+import (
+	"fmt"
+	"os"
+
+	"github.com/gohyuhan/rift/constant"
+	"github.com/gohyuhan/rift/db"
+	"github.com/gohyuhan/rift/i18n"
+	"github.com/gohyuhan/rift/internal/shell"
+	"github.com/gohyuhan/rift/logger"
+	"github.com/gohyuhan/rift/settings"
+	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/utils"
+	"golang.org/x/mod/semver"
+)
+
+func RiftSetup() error {
+	if !shell.BinaryInPath() {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(i18n.LANGUAGEMAPPING.BinaryNotInPath, style.ColorYellowWarm, false)})
+	}
+
+	sh := shell.Detect()
+	msg := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftDetectedShell, sh), style.ColorPurpleVibrant, false)
+	logger.LOGGER.LogToTerminal([]string{msg})
+
+	cfgFile, cfgFileErr := shell.ConfigFile(sh)
+	if cfgFileErr != nil {
+		// CMD or unsupported shell — Install returns the descriptive error
+		return shell.Install(sh)
+	}
+
+	installed, isInstalledErr := shell.IsInstalled(cfgFile)
+	if isInstalledErr != nil {
+		return isInstalledErr
+	}
+
+	if installed {
+		logger.LOGGER.LogToTerminal([]string{style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellAlreadyInstalled, cfgFile), style.ColorGreenSoft, false)})
+	} else {
+		if err := shell.Install(sh); err != nil {
+			return err
+		}
+	}
+
+	dbSetupErr := db.SetupDB()
+	if dbSetupErr != nil {
+		return dbSetupErr
+	}
+
+	return nil
+}
+
+// ----------------------------------
+//
+//	CheckAndRunSetup checks whether settings.json exists, the db exists,
+//	and whether the binary version is newer than the recorded settings version.
+//	If any condition is true, RiftSetup is run and the settings version is updated.
+//
+// ----------------------------------
+func CheckAndRunSetup() error {
+	needSetup := false
+
+	settingsPath, err := utils.GetRiftSettingsFilePath()
+	if err != nil {
+		return err
+	}
+	if _, err := os.Stat(settingsPath); os.IsNotExist(err) {
+		needSetup = true
+	}
+
+	dbPath, err := utils.GetRiftDBFilePath()
+	if err != nil {
+		return err
+	}
+	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
+		needSetup = true
+	}
+
+	if !needSetup {
+		if settings.RIFTSETTINGS == nil || isVersionGreater(constant.APPVERSION, settings.RIFTSETTINGS.Version) {
+			needSetup = true
+		}
+	}
+
+	if needSetup {
+		if err := RiftSetup(); err != nil {
+			return err
+		}
+		settings.UpdateVersion(constant.APPVERSION)
+	}
+
+	return nil
+}
+
+// isVersionGreater returns true if a is a valid semver string greater than b.
+func isVersionGreater(binaryVersion, settingsVersion string) bool {
+	return semver.IsValid(binaryVersion) && semver.IsValid(settingsVersion) && semver.Compare(binaryVersion, settingsVersion) > 0
+}

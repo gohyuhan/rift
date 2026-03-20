@@ -13,11 +13,11 @@ var jA = LanguageMapping{
 	SettingsWriteError: "設定ファイルの書き込みに失敗しました、[ERROR: %s]",
 
 	// DB related
-	DBPathError:                   "データベースディレクトリへのアクセスに失敗しました、[ERROR: %s]",
-	DBSetupError:                  "データベースの初期化に失敗しました、[ERROR: %s]",
-	DBOpenError:                   "データベースのオープンに失敗しました。初期化されていない可能性があります。`rift awaken` を実行してください",
-	SettingsBucketNotFoundError:   "データベースに設定バケットが見つかりません。`rift awaken` を再実行してください",
-	CheckpointBucketNotFoundError: "データベースにチェックポイントバケットが見つかりません。`rift awaken` を再実行してください",
+	DBPathError:                 "データベースディレクトリへのアクセスに失敗しました、[ERROR: %s]",
+	DBSetupError:                "データベースの初期化に失敗しました、[ERROR: %s]",
+	DBOpenError:                 "データベースのオープンに失敗しました。初期化されていない可能性があります。`rift awaken` を実行してください",
+	SettingsBucketNotFoundError: "データベースに設定バケットが見つかりません。`rift awaken` を再実行してください",
+	WaypointBucketNotFoundError: "データベースにウェイポイントバケットが見つかりません。`rift awaken` を再実行してください",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
@@ -52,6 +52,9 @@ var jA = LanguageMapping{
 	RiftAwakenDescription: "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
 
 	// cmd root
-	RiftSavedCheckpoint:   "rift：%q -> %s を保存しました",
-	RiftUnknownCheckpoint: "rift：不明なチェックポイント名 %q",
+	RiftSavedWaypoint:   "rift：%q -> %s を保存しました",
+	RiftUnknownWaypoint: "rift：不明なウェイポイント名 %q",
+
+	// Setup related
+	CheckAndRunSetupError: "rift：セットアップに失敗しました、[ERROR: %s]",
 }

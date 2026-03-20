@@ -13,11 +13,11 @@ var zH_HANS = LanguageMapping{
 	SettingsWriteError: "写入设置文件失败，[ERROR: %s]",
 
 	// DB related
-	DBPathError:                   "无法访问数据库目录，[ERROR: %s]",
-	DBSetupError:                  "数据库初始化失败，[ERROR: %s]",
-	DBOpenError:                   "数据库打开失败，请确认是否已初始化，运行 `rift awaken` 进行初始化",
-	SettingsBucketNotFoundError:   "在数据库中找不到设置存储区，请重新运行 `rift awaken`",
-	CheckpointBucketNotFoundError: "在数据库中找不到检查点存储区，请重新运行 `rift awaken`",
+	DBPathError:                 "无法访问数据库目录，[ERROR: %s]",
+	DBSetupError:                "数据库初始化失败，[ERROR: %s]",
+	DBOpenError:                 "数据库打开失败，请确认是否已初始化，运行 `rift awaken` 进行初始化",
+	SettingsBucketNotFoundError: "在数据库中找不到设置存储区，请重新运行 `rift awaken`",
+	WaypointBucketNotFoundError: "在数据库中找不到航点存储区，请重新运行 `rift awaken`",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "发现新版本 %s，是否立即下载？(y/n): ",
@@ -52,6 +52,9 @@ var zH_HANS = LanguageMapping{
 	RiftAwakenDescription: "在您的 Shell 中唤醒 rift【首次使用前请执行此命令进行设置与初始化】",
 
 	// cmd root
-	RiftSavedCheckpoint:   "rift：已保存 %q -> %s",
-	RiftUnknownCheckpoint: "rift：未知的检查点名称 %q",
+	RiftSavedWaypoint:   "rift：已保存 %q -> %s",
+	RiftUnknownWaypoint: "rift：未知的航点名称 %q",
+
+	// Setup related
+	CheckAndRunSetupError: "rift：设置失败，[ERROR: %s]",
 }

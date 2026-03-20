@@ -11,11 +11,25 @@ import (
 var ReservedCommandKeywords = []string{
 	"rift",
 	"awaken",
+	"discover",
+	"spell",
+	"cast",
+	"ritual",
+	"summon",
+	"deploy",
+	"rune",
+	"seer",
+	"recall",
+	"loot",
+	"waypoint",
+	"grimore",
+	"lore",
+	"stats",
 }
 
 // ----------------------------------
 //
-// This is to check if those checkpoint name defined by the user didn't conflict with rift's reserved keyword,
+// This is to check if those waypoint name defined by the user didn't conflict with rift's reserved keyword,
 // such as `awaken`.
 //
 // ----------------------------------

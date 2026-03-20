@@ -13,11 +13,11 @@ var eN = LanguageMapping{
 	SettingsWriteError: "Failed to write settings file, [ERROR: %s]",
 
 	// DB related
-	DBPathError:                   "Failed to access database directory, [ERROR: %s]",
-	DBSetupError:                  "Failed to initialize database, [ERROR: %s]",
-	DBOpenError:                   "Failed to open database, perhaps you haven't setup rift yet, run `rift awaken` for initialization",
-	SettingsBucketNotFoundError:   "Settings bucket not found in database, perhaps rerun `rift awaken`",
-	CheckpointBucketNotFoundError: "Checkpoint bucket not found in database, perhaps rerun `rift awaken`",
+	DBPathError:                 "Failed to access database directory, [ERROR: %s]",
+	DBSetupError:                "Failed to initialize database, [ERROR: %s]",
+	DBOpenError:                 "Failed to open database, perhaps you haven't setup rift yet, run `rift awaken` for initialization",
+	SettingsBucketNotFoundError: "Settings bucket not found in database, perhaps rerun `rift awaken`",
+	WaypointBucketNotFoundError: "Waypoint bucket not found in database, perhaps rerun `rift awaken`",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
@@ -48,10 +48,13 @@ var eN = LanguageMapping{
 	BinaryNotInPath:       "rift: binary not found in PATH — add rift to your PATH to use it after this session",
 
 	// cmd description
-	RiftDescription:       "Navigate path easily by your predefined checkpoint name",
+	RiftDescription:       "Navigate path easily by your predefined waypoint name",
 	RiftAwakenDescription: "Awaken rift within your shell [setup and initialize for the first time for using rift]",
 
 	// cmd root
-	RiftSavedCheckpoint:   "rift: saved %q -> %s",
-	RiftUnknownCheckpoint: "rift: unknown checkpoint name %q",
+	RiftSavedWaypoint:   "rift: saved %q -> %s",
+	RiftUnknownWaypoint: "rift: unknown waypoint name %q",
+
+	// Setup related
+	CheckAndRunSetupError: "rift: setup failed, [ERROR: %s]",
 }

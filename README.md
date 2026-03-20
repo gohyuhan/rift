@@ -27,11 +27,11 @@ A tool forged for those who refuse to waste their power on traversal. Memorize a
 
 ## Spellbook
 
-| Spell | Incantation | Effect |
-|---|---|---|
-| **Travel** | `rift <name>` | Tear open a rift and teleport to a memorized location |
-| **Memorize** | `rift --memorize <name>` | Inscribe your current location into memory |
-| **Awaken** | `rift awaken` | Awaken rift within your shell — run once after install |
+| Spell        | Incantation              | Effect                                                 |
+| ------------ | ------------------------ | ------------------------------------------------------ |
+| **Travel**   | `rift <name>`            | Tear open a rift and teleport to a memorized location  |
+| **Memorize** | `rift --memorize <name>` | Inscribe your current location into memory             |
+| **Awaken**   | `rift awaken`            | Awaken rift within your shell — run once after install |
 
 > More spells incoming — `rift atlas`, `rift forget`, `rift rebind`.
 
@@ -123,4 +123,137 @@ See [`docs/shell-integration.md`](docs/shell-integration.md) for the full arcane
 
 ## Grimoire
 
-Memorized locations are stored in `~/.config/rift/paths.json` — your personal grimoire, persisted across sessions.
+Memorized locations are stored in a [bbolt](https://github.com/etcd-io/bbolt) database — your personal grimoire, persisted across sessions.
+
+| Platform | Database | Settings |
+| -------- | -------- | -------- |
+| macOS | `~/Library/Application Support/rift/db/rift.db` | `~/Library/Application Support/rift/settings/rift_settings.json` |
+| Linux | `~/.config/rift/db/rift.db` | `~/.config/rift/settings/rift_settings.json` |
+| Windows | `%APPDATA%\rift\db\rift.db` | `%APPDATA%\rift\settings\rift_settings.json` |
+
+## Installation
+
+### Linux
+
+```bash
+curl --proto "=https" -sSfL https://github.com/gohyuhan/rift/releases/latest/download/install.sh | bash
+```
+
+### macOS (curl or homebrew)
+
+```bash
+curl --proto "=https" -sSfL https://github.com/gohyuhan/rift/releases/latest/download/install.sh | bash
+
+# via homebrew
+# Add the tap (once)
+brew tap gohyuhan/rift
+
+# Install latest
+brew update && brew install rift
+```
+
+### Windows (PowerShell or scoop)
+
+```powershell
+powershell -c "irm https://github.com/gohyuhan/rift/releases/latest/download/install.ps1 | iex"
+
+# via scoop
+# Add the bucket (once)
+scoop bucket add rift https://github.com/gohyuhan/scoop-rift
+
+# Install latest
+scoop update; scoop install rift
+```
+
+### Go Install
+
+If you have Go installed, you can install rift directly:
+
+```bash
+go install github.com/gohyuhan/rift@latest
+```
+
+## Uninstall & Cleanup
+
+### macOS (Homebrew)
+
+```bash
+# 1. Uninstall + remove ALL versions
+brew uninstall --force rift
+
+# 2. Remove the tap
+brew untap gohyuhan/rift
+
+# 3. Delete the binary directly (in case it's not a symlink or brew missed it)
+rm -f /opt/homebrew/bin/rift
+rm -f /usr/local/bin/rift
+
+# 4. Delete the entire Cellar folder for rift (old kegs)
+rm -rf /opt/homebrew/Cellar/rift
+rm -rf /usr/local/Cellar/rift
+
+# 5. Delete any leftover symlinks
+rm -rf /opt/homebrew/opt/rift
+rm -rf /usr/local/opt/rift
+
+# 6. Delete all cached downloads for rift
+rm -rf ~/Library/Caches/Homebrew/rift*
+rm -rf ~/Library/Caches/Homebrew/downloads/*rift*
+```
+
+### Windows (Scoop)
+
+```powershell
+# 1. Uninstall the app (all versions)
+scoop uninstall rift 2>$null
+
+# 2. Remove the bucket
+scoop bucket rm rift 2>$null
+
+# 3. Delete the app folder completely (including shims + persist)
+rm -r -force "$env:USERPROFILE\scoop\apps\rift" 2>$null
+
+# 4. Delete the bucket clone
+rm -r -force "$env:USERPROFILE\scoop\buckets\rift" 2>$null
+
+# 5. Delete all cached installers for rift
+scoop cache rm "rift*" 2>$null
+```
+
+### Manual Installation (curl / powershell)
+
+#### macOS / Linux
+
+```bash
+# Remove binary (if installed via curl)
+sudo rm -f /usr/local/bin/rift
+```
+
+#### Windows
+
+```powershell
+# Remove binary and directory
+Remove-Item -Path "$env:LOCALAPPDATA\rift" -Recurse -Force
+```
+
+### Configuration Cleanup
+
+To completely remove rift's configuration files:
+
+#### macOS
+
+```bash
+rm -rf "$HOME/Library/Application Support/rift"
+```
+
+#### Linux
+
+```bash
+rm -rf "$HOME/.config/rift"
+```
+
+#### Windows
+
+```powershell
+Remove-Item -Path "$env:APPDATA\rift" -Recurse -Force
+```

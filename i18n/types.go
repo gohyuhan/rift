@@ -19,11 +19,11 @@ type LanguageMapping struct {
 	SettingsWriteError string
 
 	// DB related
-	DBPathError                   string
-	DBSetupError                  string
-	DBOpenError                   string
-	SettingsBucketNotFoundError   string
-	CheckpointBucketNotFoundError string
+	DBPathError                 string
+	DBSetupError                string
+	DBOpenError                 string
+	SettingsBucketNotFoundError string
+	WaypointBucketNotFoundError string
 
 	// Updater related
 	UpdaterDownloadPrompt               string
@@ -58,6 +58,9 @@ type LanguageMapping struct {
 	RiftAwakenDescription string
 
 	// cmd root
-	RiftSavedCheckpoint   string
-	RiftUnknownCheckpoint string
+	RiftSavedWaypoint   string
+	RiftUnknownWaypoint string
+
+	// Setup related
+	CheckAndRunSetupError string
 }

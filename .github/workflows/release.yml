@@ -28,7 +28,18 @@ jobs:
         with:
           go-version: stable
 
-      # ── 3. Run GoReleaser (creates release + artifacts + checksums.txt) ───────────────
+      # ── 3. Detect pre-release tag ─────────────────────────────────────────────────────
+      - name: Check if pre-release
+        id: prerelease_check
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ "$TAG" =~ -[a-zA-Z] ]]; then
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
+      # ── 4. Run GoReleaser (creates release + artifacts + checksums.txt) ───────────────
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
@@ -37,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ── 4. Extract SHA256 checksums ────────────────────────────────────────────────────
+      # ── 5. Extract SHA256 checksums ────────────────────────────────────────────────────
       - name: Extract checksums
         id: checksums
         run: |
@@ -56,8 +67,9 @@ jobs:
           echo "win_amd64=$WIN_AMD64" >> $GITHUB_OUTPUT
           echo "win_arm64=$WIN_ARM64" >> $GITHUB_OUTPUT
 
-      # ── 5. Update Homebrew tap (gohyuhan/homebrew-rift) ─────────────────────────────────
+      # ── 6. Update Homebrew tap (gohyuhan/homebrew-rift) ─────────────────────────────────
       - name: Checkout Homebrew tap
+        if: steps.prerelease_check.outputs.is_prerelease != 'true'
         uses: actions/checkout@v4
         with:
           repository: gohyuhan/homebrew-rift
@@ -65,6 +77,7 @@ jobs:
           path: homebrew-tap
 
       - name: Generate Homebrew formula (Formula/rift.rb at repo root)
+        if: steps.prerelease_check.outputs.is_prerelease != 'true'
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           VERSION_CLEAN=${VERSION#v}
@@ -129,6 +142,7 @@ jobs:
           EOF
 
       - name: Commit & push Homebrew formula
+        if: steps.prerelease_check.outputs.is_prerelease != 'true'
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           VERSION_CLEAN=${VERSION#v}
@@ -139,8 +153,9 @@ jobs:
           git commit -m "rift: update to ${VERSION}" || echo "No changes to commit"
           git push origin main
 
-      # ── 6. Update Scoop bucket (gohyuhan/scoop-rift) ─────────────────────────────────────
+      # ── 7. Update Scoop bucket (gohyuhan/scoop-rift) ─────────────────────────────────────
       - name: Checkout Scoop bucket
+        if: steps.prerelease_check.outputs.is_prerelease != 'true'
         uses: actions/checkout@v4
         with:
           repository: gohyuhan/scoop-rift
@@ -148,6 +163,7 @@ jobs:
           path: scoop-bucket
 
       - name: Generate Scoop manifest (bucket/rift.json at repo root)
+        if: steps.prerelease_check.outputs.is_prerelease != 'true'
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           VERSION_CLEAN=${VERSION#v}
@@ -207,6 +223,7 @@ jobs:
           EOF
 
       - name: Commit & push Scoop manifest
+        if: steps.prerelease_check.outputs.is_prerelease != 'true'
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
           VERSION_CLEAN=${VERSION#v}
@@ -217,7 +234,7 @@ jobs:
           git commit -m "rift: update to ${VERSION}" || echo "No changes to commit"
           git push origin main
 
-      # ── 7. Cleanup temporary checkouts ───────────────────────────────────────────────────
+      # ── 8. Cleanup temporary checkouts ───────────────────────────────────────────────────
       - name: Cleanup
         if: always()
         run: |

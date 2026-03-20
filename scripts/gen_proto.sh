@@ -7,10 +7,18 @@ if ! command -v protoc &>/dev/null; then
   exit 1
 fi
 
-# Check protoc-gen-go is installed
+# Check protoc-gen-go is installed (also check $GOPATH/bin and $HOME/go/bin)
 if ! command -v protoc-gen-go &>/dev/null; then
-  echo "protoc-gen-go not found. Install with: go install google.golang.org/protobuf/cmd/protoc-gen-go@latest"
-  exit 1
+  GOBIN="$(go env GOPATH)/bin"
+  if [ -x "$GOBIN/protoc-gen-go" ]; then
+    export PATH="$PATH:$GOBIN"
+  else
+    echo "protoc-gen-go not found. Install with:"
+    echo "  go install google.golang.org/protobuf/cmd/protoc-gen-go@latest"
+    echo "Then add Go's bin directory to your PATH:"
+    echo "  export PATH=\"\$PATH:\$(go env GOPATH)/bin\""
+    exit 1
+  fi
 fi
 
 # Compile all .proto files

@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/style"
@@ -17,15 +18,19 @@ import (
 var RIFTSETTINGS *RiftSettings
 
 type RiftSettings struct {
-	LanguageCode        string
-	LastUpdateCheckTime time.Time
-	AutoUpdate          bool
+	Version             string    `json:"version"`
+	LanguageCode        string    `json:"language_code"`
+	LastUpdateCheckTime time.Time `json:"last_update_check_time"`
+	AutoUpdate          bool      `json:"auto_update"`
+	DownloadPreRelease  bool      `json:"download_pre_release"`
 }
 
 var RiftDefaultConfigSettings = RiftSettings{
+	Version:             constant.APPVERSION,
 	LanguageCode:        "EN",
 	LastUpdateCheckTime: time.Now().UTC(),
 	AutoUpdate:          true,
+	DownloadPreRelease:  false,
 }
 
 // ----------------------------------
@@ -162,6 +167,32 @@ func writeDefaultSettings(settingsPath string) {
 // ----------------------------------
 func UpdateLanguageCode(languageCode string) {
 	RIFTSETTINGS.LanguageCode = strings.ToUpper(languageCode)
+	settingsPath, err := utils.GetRiftSettingsFilePath()
+	if err == nil {
+		saveSettings(settingsPath, *RIFTSETTINGS)
+	}
+}
+
+// ----------------------------------
+//
+//	Update version in settings record
+//
+// ----------------------------------
+func UpdateVersion(version string) {
+	RIFTSETTINGS.Version = version
+	settingsPath, err := utils.GetRiftSettingsFilePath()
+	if err == nil {
+		saveSettings(settingsPath, *RIFTSETTINGS)
+	}
+}
+
+// ----------------------------------
+//
+//	Update download pre release setting
+//
+// ----------------------------------
+func UpdateDownloadPreRelease(downloadPreRelease bool) {
+	RIFTSETTINGS.DownloadPreRelease = downloadPreRelease
 	settingsPath, err := utils.GetRiftSettingsFilePath()
 	if err == nil {
 		saveSettings(settingsPath, *RIFTSETTINGS)
