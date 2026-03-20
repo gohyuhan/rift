@@ -74,5 +74,6 @@ var jA = LanguageMapping{
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 
 	// Setup related
-	CheckAndRunSetupError: "rift：セットアップに失敗しました、[ERROR: %s]",
+	CheckAndRunSetupError:  "rift：セットアップに失敗しました、[ERROR: %s]",
+	RiftAutoSetupTriggered: "rift：設定とコンフィグのセットアップが自動的にトリガーされました",
 }

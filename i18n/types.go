@@ -80,5 +80,6 @@ type LanguageMapping struct {
 	RiftFlagRetrieveError string
 
 	// Setup related
-	CheckAndRunSetupError string
+	CheckAndRunSetupError  string
+	RiftAutoSetupTriggered string
 }

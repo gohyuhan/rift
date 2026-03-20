@@ -74,5 +74,6 @@ var zH_HANT = LanguageMapping{
 	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",
 
 	// Setup related
-	CheckAndRunSetupError: "rift：設定失敗，[ERROR: %s]",
+	CheckAndRunSetupError:  "rift：設定失敗，[ERROR: %s]",
+	RiftAutoSetupTriggered: "rift：設定與配置已自動觸發",
 }

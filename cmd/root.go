@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gohyuhan/rift/api"
+	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
 )
@@ -35,6 +36,7 @@ func init() {
 // ----------------------------------
 func InitCmdI18n() {
 	rootCmd.Short = i18n.LANGUAGEMAPPING.RiftDescription
+	rootCmd.Long = constant.APPLOGO
 	rootCmd.Flags().Lookup("language").Usage = i18n.LANGUAGEMAPPING.RiftFlagLanguageDescription
 	rootCmd.Flags().Lookup("autoupdate").Usage = i18n.LANGUAGEMAPPING.RiftFlagAutoUpdateDescription
 	rootCmd.Flags().Lookup("download-pre-release").Usage = i18n.LANGUAGEMAPPING.RiftFlagDownloadPreReleaseDescription

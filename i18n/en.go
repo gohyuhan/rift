@@ -74,5 +74,6 @@ var eN = LanguageMapping{
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",
 
 	// Setup related
-	CheckAndRunSetupError: "rift: setup failed, [ERROR: %s]",
+	CheckAndRunSetupError:  "rift: setup failed, [ERROR: %s]",
+	RiftAutoSetupTriggered: "rift: settings and config setup triggered automatically",
 }

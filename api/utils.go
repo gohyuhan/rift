@@ -52,6 +52,9 @@ func RiftSetup() error {
 		}
 	}
 
+	// just to change to new line
+	logger.LOGGER.LogToTerminal([]string{""})
+
 	dbSetupErr := db.SetupDB()
 	if dbSetupErr != nil {
 		return dbSetupErr
@@ -93,6 +96,8 @@ func CheckAndRunSetup() error {
 	}
 
 	if needSetup {
+		message := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RiftAutoSetupTriggered, style.ColorCyanSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message, ""})
 		if err := RiftSetup(); err != nil {
 			return err
 		}

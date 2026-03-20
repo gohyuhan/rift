@@ -74,5 +74,6 @@ var zH_HANS = LanguageMapping{
 	RiftFlagRetrieveError: "rift：获取标志 %q 失败，[ERROR: %s]",
 
 	// Setup related
-	CheckAndRunSetupError: "rift：设置失败，[ERROR: %s]",
+	CheckAndRunSetupError:  "rift：设置失败，[ERROR: %s]",
+	RiftAutoSetupTriggered: "rift：设置与配置已自动触发",
 }

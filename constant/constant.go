@@ -4,6 +4,18 @@ const (
 	APPNAME         = "rift"
 	APPDBNAME       = "rift.db"
 	APPSETTINGSNAME = "rift_settings.json"
+
+	APPLOGO = `
+  ██████╗ ██╗███████╗████████╗
+  ██╔══██╗██║██╔════╝╚══██╔══╝
+  ██████╔╝██║█████╗     ██║
+  ██╔══██╗██║██╔══╝     ██║
+  ██║  ██║██║██║        ██║
+  ╚═╝  ╚═╝╚═╝╚═╝        ╚═╝
+ ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+ ┃  Tear through your filesystem.  ┃
+ ┃  No spells required.            ┃
+ ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`
 )
 
 // this will be injected during build
