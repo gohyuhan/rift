@@ -69,6 +69,7 @@ var jA = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:   "rift：ウェイポイント %q は存在しません",
 	RiftWaypointUpdateError:        "rift：ウェイポイント %q の更新に失敗しました",
+	RiftWaypointSealedError:        "rift：ウェイポイント %q は封印されており、移動できません",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",

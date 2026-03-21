@@ -18,16 +18,21 @@ import (
 
 // ----------------------------------
 //
-//	Runs the full rift setup: checks binary is in PATH, detects the shell,
-//	installs the shell integration if not already present, and initializes the DB.
+//	Runs the full rift setup sequence:
+//	  1. Warns if the rift binary is not on PATH
+//	  2. Detects the current shell
+//	  3. Installs the shell integration into the shell config file (if not already present)
+//	  4. Initializes (or migrates) the bbolt DB
 //
 // ----------------------------------
 func RiftSetup() error {
+	// warn if the binary won't be found after this session ends
 	if !shell.BinaryInPath() {
 		message := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.BinaryNotInPath, style.ColorYellowWarm, false)
 		logger.LOGGER.LogToTerminal([]string{message})
 	}
 
+	// detect the running shell so we know which config file to modify
 	sh := shell.Detect()
 	msg := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftDetectedShell, sh), style.ColorPurpleVibrant, false)
 	logger.LOGGER.LogToTerminal([]string{msg})
@@ -38,6 +43,7 @@ func RiftSetup() error {
 		return shell.Install(sh)
 	}
 
+	// check whether the shell integration snippet is already present
 	installed, isInstalledErr := shell.IsInstalled(cfgFile)
 	if isInstalledErr != nil {
 		return isInstalledErr
@@ -55,6 +61,7 @@ func RiftSetup() error {
 	// just to change to new line
 	logger.LOGGER.LogToTerminal([]string{""})
 
+	// initialize the DB (creates buckets if they don't exist yet)
 	dbSetupErr := db.SetupDB()
 	if dbSetupErr != nil {
 		return dbSetupErr
@@ -65,14 +72,18 @@ func RiftSetup() error {
 
 // ----------------------------------
 //
-//	CheckAndRunSetup checks whether settings.json exists, the db exists,
-//	and whether the binary version is newer than the recorded settings version.
-//	If any condition is true, RiftSetup is run and the settings version is updated.
+//	Decides whether setup needs to run and triggers it if so.
+//	Setup is required when any of the following is true:
+//	  - the settings file does not exist on disk
+//	  - the DB file does not exist on disk
+//	  - the binary version is newer than the version recorded in settings
+//	After a successful setup the settings version is stamped with the current binary version.
 //
 // ----------------------------------
 func CheckAndRunSetup() error {
 	needSetup := false
 
+	// check settings file presence
 	settingsPath, err := utils.GetRiftSettingsFilePath()
 	if err != nil {
 		return err
@@ -81,6 +92,7 @@ func CheckAndRunSetup() error {
 		needSetup = true
 	}
 
+	// check DB file presence
 	dbPath, err := utils.GetRiftDBFilePath()
 	if err != nil {
 		return err
@@ -89,6 +101,7 @@ func CheckAndRunSetup() error {
 		needSetup = true
 	}
 
+	// check whether the binary is newer than what was last set up
 	if !needSetup {
 		if settings.RIFTSETTINGS == nil || isVersionGreater(constant.APPVERSION, settings.RIFTSETTINGS.Version) {
 			needSetup = true
@@ -101,6 +114,7 @@ func CheckAndRunSetup() error {
 		if err := RiftSetup(); err != nil {
 			return err
 		}
+		// stamp the new version so we don't re-run setup on the next invocation
 		settings.UpdateVersion(constant.APPVERSION)
 	}
 
@@ -109,7 +123,8 @@ func CheckAndRunSetup() error {
 
 // ----------------------------------
 //
-//	Returns true if binaryVersion is a valid semver string greater than settingsVersion.
+//	Reports whether binaryVersion is a valid semver string that is strictly
+//	greater than settingsVersion. Returns false if either string is not valid semver.
 //
 // ----------------------------------
 func isVersionGreater(binaryVersion, settingsVersion string) bool {
@@ -119,6 +134,7 @@ func isVersionGreater(binaryVersion, settingsVersion string) bool {
 // ----------------------------------
 //
 //	The list of keywords reserved by rift that cannot be used as waypoint names.
+//	These mirror rift's own subcommands and future planned commands.
 //
 // ----------------------------------
 var ReservedCommandKeywords = []string{
@@ -145,8 +161,9 @@ var ReservedCommandKeywords = []string{
 
 // ----------------------------------
 //
-// This is to check if those waypoint name defined by the user didn't conflict with rift's reserved keyword,
-// such as `awaken`.
+//	Returns an error if the given waypoint name conflicts with a reserved rift
+//	keyword (e.g. "awaken", "discover"). This prevents waypoints from shadowing
+//	rift's own subcommands at the shell level.
 //
 // ----------------------------------
 func CheckIfKeywordIsReservedForRift(arg string) error {

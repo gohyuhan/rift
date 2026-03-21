@@ -17,11 +17,14 @@ import (
 
 // ----------------------------------
 //
-//	Validates the current working directory, checks for reserved keywords,
-//	opens the DB, and saves the given waypoint name mapped to the CWD.
+//	Cobra handler for the discover command.
+//	Resolves the current working directory, validates it is a real directory,
+//	guards against reserved keyword names, then persists the waypoint mapping
+//	(name → CWD) into the DB.
 //
 // ----------------------------------
 var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
+	// resolve and validate the current working directory
 	cwd, cwdErr := utils.GetCWD()
 	if cwdErr != nil {
 		return cwdErr
@@ -36,16 +39,19 @@ var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
 		return fmt.Errorf("%s", errorMessage)
 	}
 
+	// no waypoint name provided — show help
 	if len(args) == 0 {
 		return command.Help()
 	}
 
 	waypointName := args[0]
 
+	// reject names that clash with rift's own subcommands
 	if err := CheckIfKeywordIsReservedForRift(waypointName); err != nil {
 		return err
 	}
 
+	// open DB and persist the new waypoint
 	bboltDB, bboltDBErr := db.OpenDB()
 	if bboltDBErr != nil {
 		return bboltDBErr
@@ -66,7 +72,9 @@ var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
 
 // ----------------------------------
 //
-//	Persists a new waypoint entry into the DB bucket, rejecting duplicates.
+//	Persists a new waypoint (name → path) into the waypoint bucket.
+//	Rejects the write if a waypoint with the same name already exists,
+//	whether healthy or corrupted.
 //
 // ----------------------------------
 func saveWaypoint(bboltDb *bbolt.DB, waypointName string, path string) error {
@@ -76,6 +84,7 @@ func saveWaypoint(bboltDb *bbolt.DB, waypointName string, path string) error {
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
 		}
 
+		// duplicate guard: reject if a waypoint with this name already exists
 		existing := bucket.Get([]byte(waypointName))
 		if existing != nil {
 			existingWaypoint := &pb.Waypoint{}
@@ -87,6 +96,7 @@ func saveWaypoint(bboltDb *bbolt.DB, waypointName string, path string) error {
 			return fmt.Errorf("%s", errorMessage)
 		}
 
+		// build the new waypoint record with defaults
 		waypoint := &pb.Waypoint{
 			WaypointName:           waypointName,
 			WaypointPath:           path,

@@ -75,6 +75,7 @@ type LanguageMapping struct {
 	RiftWaypointAlreadyExistsError string
 	RiftWaypointDoNotExistsError   string
 	RiftWaypointUpdateError        string
+	RiftWaypointSealedError        string
 
 	// Flag related
 	RiftFlagRetrieveError string

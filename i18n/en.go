@@ -69,6 +69,7 @@ var eN = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "Waypoint %q already exists, pointing to %s",
 	RiftWaypointDoNotExistsError:   "rift: waypoint %q does not exist",
 	RiftWaypointUpdateError:        "rift: failed to update waypoint %q",
+	RiftWaypointSealedError:        "rift: waypoint %q is sealed and cannot be travelled to",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

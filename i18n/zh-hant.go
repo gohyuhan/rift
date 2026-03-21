@@ -69,6 +69,7 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "航點 %q 已存在，指向 %s",
 	RiftWaypointDoNotExistsError:   "rift：航點 %q 不存在",
 	RiftWaypointUpdateError:        "rift：更新航點 %q 失敗",
+	RiftWaypointSealedError:        "rift：航點 %q 已封印，無法前往",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",
