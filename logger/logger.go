@@ -8,8 +8,9 @@ import (
 
 // -----------------------------------------------------
 //
-//   Logger was resposible for logging messages to the console and files.
-//   It will output using stderr as stdout was solely for the the delegate of command to the shell for path navigation and execution.
+//   Logger is responsible for logging messages to the terminal.
+//   It writes exclusively to stderr — stdout is reserved for the cd command
+//   emitted to the shell for path navigation.
 //
 // -----------------------------------------------------
 
