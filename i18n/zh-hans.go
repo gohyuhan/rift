@@ -7,6 +7,7 @@ var zH_HANS = LanguageMapping{
 	RiftDetectedShell:        "rift：检测到的 Shell：%s",
 	CWDIsNotDirError:         "当前工作目录不是一个有效的目录",
 	PathNotAbsoluteError:     "路径必须为绝对路径，收到: %s",
+	NotFileOrDirError:        "指定路径不存在（非文件或目录）",
 
 	// Settings related
 	SettingsPathError:                 "无法访问设置目录，[ERROR: %s]",
@@ -59,9 +60,13 @@ var zH_HANS = LanguageMapping{
 	RiftDescription:                       "通过您预先定义的检查点名称轻松导航路径",
 	RiftAwakenDescription:                 "在您的 Shell 中唤醒 rift【首次使用前请执行此命令进行设置与初始化】",
 	RiftDiscoverDescription:               "为当前工作目录指定一个航点名称",
+	RiftWaypointDescription:               "列出所有航点或显示指定航点的详细信息",
 	RiftFlagLanguageDescription:           "设置 rift 的语言（支持：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "设置 rift 是否自动检查更新（使用 --autoupdate 设为启用，--autoupdate=false 设为禁用）",
 	RiftFlagDownloadPreReleaseDescription: "设置 rift 是否也下载预发布版本，或仅限稳定版本（使用 --download-pre-release 设为启用，--download-pre-release=false 设为禁用）",
+	RiftFlagWaypointDestroyDescription:    "按名称删除一个航点",
+	RiftFlagWaypointRebindDescription:     "将现有航点重新绑定到新路径；未提供路径时默认使用当前工作目录，提供有效绝对路径时优先使用该路径",
+	RiftFlagWaypointReforgeDescription:    "将现有航点重命名为新名称",
 
 	// Waypoint related
 	RiftSavedWaypoint:              "rift：已保存 %q -> %s",
@@ -69,6 +74,9 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "航点 %q 已存在，指向 %s",
 	RiftWaypointDoNotExistsError:   "rift：航点 %q 不存在",
 	RiftWaypointUpdateError:        "rift：更新航点 %q 失败",
+	RiftWaypointSealedError:        "rift：航点 %q 已封印，无法前往，原因：%q",
+	RiftWaypointSealedLabel:        "（已封印）",
+	RiftWaypointRetrieveAllError:   "rift：获取航点列表失败",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：获取标志 %q 失败，[ERROR: %s]",

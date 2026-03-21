@@ -30,6 +30,7 @@ type Waypoint struct {
 	WaypointAddedAt        string                 `protobuf:"bytes,3,opt,name=waypoint_added_at,json=waypointAddedAt,proto3" json:"waypoint_added_at,omitempty"`                       // when was this waypoint added
 	WaypointTravelledCount int64                  `protobuf:"varint,4,opt,name=waypoint_travelled_count,json=waypointTravelledCount,proto3" json:"waypoint_travelled_count,omitempty"` // represent how many time user have traveled to this waypoint
 	WaypointIsSealed       bool                   `protobuf:"varint,5,opt,name=waypoint_is_sealed,json=waypointIsSealed,proto3" json:"waypoint_is_sealed,omitempty"`                   // represent if this waypoint no longer exist in user's system
+	WaypointSealedReason   string                 `protobuf:"bytes,6,opt,name=waypoint_sealed_reason,json=waypointSealedReason,proto3" json:"waypoint_sealed_reason,omitempty"`
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
@@ -99,17 +100,25 @@ func (x *Waypoint) GetWaypointIsSealed() bool {
 	return false
 }
 
+func (x *Waypoint) GetWaypointSealedReason() string {
+	if x != nil {
+		return x.WaypointSealedReason
+	}
+	return ""
+}
+
 var File_proto_waypoint_proto protoreflect.FileDescriptor
 
 const file_proto_waypoint_proto_rawDesc = "" +
 	"\n" +
-	"\x14proto/waypoint.proto\x12\x05store\"\xe8\x01\n" +
+	"\x14proto/waypoint.proto\x12\x05store\"\x9e\x02\n" +
 	"\bWaypoint\x12#\n" +
 	"\rwaypoint_name\x18\x01 \x01(\tR\fwaypointName\x12#\n" +
 	"\rwaypoint_path\x18\x02 \x01(\tR\fwaypointPath\x12*\n" +
 	"\x11waypoint_added_at\x18\x03 \x01(\tR\x0fwaypointAddedAt\x128\n" +
 	"\x18waypoint_travelled_count\x18\x04 \x01(\x03R\x16waypointTravelledCount\x12,\n" +
-	"\x12waypoint_is_sealed\x18\x05 \x01(\bR\x10waypointIsSealedB Z\x1egithub.com/gohyuhan/rift/protob\x06proto3"
+	"\x12waypoint_is_sealed\x18\x05 \x01(\bR\x10waypointIsSealed\x124\n" +
+	"\x16waypoint_sealed_reason\x18\x06 \x01(\tR\x14waypointSealedReasonB Z\x1egithub.com/gohyuhan/rift/protob\x06proto3"
 
 var (
 	file_proto_waypoint_proto_rawDescOnce sync.Once

@@ -7,6 +7,7 @@ var jA = LanguageMapping{
 	RiftDetectedShell:        "rift：検出されたシェル：%s",
 	CWDIsNotDirError:         "現在の作業ディレクトリは有効なディレクトリではありません",
 	PathNotAbsoluteError:     "パスは絶対パスである必要があります。指定されたパス: %s",
+	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
 
 	// Settings related
 	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
@@ -59,9 +60,13 @@ var jA = LanguageMapping{
 	RiftDescription:                       "事前に定義したチェックポイント名でパスを簡単に移動できます",
 	RiftAwakenDescription:                 "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
 	RiftDiscoverDescription:               "現在の作業ディレクトリにウェイポイント名を割り当てます",
+	RiftWaypointDescription:               "すべてのウェイポイントを一覧表示するか、特定のウェイポイントの情報を表示します",
 	RiftFlagLanguageDescription:           "rift の言語を設定します（対応言語：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "rift が自動的にアップデートを確認するかどうかを設定します（有効にするには --autoupdate、無効にするには --autoupdate=false）",
 	RiftFlagDownloadPreReleaseDescription: "rift がプレリリース版もダウンロードするか、安定版のみにするかを設定します（有効にするには --download-pre-release、無効にするには --download-pre-release=false）",
+	RiftFlagWaypointDestroyDescription:    "名前を指定してウェイポイントを削除します",
+	RiftFlagWaypointRebindDescription:     "既存のウェイポイントを新しいパスに再割り当てします。パスが指定されない場合は現在の作業ディレクトリを使用し、有効な絶対パスが指定された場合はそのパスを優先します",
+	RiftFlagWaypointReforgeDescription:    "既存のウェイポイントを新しい名前に変更します",
 
 	// Waypoint related
 	RiftSavedWaypoint:              "rift：%q -> %s を保存しました",
@@ -69,6 +74,9 @@ var jA = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:   "rift：ウェイポイント %q は存在しません",
 	RiftWaypointUpdateError:        "rift：ウェイポイント %q の更新に失敗しました",
+	RiftWaypointSealedError:        "rift：ウェイポイント %q は封印されており、移動できません。理由：%q",
+	RiftWaypointSealedLabel:        "(封印済み)",
+	RiftWaypointRetrieveAllError:   "rift：ウェイポイントの取得に失敗しました",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",

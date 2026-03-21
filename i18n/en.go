@@ -7,6 +7,7 @@ var eN = LanguageMapping{
 	RiftDetectedShell:        "rift: detected shell: %s",
 	CWDIsNotDirError:         "Current working directory is not a valid directory",
 	PathNotAbsoluteError:     "Path must be absolute, got: %s",
+	NotFileOrDirError:        "Path does not exist as a file or directory",
 
 	// Settings related
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",
@@ -59,9 +60,13 @@ var eN = LanguageMapping{
 	RiftDescription:                       "Navigate path easily by your predefined waypoint name",
 	RiftAwakenDescription:                 "Awaken rift within your shell [setup and initialize for the first time for using rift]",
 	RiftDiscoverDescription:               "Assign a waypoint name to the current working directory",
+	RiftWaypointDescription:               "List all waypoints or display info for a specific waypoint",
 	RiftFlagLanguageDescription:           "Set the language for rift (supported: EN, JA, ZH-HANS, ZH-HANT)",
 	RiftFlagAutoUpdateDescription:         "Set whether rift should automatically check for updates (use --autoupdate to set true, --autoupdate=false to set false)",
 	RiftFlagDownloadPreReleaseDescription: "Set whether rift should also download pre-release versions, or only stable releases (use --download-pre-release to set true, --download-pre-release=false to set false)",
+	RiftFlagWaypointDestroyDescription:    "Remove a waypoint by name",
+	RiftFlagWaypointRebindDescription:     "Reassign an existing waypoint to a new path; defaults to the current working directory if no path is provided, or uses the given absolute path if valid",
+	RiftFlagWaypointReforgeDescription:    "Rename an existing waypoint to a new name",
 
 	// Waypoint related
 	RiftSavedWaypoint:              "rift: saved %q -> %s",
@@ -69,6 +74,9 @@ var eN = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "Waypoint %q already exists, pointing to %s",
 	RiftWaypointDoNotExistsError:   "rift: waypoint %q does not exist",
 	RiftWaypointUpdateError:        "rift: failed to update waypoint %q",
+	RiftWaypointSealedError:        "rift: waypoint %q is sealed and cannot be travelled to due to %q",
+	RiftWaypointSealedLabel:        "(SEALED)",
+	RiftWaypointRetrieveAllError:   "rift: failed to retrieve waypoints",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

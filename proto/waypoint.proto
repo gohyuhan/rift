@@ -11,4 +11,5 @@ message Waypoint {
   string waypoint_added_at = 3; // when was this waypoint added
   int64 waypoint_travelled_count = 4; // represent how many time user have traveled to this waypoint
   bool waypoint_is_sealed = 5; // represent if this waypoint no longer exist in user's system
+  string waypoint_sealed_reason = 6;
 }

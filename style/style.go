@@ -18,6 +18,7 @@ var (
 	ColorPurpleSoft    = lipgloss.Color("#B496FF")
 	ColorPurpleVibrant = lipgloss.Color("#9F7AEA")
 	ColorCyanSoft      = lipgloss.Color("#7DD3FC")
+	ColorSealedMuted   = lipgloss.Color("#5C5470")
 )
 
 // ----------------------------------

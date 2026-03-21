@@ -13,6 +13,7 @@ type LanguageMapping struct {
 	RiftDetectedShell        string
 	CWDIsNotDirError         string
 	PathNotAbsoluteError     string
+	NotFileOrDirError        string
 
 	// Settings related
 	SettingsPathError                 string
@@ -65,9 +66,13 @@ type LanguageMapping struct {
 	RiftDescription                       string
 	RiftAwakenDescription                 string
 	RiftDiscoverDescription               string
+	RiftWaypointDescription               string
 	RiftFlagLanguageDescription           string
 	RiftFlagAutoUpdateDescription         string
 	RiftFlagDownloadPreReleaseDescription string
+	RiftFlagWaypointDestroyDescription    string
+	RiftFlagWaypointRebindDescription     string
+	RiftFlagWaypointReforgeDescription    string
 
 	// Waypoint related
 	RiftSavedWaypoint              string
@@ -75,6 +80,9 @@ type LanguageMapping struct {
 	RiftWaypointAlreadyExistsError string
 	RiftWaypointDoNotExistsError   string
 	RiftWaypointUpdateError        string
+	RiftWaypointSealedError        string
+	RiftWaypointSealedLabel        string
+	RiftWaypointRetrieveAllError   string
 
 	// Flag related
 	RiftFlagRetrieveError string
