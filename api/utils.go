@@ -175,10 +175,23 @@ func CheckIfKeywordIsReservedForRift(arg string) error {
 	return nil
 }
 
-func recordCorruptedWaypointInfo(tx *bbolt.Tx, waypointName string) error {
-	waypointCorruptedBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
-	if waypointCorruptedBucket != nil {
-		waypointCorruptedBucket.Put([]byte(waypointName), []byte(waypointName))
-	}
+// ----------------------------------
+//
+//	Persists the waypoint name into the corrupted-records bucket via its own
+//	Update transaction (so the write commits regardless of what the caller's
+//	transaction did), then returns a user-facing corruption error.
+//	The Update's own error is intentionally not propagated — recording is
+//	best-effort; the corruption error is always returned to the caller.
+//
+// ----------------------------------
+func recordCorruptedWaypointInfo(bboltDB *bbolt.DB, waypointName string) error {
+	// best-effort write — ignore the Update error; the caller always gets the corruption message
+	bboltDB.Update(func(tx *bbolt.Tx) error {
+		waypointCorruptedBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
+		if waypointCorruptedBucket != nil {
+			waypointCorruptedBucket.Put([]byte(waypointName), []byte(waypointName))
+		}
+		return nil
+	})
 	return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
 }

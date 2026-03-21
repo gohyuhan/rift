@@ -47,18 +47,23 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 // ----------------------------------
 //
 //	Reads every entry in the waypoint bucket and builds a display list.
+//	Uses a read-only View transaction; any writes (corruption recording) are
+//	deferred to a separate Update transaction after View completes.
 //	Each waypoint occupies three consecutive lines in the returned slice:
 //	  1. waypoint name (cyan for active; muted/faint + sealed label for sealed)
 //	  2. waypoint path (blue-gray, faint, indented with two spaces)
 //	  3. blank line separator
-//	Corrupted proto data is recorded in the corrupted-records bucket and
-//	causes ForEach to short-circuit with an error; the caller then receives
-//	a generic retrieve-all error.
+//	Corrupted proto data stops ForEach on the first affected entry; the name is
+//	captured, recorded in the corrupted-records bucket via a follow-up Update,
+//	and the caller receives a corruption-specific error for that waypoint.
 //
 // ----------------------------------
 func retrieveAllWaypointInfo(bboltDb *bbolt.DB) ([]string, error) {
 	var waypointsInfo []string
-	dbError := bboltDb.Update(func(tx *bbolt.Tx) error {
+	var corruptedWaypointName string
+	waypointCorrupted := false
+
+	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before iterating
 		waypointBucket := tx.Bucket(db.WaypointBucket)
 		if waypointBucket == nil {
@@ -67,11 +72,15 @@ func retrieveAllWaypointInfo(bboltDb *bbolt.DB) ([]string, error) {
 
 		// walk every key-value pair in the bucket
 		retrieveError := waypointBucket.ForEach(func(k, v []byte) error {
-			// deserialize the stored proto; record and abort on corruption
+			// deserialize the stored proto; capture the name, set the flag, and
+			// return a sentinel error to stop ForEach — recording is deferred to
+			// a separate Update after the View transaction completes
 			existingWaypoint := &pb.Waypoint{}
 			protoErr := proto.Unmarshal(v, existingWaypoint)
 			if protoErr != nil {
-				return recordCorruptedWaypointInfo(tx, string(k))
+				waypointCorrupted = true
+				corruptedWaypointName = string(k)
+				return fmt.Errorf("")
 			}
 
 			// build the waypoint name line; sealed entries use a dark dormant palette
@@ -98,5 +107,10 @@ func retrieveAllWaypointInfo(bboltDb *bbolt.DB) ([]string, error) {
 
 		return nil
 	})
-	return waypointsInfo, dbError
+
+	if waypointCorrupted {
+		viewErr = recordCorruptedWaypointInfo(bboltDb, corruptedWaypointName)
+	}
+
+	return waypointsInfo, viewErr
 }

@@ -102,8 +102,10 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 // ----------------------------------
 func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error) {
 	retrievedPath := ""
+	waypointCorrupted := false
 	needToSealWaypoint := false
-	viewErr := bboltDb.Update(func(tx *bbolt.Tx) error {
+
+	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.WaypointBucket)
 		if bucket == nil {
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
@@ -116,11 +118,13 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 			return fmt.Errorf("%s", errorMessage)
 		}
 
-		// deserialize the stored proto; record in the corrupted bucket if it fails
+		// deserialize the stored proto; set the flag and return nil so the View
+		// commits cleanly — corruption recording is deferred to a follow-up Update
 		existingWaypoint := &pb.Waypoint{}
 		protoErr := proto.Unmarshal(existing, existingWaypoint)
 		if protoErr != nil {
-			return recordCorruptedWaypointInfo(tx, waypointName)
+			waypointCorrupted = true
+			return nil
 		}
 
 		// sealed means the path no longer exists or was manually sealed; block travel
@@ -138,6 +142,10 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 		retrievedPath = existingWaypoint.WaypointPath
 		return nil
 	})
+
+	if waypointCorrupted {
+		viewErr = recordCorruptedWaypointInfo(bboltDb, waypointName)
+	}
 
 	if needToSealWaypoint {
 		updateWaypointIsSeal(bboltDb, waypointName, true)
