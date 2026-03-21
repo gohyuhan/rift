@@ -24,7 +24,7 @@ import (
 //	With a waypoint name arg and:
 //	  --destroy  : permanently removes the named waypoint from the DB
 //	  --rebind   : reassigns the waypoint to a new path (defaults to CWD)
-//	  --reforge  : (not yet implemented) renames the waypoint
+//	  --reforge  : renames the waypoint to a new name
 //	  no flag    : shows detailed info for the named waypoint
 //
 // ----------------------------------
@@ -48,8 +48,10 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
+	// extract and normalize the waypoint name from the first argument
 	waypointName := strings.TrimSpace(args[0])
 
+	// check which mutually exclusive operation flag was provided
 	destroyFlagCalled := cmd.Flags().Changed("destroy")
 	rebindFlagCalled := cmd.Flags().Changed("rebind")
 	reforgeFlagCalled := cmd.Flags().Changed("reforge")
@@ -57,22 +59,35 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 	if destroyFlagCalled {
 		// if destroy flag is called, we destroy the discovered waypoint in the waypoint bucket
 		destroyWaypointErr := destroyDiscoveredWaypoint(bboltDB, waypointName)
+
 		if destroyWaypointErr != nil {
 			return destroyWaypointErr
 		}
 	} else if rebindFlagCalled {
-		rebind, rebindErr := cmd.Flags().GetString("rebind")
-		if rebindErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "rebind", rebindErr.Error()), style.ColorError, false))
+		// retrieve the target path from the flag value; empty string signals "use CWD"
+		rebindTo, rebindToErr := getFlagString(cmd, "rebind")
+		if rebindToErr != nil {
+			return rebindToErr
 		}
-		rebindTo := strings.TrimSpace(rebind)
 		rebindWaypointErr := rebindWaypoint(bboltDB, waypointName, rebindTo)
+
 		if rebindWaypointErr != nil {
 			return rebindWaypointErr
 		}
 	} else if reforgeFlagCalled {
+		// retrieve the new waypoint name from the flag value
+		reforgeTo, reforgeToErr := getFlagString(cmd, "reforge")
+		if reforgeToErr != nil {
+			return reforgeToErr
+		}
+		reforgeWaypointErr := reforgeWaypoint(bboltDB, waypointName, reforgeTo)
+
+		if reforgeWaypointErr != nil {
+			return reforgeWaypointErr
+		}
 	} else {
 		retrieveWaypointInfoDetail, retrieveWaypointInfoDetailErr := retrieveWaypointInfoDetail(bboltDB, waypointName)
+
 		if retrieveWaypointInfoDetailErr != nil {
 			return retrieveWaypointInfoDetailErr
 		}
@@ -280,6 +295,7 @@ func destroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string) error {
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroyError, waypointName, destroyWaypointErr.Error()), style.ColorError, false))
 		}
 
+		// report the destruction to the terminal
 		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroySuccess, waypointName), style.ColorGreenSoft, false)
 		logger.LOGGER.LogToTerminal([]string{message})
 
@@ -316,22 +332,26 @@ func rebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) err
 	}
 
 	rebindErr := bboltDb.Update(func(tx *bbolt.Tx) error {
+		// fetch the current waypoint record and its bucket in a single helper call
 		waypointBucket, waypoint, retrieveErr := getWaypointForUpdate(tx, waypointName)
 		if retrieveErr != nil {
 			return retrieveErr
 		}
 
+		// update all mutable fields; clear sealed state so the waypoint is immediately usable
 		waypoint.WaypointPath = rebindTo
 		waypoint.WaypointIsSealed = false
 		waypoint.WaypointSealedReason = ""
 		waypoint.WaypointTravelledCount = 0
 		waypoint.WaypointAddedAt = time.Now().UTC().Format(time.RFC3339)
 
+		// persist the updated record back under the same key
 		putWaypointErr := putWaypoint(waypointBucket, waypointName, waypoint)
 		if putWaypointErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindError, waypointName, putWaypointErr.Error()), style.ColorError, false))
+			return putWaypointErr
 		}
 
+		// report the new binding to the terminal
 		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindSuccess, waypointName, rebindTo), style.ColorGreenSoft, false)
 		logger.LOGGER.LogToTerminal([]string{message})
 
@@ -339,4 +359,59 @@ func rebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) err
 	})
 
 	return rebindErr
+}
+
+// ----------------------------------
+//
+//	Renames the named waypoint to a new name.
+//	If reforgeTo is empty, returns an error immediately — a waypoint name is
+//	required and there is no sensible default.
+//	If a waypoint with the target name already exists, the operation is
+//	rejected to prevent silently overwriting an existing record.
+//	The rename is atomic within the Update transaction: the record is written
+//	under the new key first, then the old key is deleted. All fields (path,
+//	sealed state, travelled count, timestamps) are preserved unchanged.
+//
+// ----------------------------------
+func reforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string) error {
+	// validate that a non-empty new name was provided before opening the Update transaction;
+	// unlike rebind, there is no sensible default — an empty name is always an error
+	if reforgeTo == "" {
+		return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RiftWaypointReforgeEmptyError, style.ColorError, false))
+	}
+
+	reforgeErr := bboltDb.Update(func(tx *bbolt.Tx) error {
+		// fetch the current waypoint record and its bucket in a single helper call
+		waypointBucket, waypoint, retrieveErr := getWaypointForUpdate(tx, waypointName)
+		if retrieveErr != nil {
+			return retrieveErr
+		}
+
+		// check if a waypoint with the new name already exists to prevent overwriting
+		existingWaypoint := waypointBucket.Get([]byte(reforgeTo))
+		if existingWaypoint != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointReforgeAlreadyExistsError, reforgeTo), style.ColorError, false))
+		}
+
+		// write the record under the new name first; if this fails the old key is untouched
+		waypoint.WaypointName = reforgeTo
+		putWaypointErr := putWaypoint(waypointBucket, reforgeTo, waypoint)
+		if putWaypointErr != nil {
+			return putWaypointErr
+		}
+
+		// remove the old key only after the new one is confirmed written
+		destroyWaypointErr := waypointBucket.Delete([]byte(waypointName))
+		if destroyWaypointErr != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointReforgeError, waypointName, destroyWaypointErr.Error()), style.ColorError, false))
+		}
+
+		// report the rename to the terminal
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointReforgeSuccess, waypointName, reforgeTo), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
+
+		return nil
+	})
+
+	return reforgeErr
 }
