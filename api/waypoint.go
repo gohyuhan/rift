@@ -297,22 +297,25 @@ func destroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string) error {
 //
 // ----------------------------------
 func rebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) error {
-	rebindErr := bboltDb.Update(func(tx *bbolt.Tx) error {
-		// validate if the rebindTo is valid or not
-		if rebindTo != "" {
-			isDirExist, isDirExistErr := utils.CheckIsDir(rebindTo)
-			if isDirExistErr != nil {
-				return isDirExistErr
-			} else if !isDirExist {
-				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindNotDirError, rebindTo), style.ColorError, false))
-			}
-		} else {
-			cwd, getCWDErr := utils.GetCWD()
-			if getCWDErr != nil {
-				return getCWDErr
-			}
-			rebindTo = cwd
+	// validate if the rebindTo is valid or not before opening the Update transaction;
+	// this avoids unnecessary DB writes if the path is invalid
+	// and also prevent holding the DB lock during potentially slow filesystem operations
+	if rebindTo != "" {
+		isDirExist, isDirExistErr := utils.CheckIsDir(rebindTo)
+		if isDirExistErr != nil {
+			return isDirExistErr
+		} else if !isDirExist {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindNotDirError, rebindTo), style.ColorError, false))
 		}
+	} else {
+		cwd, getCWDErr := utils.GetCWD()
+		if getCWDErr != nil {
+			return getCWDErr
+		}
+		rebindTo = cwd
+	}
+
+	rebindErr := bboltDb.Update(func(tx *bbolt.Tx) error {
 		waypointBucket, waypoint, retrieveErr := getWaypointForUpdate(tx, waypointName)
 		if retrieveErr != nil {
 			return retrieveErr
