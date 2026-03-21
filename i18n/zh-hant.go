@@ -87,6 +87,9 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointDetailSealedFalse:    "否",
 	RiftWaypointDestroySuccess:       "rift：航點 %q 已被銷毀",
 	RiftWaypointDestroyError:         "rift：銷毀航點 %q 失敗，[ERROR: %s]",
+	RiftWaypointRebindNotDirError:    "rift：重新綁定的路徑 %q 不是一個目錄",
+	RiftWaypointRebindSuccess:        "rift：航點 %q 已重新綁定至 %s",
+	RiftWaypointRebindError:          "rift：重新綁定航點 %q 失敗，[ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",

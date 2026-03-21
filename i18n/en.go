@@ -87,6 +87,9 @@ var eN = LanguageMapping{
 	RiftWaypointDetailSealedFalse:    "No",
 	RiftWaypointDestroySuccess:       "rift: waypoint %q has been destroyed",
 	RiftWaypointDestroyError:         "rift: failed to destroy waypoint %q, [ERROR: %s]",
+	RiftWaypointRebindNotDirError:    "rift: rebind path %q is not a directory",
+	RiftWaypointRebindSuccess:        "rift: waypoint %q rebound to %s",
+	RiftWaypointRebindError:          "rift: failed to rebind waypoint %q, [ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

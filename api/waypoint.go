@@ -3,6 +3,7 @@ package api
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gohyuhan/rift/db"
@@ -10,6 +11,7 @@ import (
 	"github.com/gohyuhan/rift/logger"
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/utils"
 	"github.com/spf13/cobra"
 	"go.etcd.io/bbolt"
 	"google.golang.org/protobuf/proto"
@@ -19,7 +21,11 @@ import (
 //
 //	Cobra handler for the waypoint command.
 //	With no args, lists every stored waypoint (name + path, sealed state).
-//	With an arg, shows detailed info for the named waypoint (not yet implemented).
+//	With a waypoint name arg and:
+//	  --destroy  : permanently removes the named waypoint from the DB
+//	  --rebind   : reassigns the waypoint to a new path (defaults to CWD)
+//	  --reforge  : (not yet implemented) renames the waypoint
+//	  no flag    : shows detailed info for the named waypoint
 //
 // ----------------------------------
 var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
@@ -42,7 +48,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	waypointName := args[0]
+	waypointName := strings.TrimSpace(args[0])
 
 	destroyFlagCalled := cmd.Flags().Changed("destroy")
 	rebindFlagCalled := cmd.Flags().Changed("rebind")
@@ -55,6 +61,15 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 			return destroyWaypointErr
 		}
 	} else if rebindFlagCalled {
+		rebind, rebindErr := cmd.Flags().GetString("rebind")
+		if rebindErr != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "rebind", rebindErr.Error()), style.ColorError, false))
+		}
+		rebindTo := strings.TrimSpace(rebind)
+		rebindWaypointErr := rebindWaypoint(bboltDB, waypointName, rebindTo)
+		if rebindWaypointErr != nil {
+			return rebindWaypointErr
+		}
 	} else if reforgeFlagCalled {
 	} else {
 		retrieveWaypointInfoDetail, retrieveWaypointInfoDetailErr := retrieveWaypointInfoDetail(bboltDB, waypointName)
@@ -242,22 +257,83 @@ func retrieveWaypointInfoDetail(bboltDb *bbolt.DB, waypointName string) ([]strin
 	return waypointDetailInfo, viewErr
 }
 
+// ----------------------------------
+//
+//	Permanently removes the named waypoint from the waypoint bucket.
+//	Uses a write Update transaction. The operation is idempotent: if the
+//	waypoint does not exist, it is treated as already destroyed (success).
+//	Fails only when the bucket itself is missing or bbolt returns a hard error.
+//
+// ----------------------------------
 func destroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string) error {
 	return bboltDb.Update(func(tx *bbolt.Tx) error {
-		// ensure the waypoint bucket exists before looking up the key
+		// ensure the waypoint bucket exists before attempting the delete
 		waypointBucket := tx.Bucket(db.WaypointBucket)
 		if waypointBucket == nil {
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
 		}
 
+		// bbolt.Delete returns nil for missing keys; the behavior here is
+		// intentionally idempotent — destroying a non-existent waypoint succeeds
 		destroyWaypointErr := waypointBucket.Delete([]byte(waypointName))
-
 		if destroyWaypointErr != nil {
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroyError, waypointName, destroyWaypointErr.Error()), style.ColorError, false))
 		}
+
 		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroySuccess, waypointName), style.ColorGreenSoft, false)
 		logger.LOGGER.LogToTerminal([]string{message})
 
 		return nil
 	})
+}
+
+// ----------------------------------
+//
+//	Reassigns the named waypoint to a new path and resets its state.
+//	If rebindTo is empty, defaults to the current working directory.
+//	Validates that rebindTo is an existing directory before writing.
+//	On success, clears the sealed flag, sealed reason, and travelled count,
+//	and updates the discovered timestamp to now (UTC).
+//
+// ----------------------------------
+func rebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) error {
+	rebindErr := bboltDb.Update(func(tx *bbolt.Tx) error {
+		// validate if the rebindTo is valid or not
+		if rebindTo != "" {
+			isDirExist, isDirExistErr := utils.CheckIsDir(rebindTo)
+			if isDirExistErr != nil {
+				return isDirExistErr
+			} else if !isDirExist {
+				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindNotDirError, rebindTo), style.ColorError, false))
+			}
+		} else {
+			cwd, getCWDErr := utils.GetCWD()
+			if getCWDErr != nil {
+				return getCWDErr
+			}
+			rebindTo = cwd
+		}
+		waypointBucket, waypoint, retrieveErr := getWaypointForUpdate(tx, waypointName)
+		if retrieveErr != nil {
+			return retrieveErr
+		}
+
+		waypoint.WaypointPath = rebindTo
+		waypoint.WaypointIsSealed = false
+		waypoint.WaypointSealedReason = ""
+		waypoint.WaypointTravelledCount = 0
+		waypoint.WaypointAddedAt = time.Now().UTC().Format(time.RFC3339)
+
+		putWaypointErr := putWaypoint(waypointBucket, waypointName, waypoint)
+		if putWaypointErr != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindError, waypointName, putWaypointErr.Error()), style.ColorError, false))
+		}
+
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindSuccess, waypointName, rebindTo), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
+
+		return nil
+	})
+
+	return rebindErr
 }

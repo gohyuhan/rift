@@ -87,6 +87,9 @@ var jA = LanguageMapping{
 	RiftWaypointDetailSealedFalse:    "いいえ",
 	RiftWaypointDestroySuccess:       "rift：ウェイポイント %q を削除しました",
 	RiftWaypointDestroyError:         "rift：ウェイポイント %q の削除に失敗しました、[ERROR: %s]",
+	RiftWaypointRebindNotDirError:    "rift：再バインド先のパス %q はディレクトリではありません",
+	RiftWaypointRebindSuccess:        "rift：ウェイポイント %q を %s に再バインドしました",
+	RiftWaypointRebindError:          "rift：ウェイポイント %q の再バインドに失敗しました、[ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
