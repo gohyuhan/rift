@@ -165,70 +165,31 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 // ----------------------------------
 func updateWaypointTravelledCount(bboltDb *bbolt.DB, waypointName string) error {
 	return bboltDb.Update(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket(db.WaypointBucket)
-		if bucket == nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+		bucket, waypoint, err := getWaypointForUpdate(tx, waypointName)
+		if err != nil {
+			return err
 		}
-
-		existing := bucket.Get([]byte(waypointName))
-		if existing != nil {
-			existingWaypoint := &pb.Waypoint{}
-			protoErr := proto.Unmarshal(existing, existingWaypoint)
-			if protoErr != nil {
-				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
-			}
-
-			// bump the counter then persist the updated record
-			existingWaypoint.WaypointTravelledCount += 1
-			updatedWaypointInfo, updateErr := proto.Marshal(existingWaypoint)
-
-			if updateErr != nil {
-				errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointUpdateError, waypointName), style.ColorError, false)
-				return fmt.Errorf("%s", errorMessage)
-			}
-
-			return bucket.Put([]byte(waypointName), updatedWaypointInfo)
-		}
-		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDoNotExistsError, waypointName), style.ColorError, false)
-		return fmt.Errorf("%s", errorMessage)
+		waypoint.WaypointTravelledCount += 1
+		return putWaypoint(bucket, waypointName, waypoint)
 	})
 }
 
 // ----------------------------------
 //
-//	Sets the sealed flag on the named waypoint. A sealed waypoint is one whose
-//	path no longer exists on disk; rift will refuse to travel to it until it is
-//	explicitly unsealed. Called internally when a path-existence check fails.
+//	Sets the sealed flag and reason on the named waypoint. A sealed waypoint is
+//	one whose path no longer exists on disk; rift will refuse to travel to it
+//	until it is explicitly unsealed. Called internally when a path-existence
+//	check fails.
 //
 // ----------------------------------
 func updateWaypointIsSeal(bboltDb *bbolt.DB, waypointName string, sealed bool, reason string) error {
 	return bboltDb.Update(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket(db.WaypointBucket)
-		if bucket == nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+		bucket, waypoint, err := getWaypointForUpdate(tx, waypointName)
+		if err != nil {
+			return err
 		}
-
-		existing := bucket.Get([]byte(waypointName))
-		if existing != nil {
-			existingWaypoint := &pb.Waypoint{}
-			protoErr := proto.Unmarshal(existing, existingWaypoint)
-			if protoErr != nil {
-				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
-			}
-
-			// update the sealed flag and persist
-			existingWaypoint.WaypointIsSealed = sealed
-			existingWaypoint.WaypointSealedReason = reason
-			updatedWaypointInfo, updateErr := proto.Marshal(existingWaypoint)
-
-			if updateErr != nil {
-				errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointUpdateError, waypointName), style.ColorError, false)
-				return fmt.Errorf("%s", errorMessage)
-			}
-
-			return bucket.Put([]byte(waypointName), updatedWaypointInfo)
-		}
-		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDoNotExistsError, waypointName), style.ColorError, false)
-		return fmt.Errorf("%s", errorMessage)
+		waypoint.WaypointIsSealed = sealed
+		waypoint.WaypointSealedReason = reason
+		return putWaypoint(bucket, waypointName, waypoint)
 	})
 }

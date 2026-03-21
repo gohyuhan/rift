@@ -10,11 +10,13 @@ import (
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/internal/shell"
 	"github.com/gohyuhan/rift/logger"
+	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/settings"
 	"github.com/gohyuhan/rift/style"
 	"github.com/gohyuhan/rift/utils"
 	"go.etcd.io/bbolt"
 	"golang.org/x/mod/semver"
+	"google.golang.org/protobuf/proto"
 )
 
 // ----------------------------------
@@ -194,4 +196,46 @@ func recordCorruptedWaypointInfo(bboltDB *bbolt.DB, waypointName string) error {
 		return nil
 	})
 	return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
+}
+
+// ----------------------------------
+//
+//	Fetches and deserializes the named waypoint from the bucket within an
+//	already-open Update transaction. Returns the bucket, the deserialized
+//	record, or an error if the bucket is missing, the waypoint does not exist,
+//	or the stored proto is corrupted. Callers mutate the returned record and
+//	re-persist it via bucket.Put.
+//
+// ----------------------------------
+func getWaypointForUpdate(tx *bbolt.Tx, waypointName string) (*bbolt.Bucket, *pb.Waypoint, error) {
+	bucket := tx.Bucket(db.WaypointBucket)
+	if bucket == nil {
+		return nil, nil, fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+	}
+
+	existing := bucket.Get([]byte(waypointName))
+	if existing == nil {
+		return nil, nil, fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDoNotExistsError, waypointName), style.ColorError, false))
+	}
+
+	waypoint := &pb.Waypoint{}
+	if err := proto.Unmarshal(existing, waypoint); err != nil {
+		return nil, nil, fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
+	}
+
+	return bucket, waypoint, nil
+}
+
+// ----------------------------------
+//
+//	Persists a mutated waypoint record back into its bucket. Returns an error
+//	if marshalling or the bucket write fails.
+//
+// ----------------------------------
+func putWaypoint(bucket *bbolt.Bucket, waypointName string, waypoint *pb.Waypoint) error {
+	data, err := proto.Marshal(waypoint)
+	if err != nil {
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointUpdateError, waypointName), style.ColorError, false))
+	}
+	return bucket.Put([]byte(waypointName), data)
 }
