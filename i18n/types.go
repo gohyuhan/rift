@@ -75,30 +75,31 @@ type LanguageMapping struct {
 	RiftFlagWaypointReforgeDescription    string
 
 	// Waypoint related
-	RiftSavedWaypoint                string
-	RiftUnknownWaypoint              string
-	RiftWaypointAlreadyExistsError   string
-	RiftWaypointDoNotExistsError     string
-	RiftWaypointUpdateError          string
-	RiftWaypointSealedError          string
-	RiftWaypointSealedLabel          string
-	RiftWaypointRetrieveAllError     string
-	RiftWaypointDetailName           string
-	RiftWaypointDetailPath           string
-	RiftWaypointDetailDiscovered     string
-	RiftWaypointDetailTravelledCount string
-	RiftWaypointDetailSealed         string
-	RiftWaypointDetailSealedReason   string
-	RiftWaypointDetailSealedTrue     string
-	RiftWaypointDetailSealedFalse    string
-	RiftWaypointDestroySuccess       string
-	RiftWaypointDestroyError         string
-	RiftWaypointRebindNotDirError    string
-	RiftWaypointRebindSuccess        string
-	RiftWaypointRebindError          string
-	RiftWaypointReforgeEmptyError    string
-	RiftWaypointReforgeError         string
-	RiftWaypointReforgeSuccess       string
+	RiftSavedWaypoint                     string
+	RiftUnknownWaypoint                   string
+	RiftWaypointAlreadyExistsError        string
+	RiftWaypointDoNotExistsError          string
+	RiftWaypointUpdateError               string
+	RiftWaypointSealedError               string
+	RiftWaypointSealedLabel               string
+	RiftWaypointRetrieveAllError          string
+	RiftWaypointDetailName                string
+	RiftWaypointDetailPath                string
+	RiftWaypointDetailDiscovered          string
+	RiftWaypointDetailTravelledCount      string
+	RiftWaypointDetailSealed              string
+	RiftWaypointDetailSealedReason        string
+	RiftWaypointDetailSealedTrue          string
+	RiftWaypointDetailSealedFalse         string
+	RiftWaypointDestroySuccess            string
+	RiftWaypointDestroyError              string
+	RiftWaypointRebindNotDirError         string
+	RiftWaypointRebindSuccess             string
+	RiftWaypointRebindError               string
+	RiftWaypointReforgeEmptyError         string
+	RiftWaypointReforgeAlreadyExistsError string
+	RiftWaypointReforgeError              string
+	RiftWaypointReforgeSuccess            string
 
 	// Flag related
 	RiftFlagRetrieveError string

@@ -368,6 +368,8 @@ func rebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) err
 //	Renames the named waypoint to a new name.
 //	If reforgeTo is empty, returns an error immediately — a waypoint name is
 //	required and there is no sensible default.
+//	If a waypoint with the target name already exists, the operation is
+//	rejected to prevent silently overwriting an existing record.
 //	The rename is atomic within the Update transaction: the record is written
 //	under the new key first, then the old key is deleted. All fields (path,
 //	sealed state, travelled count, timestamps) are preserved unchanged.
@@ -385,6 +387,12 @@ func reforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string) e
 		waypointBucket, waypoint, retrieveErr := getWaypointForUpdate(tx, waypointName)
 		if retrieveErr != nil {
 			return retrieveErr
+		}
+
+		// check if a waypoint with the new name already exists to prevent overwriting
+		existingWaypoint := waypointBucket.Get([]byte(reforgeTo))
+		if existingWaypoint != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointReforgeAlreadyExistsError, reforgeTo), style.ColorError, false))
 		}
 
 		// write the record under the new name first; if this fails the old key is untouched
