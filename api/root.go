@@ -19,6 +19,7 @@ import (
 // ----------------------------------
 //
 //	Cobra handler for the root rift command.
+//	If --update is passed, triggers an immediate update check and returns.
 //	When called with no args, it handles settings flags (language, autoupdate,
 //	download-pre-release); if no flags were passed it falls through to help.
 //	When called with an arg, it travels to the named waypoint by printing a
@@ -26,43 +27,44 @@ import (
 //
 // ----------------------------------
 var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
+	if cmd.Flags().Changed("update") {
+		updater.Update()
+		return nil
+	}
+
 	if len(args) < 1 {
-		if cmd.Flags().Changed("update") {
-			updater.Update()
-		} else {
-			// settings flags can only take effect when there are no waypoint args
-			languageFlagCalled := cmd.Flags().Changed("language")
-			autoupdateFlagCalled := cmd.Flags().Changed("autoupdate")
-			downloadPreReleaseFlagCalled := cmd.Flags().Changed("download-pre-release")
+		// settings flags can only take effect when there are no waypoint args
+		languageFlagCalled := cmd.Flags().Changed("language")
+		autoupdateFlagCalled := cmd.Flags().Changed("autoupdate")
+		downloadPreReleaseFlagCalled := cmd.Flags().Changed("download-pre-release")
 
-			if languageFlagCalled {
-				languageSetting, languageSettingErr := cmd.Flags().GetString("language")
-				if languageSettingErr != nil {
-					return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "language", languageSettingErr.Error()), style.ColorError, false))
-				}
-				settings.UpdateLanguageCode(languageSetting)
+		if languageFlagCalled {
+			languageSetting, languageSettingErr := cmd.Flags().GetString("language")
+			if languageSettingErr != nil {
+				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "language", languageSettingErr.Error()), style.ColorError, false))
 			}
+			settings.UpdateLanguageCode(languageSetting)
+		}
 
-			if autoupdateFlagCalled {
-				autoUpdateSetting, autoUpdateSettingErr := cmd.Flags().GetBool("autoupdate")
-				if autoUpdateSettingErr != nil {
-					return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "autoupdate", autoUpdateSettingErr.Error()), style.ColorError, false))
-				}
-				settings.UpdateAutoUpdate(autoUpdateSetting)
+		if autoupdateFlagCalled {
+			autoUpdateSetting, autoUpdateSettingErr := cmd.Flags().GetBool("autoupdate")
+			if autoUpdateSettingErr != nil {
+				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "autoupdate", autoUpdateSettingErr.Error()), style.ColorError, false))
 			}
+			settings.UpdateAutoUpdate(autoUpdateSetting)
+		}
 
-			if downloadPreReleaseFlagCalled {
-				downloadPreReleaseSetting, downloadPreReleaseSettingErr := cmd.Flags().GetBool("download-pre-release")
-				if downloadPreReleaseSettingErr != nil {
-					return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "download-pre-release", downloadPreReleaseSettingErr.Error()), style.ColorError, false))
-				}
-				settings.UpdateDownloadPreRelease(downloadPreReleaseSetting)
+		if downloadPreReleaseFlagCalled {
+			downloadPreReleaseSetting, downloadPreReleaseSettingErr := cmd.Flags().GetBool("download-pre-release")
+			if downloadPreReleaseSettingErr != nil {
+				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "download-pre-release", downloadPreReleaseSettingErr.Error()), style.ColorError, false))
 			}
+			settings.UpdateDownloadPreRelease(downloadPreReleaseSetting)
+		}
 
-			// no flags were passed — show help
-			if !(languageFlagCalled || autoupdateFlagCalled || downloadPreReleaseFlagCalled) {
-				return cmd.Help()
-			}
+		// no flags were passed — show help
+		if !(languageFlagCalled || autoupdateFlagCalled || downloadPreReleaseFlagCalled) {
+			return cmd.Help()
 		}
 
 		return nil
