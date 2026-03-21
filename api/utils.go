@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"strings"
 
 	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/db"
@@ -14,6 +15,7 @@ import (
 	"github.com/gohyuhan/rift/settings"
 	"github.com/gohyuhan/rift/style"
 	"github.com/gohyuhan/rift/utils"
+	"github.com/spf13/cobra"
 	"go.etcd.io/bbolt"
 	"golang.org/x/mod/semver"
 	"google.golang.org/protobuf/proto"
@@ -238,4 +240,19 @@ func putWaypoint(bucket *bbolt.Bucket, waypointName string, waypoint *pb.Waypoin
 		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointUpdateError, waypointName), style.ColorError, false))
 	}
 	return bucket.Put([]byte(waypointName), data)
+}
+
+// ----------------------------------
+//
+//	Retrieves the string value of the named flag from cmd, wraps any error
+//	into a user-facing i18n message, and trims surrounding whitespace from
+//	the returned value.
+//
+// ----------------------------------
+func getFlagString(cmd *cobra.Command, flagName string) (string, error) {
+	value, err := cmd.Flags().GetString(flagName)
+	if err != nil {
+		return "", fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, flagName, err.Error()), style.ColorError, false))
+	}
+	return strings.TrimSpace(value), nil
 }

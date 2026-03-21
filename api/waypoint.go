@@ -65,11 +65,10 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		}
 	} else if rebindFlagCalled {
 		// retrieve the target path from the flag value; empty string signals "use CWD"
-		rebind, rebindErr := cmd.Flags().GetString("rebind")
-		if rebindErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "rebind", rebindErr.Error()), style.ColorError, false))
+		rebindTo, rebindToErr := getFlagString(cmd, "rebind")
+		if rebindToErr != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "rebind", rebindToErr.Error()), style.ColorError, false))
 		}
-		rebindTo := strings.TrimSpace(rebind)
 		rebindWaypointErr := rebindWaypoint(bboltDB, waypointName, rebindTo)
 
 		if rebindWaypointErr != nil {
@@ -77,11 +76,10 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		}
 	} else if reforgeFlagCalled {
 		// retrieve the new waypoint name from the flag value
-		reforge, reforgeErr := cmd.Flags().GetString("reforge")
-		if reforgeErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "reforge", reforgeErr.Error()), style.ColorError, false))
+		reforgeTo, reforgeToErr := getFlagString(cmd, "reforge")
+		if reforgeToErr != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "reforge", reforgeToErr.Error()), style.ColorError, false))
 		}
-		reforgeTo := strings.TrimSpace(reforge)
 		reforgeWaypointErr := reforgeWaypoint(bboltDB, waypointName, reforgeTo)
 
 		if reforgeWaypointErr != nil {
