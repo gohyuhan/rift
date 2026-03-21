@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
@@ -62,7 +63,7 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 		return nil
 	}
 
-	waypointName := args[0]
+	waypointName := strings.TrimSpace(args[0])
 
 	// open DB for reading waypoint data
 	bboltDB, bboltDBErr := db.OpenDB()

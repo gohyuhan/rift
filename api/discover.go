@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/gohyuhan/rift/db"
@@ -44,7 +45,7 @@ var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
 		return command.Help()
 	}
 
-	waypointName := args[0]
+	waypointName := strings.TrimSpace(args[0])
 
 	// reject names that clash with rift's own subcommands
 	if err := CheckIfKeywordIsReservedForRift(waypointName); err != nil {

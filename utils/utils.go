@@ -101,7 +101,6 @@ func GetCWD() (string, error) {
 func CheckIsDir(path string) (bool, error) {
 	if !filepath.IsAbs(path) {
 		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.PathNotAbsoluteError, path), style.ColorError, false)
-		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		return false, fmt.Errorf("%s", errorMessage)
 	}
 	info, err := os.Stat(path)
@@ -125,7 +124,6 @@ func CheckIsDir(path string) (bool, error) {
 func CheckIsPathExist(path string) (bool, error) {
 	if !filepath.IsAbs(path) {
 		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.PathNotAbsoluteError, path), style.ColorError, false)
-		logger.LOGGER.LogToTerminal([]string{errorMessage})
 		return false, fmt.Errorf("%s", errorMessage)
 	}
 	_, pathErr := os.Stat(path)

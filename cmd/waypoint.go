@@ -24,6 +24,9 @@ func init() {
 	waypointCmd.Flags().String("reforge", "", "")
 	waypointCmd.Flags().Bool("destroy", false, "")
 	waypointCmd.MarkFlagsMutuallyExclusive("destroy", "rebind", "reforge")
+
+	// if rebind is not follow by arguments, the default is " ", which will be "" after space trim.
+	waypointCmd.Flags().Lookup("rebind").NoOptDefVal = " "
 	rootCmd.AddCommand(waypointCmd)
 }
 
