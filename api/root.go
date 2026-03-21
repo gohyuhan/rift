@@ -9,6 +9,7 @@ import (
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/settings"
 	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/updater"
 	"github.com/gohyuhan/rift/utils"
 	"github.com/spf13/cobra"
 	"go.etcd.io/bbolt"
@@ -18,6 +19,7 @@ import (
 // ----------------------------------
 //
 //	Cobra handler for the root rift command.
+//	If --update is passed, triggers an immediate update check and returns.
 //	When called with no args, it handles settings flags (language, autoupdate,
 //	download-pre-release); if no flags were passed it falls through to help.
 //	When called with an arg, it travels to the named waypoint by printing a
@@ -25,6 +27,11 @@ import (
 //
 // ----------------------------------
 var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
+	if cmd.Flags().Changed("update") {
+		updater.Update()
+		return nil
+	}
+
 	if len(args) < 1 {
 		// settings flags can only take effect when there are no waypoint args
 		languageFlagCalled := cmd.Flags().Changed("language")

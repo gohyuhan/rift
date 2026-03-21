@@ -67,6 +67,7 @@ var jA = LanguageMapping{
 	RiftFlagWaypointDestroyDescription:    "名前を指定してウェイポイントを削除します",
 	RiftFlagWaypointRebindDescription:     "既存のウェイポイントを新しいパスに再割り当てします。パスが指定されない場合は現在の作業ディレクトリを使用し、有効な絶対パスが指定された場合はそのパスを優先します",
 	RiftFlagWaypointReforgeDescription:    "既存のウェイポイントを新しい名前に変更します",
+	RiftFlagUpdateDescription:             "最新バージョンの確認を手動でトリガーし、利用可能な場合はアップデートします",
 
 	// Waypoint related
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",
