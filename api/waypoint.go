@@ -67,7 +67,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		// retrieve the target path from the flag value; empty string signals "use CWD"
 		rebindTo, rebindToErr := getFlagString(cmd, "rebind")
 		if rebindToErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "rebind", rebindToErr.Error()), style.ColorError, false))
+			return rebindToErr
 		}
 		rebindWaypointErr := rebindWaypoint(bboltDB, waypointName, rebindTo)
 
@@ -78,7 +78,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		// retrieve the new waypoint name from the flag value
 		reforgeTo, reforgeToErr := getFlagString(cmd, "reforge")
 		if reforgeToErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "reforge", reforgeToErr.Error()), style.ColorError, false))
+			return reforgeToErr
 		}
 		reforgeWaypointErr := reforgeWaypoint(bboltDB, waypointName, reforgeTo)
 
@@ -348,7 +348,7 @@ func rebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) err
 		// persist the updated record back under the same key
 		putWaypointErr := putWaypoint(waypointBucket, waypointName, waypoint)
 		if putWaypointErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindError, waypointName, putWaypointErr.Error()), style.ColorError, false))
+			return putWaypointErr
 		}
 
 		// report the new binding to the terminal
@@ -397,13 +397,13 @@ func reforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string) e
 		waypoint.WaypointName = reforgeTo
 		putWaypointErr := putWaypoint(waypointBucket, reforgeTo, waypoint)
 		if putWaypointErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointReforgeError, waypointName, putWaypointErr.Error()), style.ColorError, false))
+			return putWaypointErr
 		}
 
 		// remove the old key only after the new one is confirmed written
 		destroyWaypointErr := waypointBucket.Delete([]byte(waypointName))
 		if destroyWaypointErr != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroyError, waypointName, destroyWaypointErr.Error()), style.ColorError, false))
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointReforgeError, waypointName, destroyWaypointErr.Error()), style.ColorError, false))
 		}
 
 		// report the rename to the terminal
