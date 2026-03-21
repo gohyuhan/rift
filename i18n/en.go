@@ -90,6 +90,9 @@ var eN = LanguageMapping{
 	RiftWaypointRebindNotDirError:    "rift: rebind path %q is not a directory",
 	RiftWaypointRebindSuccess:        "rift: waypoint %q rebound to %s",
 	RiftWaypointRebindError:          "rift: failed to rebind waypoint %q, [ERROR: %s]",
+	RiftWaypointReforgeEmptyError:    "rift: reforge name cannot be empty",
+	RiftWaypointReforgeError:         "rift: failed to reforge waypoint %q, [ERROR: %s]",
+	RiftWaypointReforgeSuccess:       "rift: waypoint %q reforged to %q",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

@@ -90,6 +90,9 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointRebindNotDirError:    "rift：重新綁定的路徑 %q 不是一個目錄",
 	RiftWaypointRebindSuccess:        "rift：航點 %q 已重新綁定至 %s",
 	RiftWaypointRebindError:          "rift：重新綁定航點 %q 失敗，[ERROR: %s]",
+	RiftWaypointReforgeEmptyError:    "rift：重鑄名稱不能為空",
+	RiftWaypointReforgeError:         "rift：重鑄航點 %q 失敗，[ERROR: %s]",
+	RiftWaypointReforgeSuccess:       "rift：航點 %q 已重鑄為 %q",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",

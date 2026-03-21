@@ -96,6 +96,9 @@ type LanguageMapping struct {
 	RiftWaypointRebindNotDirError    string
 	RiftWaypointRebindSuccess        string
 	RiftWaypointRebindError          string
+	RiftWaypointReforgeEmptyError    string
+	RiftWaypointReforgeError         string
+	RiftWaypointReforgeSuccess       string
 
 	// Flag related
 	RiftFlagRetrieveError string

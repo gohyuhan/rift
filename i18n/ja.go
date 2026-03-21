@@ -90,6 +90,9 @@ var jA = LanguageMapping{
 	RiftWaypointRebindNotDirError:    "rift：再バインド先のパス %q はディレクトリではありません",
 	RiftWaypointRebindSuccess:        "rift：ウェイポイント %q を %s に再バインドしました",
 	RiftWaypointRebindError:          "rift：ウェイポイント %q の再バインドに失敗しました、[ERROR: %s]",
+	RiftWaypointReforgeEmptyError:    "rift：リフォージ名を空にすることはできません",
+	RiftWaypointReforgeError:         "rift：ウェイポイント %q のリフォージに失敗しました、[ERROR: %s]",
+	RiftWaypointReforgeSuccess:       "rift：ウェイポイント %q を %q にリフォージしました",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
