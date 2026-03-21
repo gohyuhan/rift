@@ -75,14 +75,22 @@ type LanguageMapping struct {
 	RiftFlagWaypointReforgeDescription    string
 
 	// Waypoint related
-	RiftSavedWaypoint              string
-	RiftUnknownWaypoint            string
-	RiftWaypointAlreadyExistsError string
-	RiftWaypointDoNotExistsError   string
-	RiftWaypointUpdateError        string
-	RiftWaypointSealedError        string
-	RiftWaypointSealedLabel        string
-	RiftWaypointRetrieveAllError   string
+	RiftSavedWaypoint                string
+	RiftUnknownWaypoint              string
+	RiftWaypointAlreadyExistsError   string
+	RiftWaypointDoNotExistsError     string
+	RiftWaypointUpdateError          string
+	RiftWaypointSealedError          string
+	RiftWaypointSealedLabel          string
+	RiftWaypointRetrieveAllError     string
+	RiftWaypointDetailName           string
+	RiftWaypointDetailPath           string
+	RiftWaypointDetailDiscovered     string
+	RiftWaypointDetailTravelledCount string
+	RiftWaypointDetailSealed         string
+	RiftWaypointDetailSealedReason   string
+	RiftWaypointDetailSealedTrue     string
+	RiftWaypointDetailSealedFalse    string
 
 	// Flag related
 	RiftFlagRetrieveError string
