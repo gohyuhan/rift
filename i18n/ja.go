@@ -85,6 +85,8 @@ var jA = LanguageMapping{
 	RiftWaypointDetailSealedReason:   "封印理由：",
 	RiftWaypointDetailSealedTrue:     "はい",
 	RiftWaypointDetailSealedFalse:    "いいえ",
+	RiftWaypointDestroySuccess:       "rift：ウェイポイント %q を削除しました",
+	RiftWaypointDestroyError:         "rift：ウェイポイント %q の削除に失敗しました、[ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",

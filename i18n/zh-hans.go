@@ -85,6 +85,8 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointDetailSealedReason:   "封印原因：",
 	RiftWaypointDetailSealedTrue:     "是",
 	RiftWaypointDetailSealedFalse:    "否",
+	RiftWaypointDestroySuccess:       "rift：航点 %q 已被销毁",
+	RiftWaypointDestroyError:         "rift：销毁航点 %q 失败，[ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：获取标志 %q 失败，[ERROR: %s]",

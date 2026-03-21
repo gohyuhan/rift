@@ -49,6 +49,11 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 	reforgeFlagCalled := cmd.Flags().Changed("reforge")
 
 	if destroyFlagCalled {
+		// if destroy flag is called, we destroy the discovered waypoint in the waypoint bucket
+		destroyWaypointErr := destroyDiscoveredWaypoint(bboltDB, waypointName)
+		if destroyWaypointErr != nil {
+			return destroyWaypointErr
+		}
 	} else if rebindFlagCalled {
 	} else if reforgeFlagCalled {
 	} else {
@@ -235,4 +240,24 @@ func retrieveWaypointInfoDetail(bboltDb *bbolt.DB, waypointName string) ([]strin
 	}
 
 	return waypointDetailInfo, viewErr
+}
+
+func destroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string) error {
+	return bboltDb.Update(func(tx *bbolt.Tx) error {
+		// ensure the waypoint bucket exists before looking up the key
+		waypointBucket := tx.Bucket(db.WaypointBucket)
+		if waypointBucket == nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+		}
+
+		destroyWaypointErr := waypointBucket.Delete([]byte(waypointName))
+
+		if destroyWaypointErr != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroyError, waypointName, destroyWaypointErr.Error()), style.ColorError, false))
+		}
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroySuccess, waypointName), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
+
+		return nil
+	})
 }

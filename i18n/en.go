@@ -85,6 +85,8 @@ var eN = LanguageMapping{
 	RiftWaypointDetailSealedReason:   "Sealed Reason:",
 	RiftWaypointDetailSealedTrue:     "Yes",
 	RiftWaypointDetailSealedFalse:    "No",
+	RiftWaypointDestroySuccess:       "rift: waypoint %q has been destroyed",
+	RiftWaypointDestroyError:         "rift: failed to destroy waypoint %q, [ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",
