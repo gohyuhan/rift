@@ -27,11 +27,11 @@ A tool forged for those who refuse to waste their power on traversal. Memorize a
 
 ## Spellbook
 
-| Spell        | Incantation              | Effect                                                 |
-| ------------ | ------------------------ | ------------------------------------------------------ |
-| **Travel**   | `rift <name>`            | Tear open a rift and teleport to a memorized waypoint  |
-| **Discover** | `rift discover <name>`   | Inscribe your current location as a waypoint           |
-| **Awaken**   | `rift awaken`            | Repair shell integration or database if something breaks |
+| Spell        | Incantation            | Effect                                                   |
+| ------------ | ---------------------- | -------------------------------------------------------- |
+| **Travel**   | `rift <name>`          | Tear open a rift and teleport to a memorized waypoint    |
+| **Discover** | `rift discover <name>` | Inscribe your current location as a waypoint             |
+| **Awaken**   | `rift awaken`          | Repair shell integration or database if something breaks |
 
 > Full usage, examples, and settings flags → **[usage.md](usage.md)**
 
@@ -83,11 +83,11 @@ See [`docs/shell-integration.md`](docs/shell-integration.md) for the full arcane
 
 Memorized locations are stored in a [bbolt](https://github.com/etcd-io/bbolt) database — your personal grimoire, persisted across sessions.
 
-| Platform | Database | Settings |
-| -------- | -------- | -------- |
-| macOS | `~/Library/Application Support/rift/db/rift.db` | `~/Library/Application Support/rift/settings/rift_settings.json` |
-| Linux | `~/.config/rift/db/rift.db` | `~/.config/rift/settings/rift_settings.json` |
-| Windows | `%APPDATA%\rift\db\rift.db` | `%APPDATA%\rift\settings\rift_settings.json` |
+| Platform | Database                                        | Settings                                                         |
+| -------- | ----------------------------------------------- | ---------------------------------------------------------------- |
+| macOS    | `~/Library/Application Support/rift/db/rift.db` | `~/Library/Application Support/rift/settings/rift_settings.json` |
+| Linux    | `~/.config/rift/db/rift.db`                     | `~/.config/rift/settings/rift_settings.json`                     |
+| Windows  | `%APPDATA%\rift\db\rift.db`                     | `%APPDATA%\rift\settings\rift_settings.json`                     |
 
 ## Installation
 
@@ -220,10 +220,6 @@ Remove-Item -Path "$env:APPDATA\rift" -Recurse -Force
 
 ## Changelog
 
-### v0.1.0-pr.1
+### v0.1.0
 
-Initial pre-release.
-
-- Path navigation using predefined waypoint names — tear open a rift to any saved location instantly
-- Waypoint assignment — bind a name to any directory for fast recall
-- Settings configurable via command flags — control language, auto-update behaviour, and pre-release preferences directly from the terminal
+[coming soon]
