@@ -25,13 +25,15 @@ const (
 	Unsupported Shell = "unsupported"
 )
 
-// Detect returns the current shell.
+// ----------------------------------
 //
-// Detection priority:
-//  1. $SHELL env var       — set on macOS, Linux, WSL, Git Bash, Cygwin, MSYS2
-//  2. $PSModulePath        — always set inside any PowerShell session (all platforms)
-//  3. $COMSPEC without PS  — Windows CMD
-//  4. OS-level fallback
+//	Returns the current shell by inspecting environment variables in priority order:
+//	  1. $SHELL suffix      — set on macOS, Linux, WSL, Git Bash, Cygwin, MSYS2
+//	  2. $PSModulePath      — always present inside any PowerShell session (all platforms)
+//	  3. $COMSPEC           — Windows CMD (only when PSModulePath is absent)
+//	  4. OS-level fallback  — Linux/macOS defaults to bash; unknown Windows terminals → Unsupported
+//
+// ----------------------------------
 func Detect() Shell {
 	s := os.Getenv("SHELL")
 	switch {
@@ -67,7 +69,12 @@ func Detect() Shell {
 	return Bash
 }
 
-// ConfigFile returns the shell config file path for the given shell.
+// ----------------------------------
+//
+//	Returns the shell config file path for the given shell type.
+//	Returns an error for CMD and Unsupported shells, which have no config file.
+//
+// ----------------------------------
 func ConfigFile(sh Shell) (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
@@ -100,11 +107,16 @@ func ConfigFile(sh Shell) (string, error) {
 	}
 }
 
-// powerShellProfile resolves the correct $PROFILE path for the running PowerShell flavour.
+// ----------------------------------
 //
-//   - pwsh 7+ on Windows        → ~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
-//   - Windows PowerShell 5.x    → ~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
-//   - pwsh on Linux / macOS     → ~/.config/powershell/Microsoft.PowerShell_profile.ps1
+//	Resolves the correct $PROFILE path for the running PowerShell flavour.
+//	Trusts $PROFILE if it is already set by the active PS session; otherwise
+//	derives the path from the OS and available binary:
+//	  - pwsh 7+ on Windows        → ~/Documents/PowerShell/Microsoft.PowerShell_profile.ps1
+//	  - Windows PowerShell 5.x    → ~/Documents/WindowsPowerShell/Microsoft.PowerShell_profile.ps1
+//	  - pwsh on Linux / macOS     → ~/.config/powershell/Microsoft.PowerShell_profile.ps1
+//
+// ----------------------------------
 func powerShellProfile(home string) string {
 	// If $PROFILE is already set by the running PS session, trust it.
 	if p := os.Getenv("PROFILE"); p != "" {
@@ -122,16 +134,18 @@ func powerShellProfile(home string) string {
 	}
 }
 
-// FunctionSnippet returns the shell wrapper function to write into the config file.
+// ----------------------------------
 //
-// The function is always named "rift" and shadows the binary of the same name.
-// To avoid infinite recursion, each shell uses its own mechanism to bypass
-// functions/aliases and call the real binary directly:
+//	Returns the shell wrapper function snippet to append to the shell config file.
+//	The function is always named "rift" and shadows the binary of the same name.
+//	To avoid infinite recursion each shell uses its own mechanism to invoke the
+//	real binary directly rather than the function:
+//	  - bash / zsh / ksh : `command rift`                             (POSIX — skips functions and aliases)
+//	  - fish             : `command rift`                             (fish built-in equivalent)
+//	  - PowerShell Win   : `rift.exe`                                 (extension disambiguates from the function)
+//	  - PowerShell Unix  : `Get-Command -CommandType Application rift`
 //
-//   - bash / zsh / ksh : `command rift`  (POSIX — skips functions and aliases)
-//   - fish             : `command rift`  (fish built-in equivalent)
-//   - PowerShell Win   : `rift.exe`      (extension disambiguates from the function)
-//   - PowerShell Unix  : `Get-Command -CommandType Application rift`
+// ----------------------------------
 func FunctionSnippet(sh Shell) string {
 	switch sh {
 	case Fish:
@@ -166,7 +180,13 @@ rift() { eval "$(command rift "$@")"; }
 	}
 }
 
-// reloadHint returns the command the user should run to reload their shell config.
+// ----------------------------------
+//
+//	Returns the shell command the user should run to reload their config file
+//	after shell integration is installed. PowerShell uses `. $PROFILE`;
+//	all other shells use `source <cfgFile>`.
+//
+// ----------------------------------
 func reloadHint(sh Shell, cfgFile string) string {
 	if sh == PowerShell {
 		return ". $PROFILE"
@@ -176,7 +196,12 @@ func reloadHint(sh Shell, cfgFile string) string {
 
 const marker = "# rift shell integration"
 
-// IsInstalled reports whether the shell function is already present in the config file.
+// ----------------------------------
+//
+//	Reports whether the rift shell integration marker is already present in the
+//	given config file. Returns false (not an error) if the file does not exist yet.
+//
+// ----------------------------------
 func IsInstalled(configFile string) (bool, error) {
 	data, err := os.ReadFile(configFile)
 	if os.IsNotExist(err) {
@@ -188,7 +213,15 @@ func IsInstalled(configFile string) (bool, error) {
 	return strings.Contains(string(data), marker), nil
 }
 
-// Install appends the rift shell function to the detected shell's config file.
+// ----------------------------------
+//
+//	Appends the rift shell function snippet to the shell's config file.
+//	Returns an error immediately for CMD and Unsupported shells.
+//	Creates the config file's parent directory if it does not exist (relevant
+//	for fish and PowerShell on Linux/macOS). Idempotent — skips the write and
+//	logs a message if the marker is already present.
+//
+// ----------------------------------
 func Install(sh Shell) error {
 	switch sh {
 	case CMD:
@@ -234,7 +267,11 @@ func Install(sh Shell) error {
 	return nil
 }
 
-// BinaryInPath checks that the rift binary is accessible via PATH.
+// ----------------------------------
+//
+//	Reports whether the rift binary is accessible via PATH.
+//
+// ----------------------------------
 func BinaryInPath() bool {
 	_, err := exec.LookPath("rift")
 	return err == nil
