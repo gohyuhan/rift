@@ -58,7 +58,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 // ----------------------------------
 func retrieveAllWaypointInfo(bboltDb *bbolt.DB) ([]string, error) {
 	var waypointsInfo []string
-	dbError := bboltDb.View(func(tx *bbolt.Tx) error {
+	dbError := bboltDb.Update(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before iterating
 		waypointBucket := tx.Bucket(db.WaypointBucket)
 		if waypointBucket == nil {

@@ -89,15 +89,20 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 // ----------------------------------
 //
 //	Looks up a waypoint by name and validates it is travelable.
+//	Uses a read-only View transaction for the lookup; sealing on a missing path
+//	is deferred to a second write transaction after View completes — bbolt write
+//	locks are not reentrant, so calling Update inside View (or Update) would deadlock.
 //	Returns the stored path, or an error when:
 //	  - the waypoint bucket is missing
 //	  - the waypoint does not exist
 //	  - the stored proto data is corrupted
-//	  - the waypoint is sealed (path deleted or manually sealed)
+//	  - the waypoint is already sealed
+//	  - the waypoint path no longer exists on disk (seals it via a follow-up write tx)
 //
 // ----------------------------------
 func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error) {
 	retrievedPath := ""
+	needToSealWaypoint := false
 	viewErr := bboltDb.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.WaypointBucket)
 		if bucket == nil {
@@ -126,13 +131,17 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 		// verify the path still exists on disk; if not, seal the waypoint and abort
 		isPathExist, _ := utils.CheckIsPathExist(existingWaypoint.WaypointPath)
 		if !isPathExist {
-			updateWaypointIsSeal(bboltDb, waypointName, true)
+			needToSealWaypoint = true
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName), style.ColorError, false))
 		}
 
 		retrievedPath = existingWaypoint.WaypointPath
 		return nil
 	})
+
+	if needToSealWaypoint {
+		updateWaypointIsSeal(bboltDb, waypointName, true)
+	}
 
 	return retrievedPath, viewErr
 }
