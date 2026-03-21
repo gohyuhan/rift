@@ -7,6 +7,7 @@ var zH_HANS = LanguageMapping{
 	RiftDetectedShell:        "rift：检测到的 Shell：%s",
 	CWDIsNotDirError:         "当前工作目录不是一个有效的目录",
 	PathNotAbsoluteError:     "路径必须为绝对路径，收到: %s",
+	NotFileOrDirError:        "指定路径不存在（非文件或目录）",
 
 	// Settings related
 	SettingsPathError:                 "无法访问设置目录，[ERROR: %s]",
@@ -73,7 +74,7 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "航点 %q 已存在，指向 %s",
 	RiftWaypointDoNotExistsError:   "rift：航点 %q 不存在",
 	RiftWaypointUpdateError:        "rift：更新航点 %q 失败",
-	RiftWaypointSealedError:        "rift：航点 %q 已封印，无法前往",
+	RiftWaypointSealedError:        "rift：航点 %q 已封印，无法前往，原因：%q",
 	RiftWaypointSealedLabel:        "（已封印）",
 	RiftWaypointRetrieveAllError:   "rift：获取航点列表失败",
 

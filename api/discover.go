@@ -103,6 +103,7 @@ func saveWaypoint(bboltDb *bbolt.DB, waypointName string, path string) error {
 			WaypointAddedAt:        time.Now().UTC().Format(time.RFC3339),
 			WaypointTravelledCount: 0,
 			WaypointIsSealed:       false,
+			WaypointSealedReason:   "",
 		}
 
 		data, err := proto.Marshal(waypoint)

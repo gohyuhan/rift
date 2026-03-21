@@ -13,6 +13,7 @@ type LanguageMapping struct {
 	RiftDetectedShell        string
 	CWDIsNotDirError         string
 	PathNotAbsoluteError     string
+	NotFileOrDirError        string
 
 	// Settings related
 	SettingsPathError                 string

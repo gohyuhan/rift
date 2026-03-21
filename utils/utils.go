@@ -133,7 +133,7 @@ func CheckIsPathExist(path string) (bool, error) {
 		return true, nil
 	}
 	if os.IsNotExist(pathErr) {
-		return false, nil
+		return false, fmt.Errorf("%s", i18n.LANGUAGEMAPPING.NotFileOrDirError)
 	}
 	return false, pathErr
 }

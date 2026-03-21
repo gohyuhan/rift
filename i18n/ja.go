@@ -7,6 +7,7 @@ var jA = LanguageMapping{
 	RiftDetectedShell:        "rift：検出されたシェル：%s",
 	CWDIsNotDirError:         "現在の作業ディレクトリは有効なディレクトリではありません",
 	PathNotAbsoluteError:     "パスは絶対パスである必要があります。指定されたパス: %s",
+	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
 
 	// Settings related
 	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
@@ -73,7 +74,7 @@ var jA = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:   "rift：ウェイポイント %q は存在しません",
 	RiftWaypointUpdateError:        "rift：ウェイポイント %q の更新に失敗しました",
-	RiftWaypointSealedError:        "rift：ウェイポイント %q は封印されており、移動できません",
+	RiftWaypointSealedError:        "rift：ウェイポイント %q は封印されており、移動できません。理由：%q",
 	RiftWaypointSealedLabel:        "(封印済み)",
 	RiftWaypointRetrieveAllError:   "rift：ウェイポイントの取得に失敗しました",
 

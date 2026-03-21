@@ -104,6 +104,7 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 	retrievedPath := ""
 	waypointCorrupted := false
 	needToSealWaypoint := false
+	needToSealReason := ""
 
 	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.WaypointBucket)
@@ -129,14 +130,15 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 
 		// sealed means the path no longer exists or was manually sealed; block travel
 		if existingWaypoint.WaypointIsSealed {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName), style.ColorError, false))
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName, existingWaypoint.WaypointSealedReason), style.ColorError, false))
 		}
 
 		// verify the path still exists on disk; if not, seal the waypoint and abort
-		isPathExist, _ := utils.CheckIsPathExist(existingWaypoint.WaypointPath)
+		isPathExist, isPathExistErr := utils.CheckIsPathExist(existingWaypoint.WaypointPath)
 		if !isPathExist {
 			needToSealWaypoint = true
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName), style.ColorError, false))
+			needToSealReason = isPathExistErr.Error()
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName, isPathExistErr.Error()), style.ColorError, false))
 		}
 
 		retrievedPath = existingWaypoint.WaypointPath
@@ -148,7 +150,7 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 	}
 
 	if needToSealWaypoint {
-		updateWaypointIsSeal(bboltDb, waypointName, true)
+		updateWaypointIsSeal(bboltDb, waypointName, true, needToSealReason)
 	}
 
 	return retrievedPath, viewErr
@@ -199,7 +201,7 @@ func updateWaypointTravelledCount(bboltDb *bbolt.DB, waypointName string) error 
 //	explicitly unsealed. Called internally when a path-existence check fails.
 //
 // ----------------------------------
-func updateWaypointIsSeal(bboltDb *bbolt.DB, waypointName string, sealed bool) error {
+func updateWaypointIsSeal(bboltDb *bbolt.DB, waypointName string, sealed bool, reason string) error {
 	return bboltDb.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.WaypointBucket)
 		if bucket == nil {
@@ -216,6 +218,7 @@ func updateWaypointIsSeal(bboltDb *bbolt.DB, waypointName string, sealed bool) e
 
 			// update the sealed flag and persist
 			existingWaypoint.WaypointIsSealed = sealed
+			existingWaypoint.WaypointSealedReason = reason
 			updatedWaypointInfo, updateErr := proto.Marshal(existingWaypoint)
 
 			if updateErr != nil {

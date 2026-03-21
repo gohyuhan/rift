@@ -7,6 +7,7 @@ var eN = LanguageMapping{
 	RiftDetectedShell:        "rift: detected shell: %s",
 	CWDIsNotDirError:         "Current working directory is not a valid directory",
 	PathNotAbsoluteError:     "Path must be absolute, got: %s",
+	NotFileOrDirError:        "Path does not exist as a file or directory",
 
 	// Settings related
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",
@@ -73,7 +74,7 @@ var eN = LanguageMapping{
 	RiftWaypointAlreadyExistsError: "Waypoint %q already exists, pointing to %s",
 	RiftWaypointDoNotExistsError:   "rift: waypoint %q does not exist",
 	RiftWaypointUpdateError:        "rift: failed to update waypoint %q",
-	RiftWaypointSealedError:        "rift: waypoint %q is sealed and cannot be travelled to",
+	RiftWaypointSealedError:        "rift: waypoint %q is sealed and cannot be travelled to due to %q",
 	RiftWaypointSealedLabel:        "(SEALED)",
 	RiftWaypointRetrieveAllError:   "rift: failed to retrieve waypoints",
 
