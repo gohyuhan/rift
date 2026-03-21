@@ -9,6 +9,7 @@ import (
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/settings"
 	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/updater"
 	"github.com/gohyuhan/rift/utils"
 	"github.com/spf13/cobra"
 	"go.etcd.io/bbolt"
@@ -26,38 +27,42 @@ import (
 // ----------------------------------
 var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 	if len(args) < 1 {
-		// settings flags can only take effect when there are no waypoint args
-		languageFlagCalled := cmd.Flags().Changed("language")
-		autoupdateFlagCalled := cmd.Flags().Changed("autoupdate")
-		downloadPreReleaseFlagCalled := cmd.Flags().Changed("download-pre-release")
+		if cmd.Flags().Changed("update") {
+			updater.Update()
+		} else {
+			// settings flags can only take effect when there are no waypoint args
+			languageFlagCalled := cmd.Flags().Changed("language")
+			autoupdateFlagCalled := cmd.Flags().Changed("autoupdate")
+			downloadPreReleaseFlagCalled := cmd.Flags().Changed("download-pre-release")
 
-		if languageFlagCalled {
-			languageSetting, languageSettingErr := cmd.Flags().GetString("language")
-			if languageSettingErr != nil {
-				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "language", languageSettingErr.Error()), style.ColorError, false))
+			if languageFlagCalled {
+				languageSetting, languageSettingErr := cmd.Flags().GetString("language")
+				if languageSettingErr != nil {
+					return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "language", languageSettingErr.Error()), style.ColorError, false))
+				}
+				settings.UpdateLanguageCode(languageSetting)
 			}
-			settings.UpdateLanguageCode(languageSetting)
-		}
 
-		if autoupdateFlagCalled {
-			autoUpdateSetting, autoUpdateSettingErr := cmd.Flags().GetBool("autoupdate")
-			if autoUpdateSettingErr != nil {
-				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "autoupdate", autoUpdateSettingErr.Error()), style.ColorError, false))
+			if autoupdateFlagCalled {
+				autoUpdateSetting, autoUpdateSettingErr := cmd.Flags().GetBool("autoupdate")
+				if autoUpdateSettingErr != nil {
+					return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "autoupdate", autoUpdateSettingErr.Error()), style.ColorError, false))
+				}
+				settings.UpdateAutoUpdate(autoUpdateSetting)
 			}
-			settings.UpdateAutoUpdate(autoUpdateSetting)
-		}
 
-		if downloadPreReleaseFlagCalled {
-			downloadPreReleaseSetting, downloadPreReleaseSettingErr := cmd.Flags().GetBool("download-pre-release")
-			if downloadPreReleaseSettingErr != nil {
-				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "download-pre-release", downloadPreReleaseSettingErr.Error()), style.ColorError, false))
+			if downloadPreReleaseFlagCalled {
+				downloadPreReleaseSetting, downloadPreReleaseSettingErr := cmd.Flags().GetBool("download-pre-release")
+				if downloadPreReleaseSettingErr != nil {
+					return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "download-pre-release", downloadPreReleaseSettingErr.Error()), style.ColorError, false))
+				}
+				settings.UpdateDownloadPreRelease(downloadPreReleaseSetting)
 			}
-			settings.UpdateDownloadPreRelease(downloadPreReleaseSetting)
-		}
 
-		// no flags were passed — show help
-		if !(languageFlagCalled || autoupdateFlagCalled || downloadPreReleaseFlagCalled) {
-			return cmd.Help()
+			// no flags were passed — show help
+			if !(languageFlagCalled || autoupdateFlagCalled || downloadPreReleaseFlagCalled) {
+				return cmd.Help()
+			}
 		}
 
 		return nil

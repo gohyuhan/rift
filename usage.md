@@ -16,6 +16,7 @@ Everything you need to wield rift from the terminal.
   - [--language](#--language)
   - [--autoupdate](#--autoupdate)
   - [--download-pre-release](#--download-pre-release)
+  - [--update](#--update)
 - [Supported Languages](#supported-languages)
 
 ---
@@ -246,6 +247,33 @@ rift --download-pre-release
 rift --download-pre-release=false
 # rift: download pre-release set to false
 ```
+
+---
+
+### --update
+
+Manually triggers an update check and downloads the latest version if one is available. Unlike `--autoupdate`, this bypasses the cooldown interval and runs immediately.
+
+```sh
+rift --update
+```
+
+**Examples**
+
+```sh
+# Already on the latest version
+rift --update
+# You are already on the latest version (v0.1.0)
+
+# A newer version is available
+rift --update
+# Downloading version v0.2.0...
+# Successfully updated to version v0.2.0
+```
+
+**Notes**
+- Does not prompt for confirmation — update proceeds immediately if a newer version is found.
+- Respects the `--download-pre-release` setting when deciding which release to compare against.
 
 ---
 

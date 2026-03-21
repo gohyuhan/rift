@@ -67,6 +67,7 @@ var zH_HANS = LanguageMapping{
 	RiftFlagWaypointDestroyDescription:    "按名称删除一个航点",
 	RiftFlagWaypointRebindDescription:     "将现有航点重新绑定到新路径；未提供路径时默认使用当前工作目录，提供有效绝对路径时优先使用该路径",
 	RiftFlagWaypointReforgeDescription:    "将现有航点重命名为新名称",
+	RiftFlagUpdateDescription:             "手动触发检查最新版本，如有可用更新则进行升级",
 
 	// Waypoint related
 	RiftSavedWaypoint:                     "rift：已保存 %q -> %s",
