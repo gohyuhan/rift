@@ -11,6 +11,7 @@ Everything you need to wield rift from the terminal.
   - [awaken](#awaken)
   - [discover](#discover)
   - [travel](#travel)
+  - [waypoint](#waypoint)
 - [Settings Flags](#settings-flags)
   - [--language](#--language)
   - [--autoupdate](#--autoupdate)
@@ -95,6 +96,64 @@ rift ui
 **Notes**
 - If the waypoint name does not exist, rift will tell you.
 - Waypoints persist across sessions — discover once, travel forever.
+
+---
+
+### waypoint
+
+Inspects and manages your saved waypoints.
+
+```sh
+rift waypoint
+rift waypoint <name>
+rift waypoint <name> --destroy
+rift waypoint <name> --rebind
+rift waypoint <name> --rebind=<path>
+rift waypoint <name> --reforge <new-name>
+```
+
+With no arguments, lists every saved waypoint with its name and bound path. With a waypoint name, shows detailed info for that waypoint. Flags unlock destructive or mutating operations.
+
+**Flags**
+
+| Flag | Description |
+| ---- | ----------- |
+| `--destroy` | Permanently removes the named waypoint |
+| `--rebind` | Reassigns the waypoint to the current working directory |
+| `--rebind=<path>` | Reassigns the waypoint to the given absolute path |
+| `--reforge <new-name>` | Renames the waypoint to a new name, preserving all its data |
+
+**Examples**
+
+```sh
+# List all waypoints
+rift waypoint
+
+# Show detail for a specific waypoint
+rift waypoint api
+
+# Destroy a waypoint
+rift waypoint api --destroy
+# rift: waypoint "api" has been destroyed
+
+# Rebind a waypoint to the current directory
+rift waypoint api --rebind
+# rift: waypoint "api" rebound to /Users/alice/projects/new-api
+
+# Rebind a waypoint to an explicit path
+rift waypoint api --rebind=/Users/alice/projects/other-api
+# rift: waypoint "api" rebound to /Users/alice/projects/other-api
+
+# Rename a waypoint
+rift waypoint api --reforge backend-api
+# rift: waypoint "api" reforged to "backend-api"
+```
+
+**Notes**
+- `--destroy`, `--rebind`, and `--reforge` are mutually exclusive — only one may be used at a time.
+- `--rebind` resets the waypoint's sealed state, sealed reason, and travelled count, and updates its discovered timestamp.
+- `--reforge` preserves all waypoint data (path, sealed state, travelled count, timestamps) — only the name changes.
+- `--reforge` requires a non-empty new name and will refuse to overwrite an existing waypoint.
 
 ---
 

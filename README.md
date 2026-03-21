@@ -27,11 +27,12 @@ A tool forged for those who refuse to waste their power on traversal. Memorize a
 
 ## Spellbook
 
-| Spell        | Incantation            | Effect                                                   |
-| ------------ | ---------------------- | -------------------------------------------------------- |
-| **Travel**   | `rift <name>`          | Tear open a rift and teleport to a memorized waypoint    |
-| **Discover** | `rift discover <name>` | Inscribe your current location as a waypoint             |
-| **Awaken**   | `rift awaken`          | Repair shell integration or database if something breaks |
+| Spell        | Incantation                              | Effect                                                   |
+| ------------ | ---------------------------------------- | -------------------------------------------------------- |
+| **Travel**   | `rift <name>`                            | Tear open a rift and teleport to a memorized waypoint    |
+| **Discover** | `rift discover <name>`                   | Inscribe your current location as a waypoint             |
+| **Awaken**   | `rift awaken`                            | Repair shell integration or database if something breaks |
+| **Waypoint** | `rift waypoint [name] [--destroy\|--rebind\|--reforge]` | Inspect, rename, rebind, or destroy waypoints |
 
 > Full usage, examples, and settings flags → **[usage.md](usage.md)**
 
