@@ -23,6 +23,7 @@ func init() {
 	waypointCmd.Flags().String("rebind", "", "")
 	waypointCmd.Flags().String("reforge", "", "")
 	waypointCmd.Flags().Bool("destroy", false, "")
+	waypointCmd.MarkFlagsMutuallyExclusive("destroy", "rebind", "reforge")
 	rootCmd.AddCommand(waypointCmd)
 }
 

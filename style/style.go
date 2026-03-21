@@ -2,6 +2,8 @@ package style
 
 import (
 	"image/color"
+	"strings"
+	"unicode/utf8"
 
 	"charm.land/lipgloss/v2"
 )
@@ -30,4 +32,27 @@ var (
 func RenderStringWithColor(text string, color color.Color, faint bool) string {
 	style := lipgloss.NewStyle().Foreground(color).Faint(faint)
 	return style.Render(text)
+}
+
+// ----------------------------------
+//
+//	PadAndRenderLabels takes a slice of raw label strings, finds the longest
+//	by rune count, pads all labels to that width, and returns each one
+//	rendered with the given color and faint setting.
+//
+// ----------------------------------
+func PadAndRenderLabels(labels []string, color color.Color, faint bool) []string {
+	maxLen := 0
+	for _, l := range labels {
+		if n := utf8.RuneCountInString(l); n > maxLen {
+			maxLen = n
+		}
+	}
+
+	rendered := make([]string, len(labels))
+	for i, l := range labels {
+		padded := l + strings.Repeat(" ", maxLen-utf8.RuneCountInString(l))
+		rendered[i] = RenderStringWithColor(padded, color, faint)
+	}
+	return rendered
 }
