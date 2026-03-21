@@ -13,6 +13,7 @@ import (
 	"github.com/gohyuhan/rift/settings"
 	"github.com/gohyuhan/rift/style"
 	"github.com/gohyuhan/rift/utils"
+	"go.etcd.io/bbolt"
 	"golang.org/x/mod/semver"
 )
 
@@ -172,4 +173,12 @@ func CheckIfKeywordIsReservedForRift(arg string) error {
 		return fmt.Errorf("%s", errorMessage)
 	}
 	return nil
+}
+
+func recordCorruptedWaypointInfo(tx *bbolt.Tx, waypointName string) error {
+	waypointCorruptedBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
+	if waypointCorruptedBucket != nil {
+		waypointCorruptedBucket.Put([]byte(waypointName), []byte(waypointName))
+	}
+	return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
 }

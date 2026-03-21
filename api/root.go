@@ -115,11 +115,7 @@ func retrieveWaypointInfo(bboltDb *bbolt.DB, waypointName string) (string, error
 		existingWaypoint := &pb.Waypoint{}
 		protoErr := proto.Unmarshal(existing, existingWaypoint)
 		if protoErr != nil {
-			waypointCorruptedBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
-			if waypointCorruptedBucket != nil {
-				waypointCorruptedBucket.Put([]byte(waypointName), []byte(waypointName))
-			}
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
+			return recordCorruptedWaypointInfo(tx, waypointName)
 		}
 
 		// sealed means the path no longer exists or was manually sealed; block travel

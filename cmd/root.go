@@ -42,6 +42,7 @@ func InitCmdI18n() {
 	rootCmd.Flags().Lookup("download-pre-release").Usage = i18n.LANGUAGEMAPPING.RiftFlagDownloadPreReleaseDescription
 	initAwakenI18n()
 	initDiscoverI18n()
+	initWaypointI18n()
 }
 
 // ----------------------------------

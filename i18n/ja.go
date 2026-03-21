@@ -59,9 +59,13 @@ var jA = LanguageMapping{
 	RiftDescription:                       "事前に定義したチェックポイント名でパスを簡単に移動できます",
 	RiftAwakenDescription:                 "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
 	RiftDiscoverDescription:               "現在の作業ディレクトリにウェイポイント名を割り当てます",
+	RiftWaypointDescription:               "すべてのウェイポイントを一覧表示するか、特定のウェイポイントの情報を表示します",
 	RiftFlagLanguageDescription:           "rift の言語を設定します（対応言語：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "rift が自動的にアップデートを確認するかどうかを設定します（有効にするには --autoupdate、無効にするには --autoupdate=false）",
 	RiftFlagDownloadPreReleaseDescription: "rift がプレリリース版もダウンロードするか、安定版のみにするかを設定します（有効にするには --download-pre-release、無効にするには --download-pre-release=false）",
+	RiftFlagWaypointDestroyDescription:    "名前を指定してウェイポイントを削除します",
+	RiftFlagWaypointRebindDescription:     "既存のウェイポイントを新しいパスに再割り当てします。パスが指定されない場合は現在の作業ディレクトリを使用し、有効な絶対パスが指定された場合はそのパスを優先します",
+	RiftFlagWaypointReforgeDescription:    "既存のウェイポイントを新しい名前に変更します",
 
 	// Waypoint related
 	RiftSavedWaypoint:              "rift：%q -> %s を保存しました",
@@ -70,6 +74,8 @@ var jA = LanguageMapping{
 	RiftWaypointDoNotExistsError:   "rift：ウェイポイント %q は存在しません",
 	RiftWaypointUpdateError:        "rift：ウェイポイント %q の更新に失敗しました",
 	RiftWaypointSealedError:        "rift：ウェイポイント %q は封印されており、移動できません",
+	RiftWaypointSealedLabel:        "(封印済み)",
+	RiftWaypointRetrieveAllError:   "rift：ウェイポイントの取得に失敗しました",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
