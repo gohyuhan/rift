@@ -68,6 +68,7 @@ var eN = LanguageMapping{
 	RiftFlagWaypointRebindDescription:     "Reassign an existing waypoint to a new path; defaults to the current working directory if no path is provided, or uses the given absolute path if valid",
 	RiftFlagWaypointReforgeDescription:    "Rename an existing waypoint to a new name",
 	RiftFlagUpdateDescription:             "Manually trigger a check for the latest version and update if available",
+	RiftFlagVersionDescription:            "Print the current version of rift",
 
 	// Waypoint related
 	RiftSavedWaypoint:                     "rift: saved %q -> %s",

@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
+	"github.com/gohyuhan/rift/logger"
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/settings"
 	"github.com/gohyuhan/rift/style"
@@ -20,6 +22,7 @@ import (
 //
 //	Cobra handler for the root rift command.
 //	If --update is passed, triggers an immediate update check and returns.
+//	If --version is passed, prints the current app version and returns.
 //	When called with no args, it handles settings flags (language, autoupdate,
 //	download-pre-release); if no flags were passed it falls through to help.
 //	When called with an arg, it travels to the named waypoint by printing a
@@ -29,6 +32,12 @@ import (
 var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 	if cmd.Flags().Changed("update") {
 		updater.Update()
+		return nil
+	}
+
+	if cmd.Flags().Changed("version") {
+		message := style.RenderStringWithColor(constant.APPVERSION, style.ColorPurpleVibrant, false)
+		logger.LOGGER.LogToTerminal([]string{message})
 		return nil
 	}
 
