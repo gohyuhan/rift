@@ -104,6 +104,11 @@ type LanguageMapping struct {
 	RiftWaypointReforgeSuccess            string
 	WaypointInfoListTitle                 string
 	WaypointInteractiveError              string
+	ListUpKeyHelp                         string
+	ListDownKeyHelp                       string
+	ListQuitKeyHelp                       string
+	WaypointNavigateKeyHelp               string
+	WaypointDestroyKeyHelp                string
 
 	// Flag related
 	RiftFlagRetrieveError string

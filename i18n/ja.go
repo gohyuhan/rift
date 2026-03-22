@@ -98,6 +98,11 @@ var jA = LanguageMapping{
 	RiftWaypointReforgeSuccess:            "rift：ウェイポイント %q を %q にリフォージしました",
 	WaypointInfoListTitle:                 "ウェイポイント一覧",
 	WaypointInteractiveError:              "rift：ウェイポイントインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
+	ListUpKeyHelp:                         "上へ",
+	ListDownKeyHelp:                       "下へ",
+	ListQuitKeyHelp:                       "終了",
+	WaypointNavigateKeyHelp:               "移動",
+	WaypointDestroyKeyHelp:                "破壊",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",

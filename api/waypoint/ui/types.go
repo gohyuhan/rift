@@ -33,7 +33,7 @@ func (i waypointInfoItem) FilterValue() string {
 }
 
 // for list component of Git branch
-func (d waypointInfoDelegate) Height() int                             { return 1 }
+func (d waypointInfoDelegate) Height() int                             { return 2 }
 func (d waypointInfoDelegate) Spacing() int                            { return 0 }
 func (d waypointInfoDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
 func (d waypointInfoDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {

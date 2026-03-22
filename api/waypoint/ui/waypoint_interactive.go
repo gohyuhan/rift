@@ -83,14 +83,23 @@ func (m *WaypointInterctiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "enter":
 			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-				m.SelectedPath = i.WaypointPath
+				if !i.WaypointIsSealed {
+					m.SelectedPath = i.WaypointPath
+					m.IsQuit = true
+					return m, tea.Quit
+				}
+				return m, nil
 			}
-			m.IsQuit = true
-			return m, tea.Quit
 		case "j", "down":
 			m.WaypointInfoList.CursorDown()
+			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
+				initWaypointInfoListKeyMap(i.WaypointIsSealed)
+			}
 		case "k", "up":
 			m.WaypointInfoList.CursorUp()
+			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
+				initWaypointInfoListKeyMap(i.WaypointIsSealed)
+			}
 		case "ctrl+c", "esc", "q":
 			m.IsQuit = true
 			return m, tea.Quit

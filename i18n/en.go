@@ -98,6 +98,11 @@ var eN = LanguageMapping{
 	RiftWaypointReforgeSuccess:            "rift: waypoint %q reforged to %q",
 	WaypointInfoListTitle:                 "Waypoints",
 	WaypointInteractiveError:              "rift: waypoint interactive session failed, [ERROR: %s]",
+	ListUpKeyHelp:                         "up",
+	ListDownKeyHelp:                       "down",
+	ListQuitKeyHelp:                       "quit",
+	WaypointNavigateKeyHelp:               "navigate",
+	WaypointDestroyKeyHelp:                "destroy",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

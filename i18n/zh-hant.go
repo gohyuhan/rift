@@ -98,6 +98,11 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointReforgeSuccess:            "rift：航點 %q 已重鑄為 %q",
 	WaypointInfoListTitle:                 "航點列表",
 	WaypointInteractiveError:              "rift：航點互動介面啟動失敗，[ERROR: %s]",
+	ListUpKeyHelp:                         "上移",
+	ListDownKeyHelp:                       "下移",
+	ListQuitKeyHelp:                       "退出",
+	WaypointNavigateKeyHelp:               "導航",
+	WaypointDestroyKeyHelp:                "銷毀",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",

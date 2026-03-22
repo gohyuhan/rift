@@ -3,6 +3,7 @@ package ui
 import (
 	"fmt"
 
+	"charm.land/bubbles/v2/key"
 	"charm.land/bubbles/v2/list"
 	"github.com/charmbracelet/x/ansi"
 	apiUtils "github.com/gohyuhan/rift/api/utils"
@@ -100,7 +101,7 @@ func initWaypointInfoListModel(m *WaypointInterctiveModel) error {
 		previousSelectedWaypointInfo := previousSelectedWaypoint.(waypointInfoItem)
 		for index, waypoint := range allWaypointsInfo {
 			if waypoint.WaypointName == previousSelectedWaypointInfo.WaypointName {
-				selectedWayPointCursorPosition = index + 1
+				selectedWayPointCursorPosition = index
 			}
 			latestWaypointInfoArray = append(latestWaypointInfoArray, waypointInfoItem(waypoint))
 		}
@@ -121,7 +122,16 @@ func initWaypointInfoListModel(m *WaypointInterctiveModel) error {
 	m.WaypointInfoList.Styles.Title = style.NewStyle.Bold(true)
 	m.WaypointInfoList.Styles.PaginationStyle = style.NewStyle
 	m.WaypointInfoList.Styles.TitleBar = style.NewStyle
-	m.WaypointInfoList.Styles.HelpStyle = style.NewStyle.MarginTop(0).MarginBottom(0).PaddingTop(0).PaddingBottom(0)
+	m.WaypointInfoList.Styles.HelpStyle = style.NewStyle
+	m.WaypointInfoList.Help.Styles.ShortKey = style.NewStyle.Foreground(style.ColorBlueMuted).Bold(true)
+	m.WaypointInfoList.Help.Styles.ShortDesc = style.NewStyle.Foreground(style.ColorBlueMuted)
+	m.WaypointInfoList.Help.Styles.ShortSeparator = style.NewStyle.Foreground(style.ColorBlueGrayMuted)
+	m.WaypointInfoList.KeyMap = list.KeyMap{}
+	m.WaypointInfoList.AdditionalShortHelpKeys = func() []key.Binding {
+		return []key.Binding{
+			key.NewBinding(key.WithKeys("q", "esc", "ctrl+c"), key.WithHelp("q/esc/ctrl+c", i18n.LANGUAGEMAPPING.ListQuitKeyHelp)),
+		}
+	}
 
 	if selectedWayPointCursorPosition >= 0 {
 		m.WaypointInfoList.Select(selectedWayPointCursorPosition)
@@ -135,5 +145,34 @@ func initWaypointInfoListModel(m *WaypointInterctiveModel) error {
 		}
 	}
 
+	currentSelectedWaypoint := m.WaypointInfoList.SelectedItem()
+	if currentSelectedWaypoint != nil {
+		currentSelectedWaypointInfo := currentSelectedWaypoint.(waypointInfoItem)
+		m.WaypointInfoList.AdditionalShortHelpKeys = initWaypointInfoListKeyMap(currentSelectedWaypointInfo.WaypointIsSealed)
+	}
+
 	return nil
+}
+
+func initWaypointInfoListKeyMap(isSealed bool) func() []key.Binding {
+	if isSealed {
+		return func() []key.Binding {
+			return []key.Binding{
+				key.NewBinding(key.WithKeys("↑", "k"), key.WithHelp("↑/k", i18n.LANGUAGEMAPPING.ListUpKeyHelp)),
+				key.NewBinding(key.WithKeys("↓", "j"), key.WithHelp("↓/j", i18n.LANGUAGEMAPPING.ListDownKeyHelp)),
+				key.NewBinding(key.WithKeys("backspace"), key.WithHelp("backspace", i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelp)),
+				key.NewBinding(key.WithKeys("q", "esc", "ctrl+c"), key.WithHelp("q/esc/ctrl+c", i18n.LANGUAGEMAPPING.ListQuitKeyHelp)),
+			}
+		}
+	} else {
+		return func() []key.Binding {
+			return []key.Binding{
+				key.NewBinding(key.WithKeys("↑", "k"), key.WithHelp("↑/k", i18n.LANGUAGEMAPPING.ListUpKeyHelp)),
+				key.NewBinding(key.WithKeys("↓", "j"), key.WithHelp("↓/j", i18n.LANGUAGEMAPPING.ListDownKeyHelp)),
+				key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.WaypointNavigateKeyHelp)),
+				key.NewBinding(key.WithKeys("backspace"), key.WithHelp("backspace", i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelp)),
+				key.NewBinding(key.WithKeys("q", "esc", "ctrl+c"), key.WithHelp("q/esc/ctrl+c", i18n.LANGUAGEMAPPING.ListQuitKeyHelp)),
+			}
+		}
+	}
 }
