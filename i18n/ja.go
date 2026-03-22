@@ -96,6 +96,8 @@ var jA = LanguageMapping{
 	RiftWaypointReforgeError:              "rift：ウェイポイント %q のリフォージに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift：ウェイポイント %q は既に存在するため、既存の名前にリフォージすることはできません",
 	RiftWaypointReforgeSuccess:            "rift：ウェイポイント %q を %q にリフォージしました",
+	WaypointInfoListTitle:                 "ウェイポイント一覧",
+	WaypointInteractiveError:              "rift：ウェイポイントインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",

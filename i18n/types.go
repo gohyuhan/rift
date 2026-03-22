@@ -102,6 +102,8 @@ type LanguageMapping struct {
 	RiftWaypointReforgeAlreadyExistsError string
 	RiftWaypointReforgeError              string
 	RiftWaypointReforgeSuccess            string
+	WaypointInfoListTitle                 string
+	WaypointInteractiveError              string
 
 	// Flag related
 	RiftFlagRetrieveError string

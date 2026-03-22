@@ -96,6 +96,8 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointReforgeError:              "rift：重鑄航點 %q 失敗，[ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift：航點 %q 已存在，無法重鑄為已有名稱",
 	RiftWaypointReforgeSuccess:            "rift：航點 %q 已重鑄為 %q",
+	WaypointInfoListTitle:                 "航點列表",
+	WaypointInteractiveError:              "rift：航點互動介面啟動失敗，[ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",

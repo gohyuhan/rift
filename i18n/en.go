@@ -96,6 +96,8 @@ var eN = LanguageMapping{
 	RiftWaypointReforgeError:              "rift: failed to reforge waypoint %q, [ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift: waypoint %q already exists, cannot reforge to an existing name",
 	RiftWaypointReforgeSuccess:            "rift: waypoint %q reforged to %q",
+	WaypointInfoListTitle:                 "Waypoints",
+	WaypointInteractiveError:              "rift: waypoint interactive session failed, [ERROR: %s]",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

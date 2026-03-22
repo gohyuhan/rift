@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
+	waypointUI "github.com/gohyuhan/rift/api/waypoint/ui"
 	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/spf13/cobra"
@@ -30,12 +31,11 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 
 	// no args — list all waypoints
 	if len(args) < 1 {
-		allWaypointInfo, allWaypointInfoErr := waypointInteractive(bboltDB)
-		if allWaypointInfoErr != nil {
-			return allWaypointInfoErr
-		}
-
-		logger.LOGGER.LogToTerminal(allWaypointInfo)
+		// _, allWaypointInfoErr := waypointInteractive(bboltDB)
+		// if allWaypointInfoErr != nil {
+		// 	return allWaypointInfoErr
+		// }
+		waypointUI.RunWaypointInteractive(bboltDB)
 
 		return nil
 	}
