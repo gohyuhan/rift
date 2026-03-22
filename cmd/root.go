@@ -27,6 +27,7 @@ func init() {
 	rootCmd.Flags().Bool("autoupdate", false, "")
 	rootCmd.Flags().Bool("download-pre-release", false, "")
 	rootCmd.Flags().Bool("update", false, "")
+	rootCmd.Flags().Bool("version", false, "")
 }
 
 // ----------------------------------
@@ -42,6 +43,7 @@ func InitCmdI18n() {
 	rootCmd.Flags().Lookup("autoupdate").Usage = i18n.LANGUAGEMAPPING.RiftFlagAutoUpdateDescription
 	rootCmd.Flags().Lookup("download-pre-release").Usage = i18n.LANGUAGEMAPPING.RiftFlagDownloadPreReleaseDescription
 	rootCmd.Flags().Lookup("update").Usage = i18n.LANGUAGEMAPPING.RiftFlagUpdateDescription
+	rootCmd.Flags().Lookup("version").Usage = i18n.LANGUAGEMAPPING.RiftFlagVersionDescription
 	initAwakenI18n()
 	initDiscoverI18n()
 	initWaypointI18n()

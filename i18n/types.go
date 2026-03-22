@@ -74,6 +74,7 @@ type LanguageMapping struct {
 	RiftFlagWaypointRebindDescription     string
 	RiftFlagWaypointReforgeDescription    string
 	RiftFlagUpdateDescription             string
+	RiftFlagVersionDescription            string
 
 	// Waypoint related
 	RiftSavedWaypoint                     string
