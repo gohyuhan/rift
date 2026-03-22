@@ -26,9 +26,9 @@ import (
 //	and the caller receives a corruption-specific error for that waypoint.
 //
 // ----------------------------------
-func retrieveAllWaypointInfo(bboltDb *bbolt.DB) ([]string, error) {
+func waypointInteractive(bboltDb *bbolt.DB) ([]string, error) {
 	var waypointsInfo []string
-	var corruptedWaypointName string
+	var corruptedWaypointName []string
 	waypointCorrupted := false
 
 	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
@@ -47,8 +47,7 @@ func retrieveAllWaypointInfo(bboltDb *bbolt.DB) ([]string, error) {
 			protoErr := proto.Unmarshal(v, existingWaypoint)
 			if protoErr != nil {
 				waypointCorrupted = true
-				corruptedWaypointName = string(k)
-				return fmt.Errorf("")
+				corruptedWaypointName = append(corruptedWaypointName, string(k))
 			}
 
 			// build the waypoint name line; sealed entries use a dark dormant palette

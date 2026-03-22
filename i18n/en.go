@@ -25,7 +25,7 @@ var eN = LanguageMapping{
 	DBOpenError:                 "Failed to open database, perhaps you haven't setup rift yet, run `rift awaken` for initialization",
 	SettingsBucketNotFoundError: "Settings bucket not found in database, perhaps rerun `rift awaken`",
 	WaypointBucketNotFoundError: "Waypoint bucket not found in database, perhaps rerun `rift awaken`",
-	WaypointDataCorruptedError:  "Waypoint data for %q is corrupted and could not be read",
+	WaypointDataCorruptedError:  "Waypoint data for [%s] is corrupted and could not be read",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",

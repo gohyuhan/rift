@@ -111,7 +111,7 @@ func retrieveWaypointInfoDetail(bboltDb *bbolt.DB, waypointName string) ([]strin
 
 	// View is complete — safe to open an Update for the corruption write
 	if waypointCorrupted {
-		viewErr = apiUtils.RecordCorruptedWaypointInfo(bboltDb, waypointName)
+		viewErr = apiUtils.RecordCorruptedWaypointInfo(bboltDb, []string{waypointName})
 	}
 
 	return waypointDetailInfo, viewErr

@@ -25,7 +25,7 @@ var zH_HANS = LanguageMapping{
 	DBOpenError:                 "数据库打开失败，请确认是否已初始化，运行 `rift awaken` 进行初始化",
 	SettingsBucketNotFoundError: "在数据库中找不到设置存储区，请重新运行 `rift awaken`",
 	WaypointBucketNotFoundError: "在数据库中找不到航点存储区，请重新运行 `rift awaken`",
-	WaypointDataCorruptedError:  "航点 %q 的数据已损坏，无法读取",
+	WaypointDataCorruptedError:  "航点 [%s] 的数据已损坏，无法读取",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "发现新版本 %s，是否立即下载？(y/n): ",

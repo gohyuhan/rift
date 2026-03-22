@@ -30,7 +30,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 
 	// no args — list all waypoints
 	if len(args) < 1 {
-		allWaypointInfo, allWaypointInfoErr := retrieveAllWaypointInfo(bboltDB)
+		allWaypointInfo, allWaypointInfoErr := waypointInteractive(bboltDB)
 		if allWaypointInfoErr != nil {
 			return allWaypointInfoErr
 		}
