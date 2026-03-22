@@ -39,12 +39,31 @@ jobs:
             echo "is_prerelease=false" >> $GITHUB_OUTPUT
           fi
 
-      # ── 4. Run GoReleaser (creates release + artifacts + checksums.txt) ───────────────
+      # ── 4. Resolve previous tag for changelog ────────────────────────────────────────
+      # For stable releases: find the previous stable tag (skip pre-releases)
+      # For pre-releases: let goreleaser use its default (previous tag of any kind)
+      - name: Resolve previous tag
+        id: prev_tag
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          if [[ "${{ steps.prerelease_check.outputs.is_prerelease }}" == "false" ]]; then
+            # List all tags sorted by version descending, skip current, find first stable tag
+            PREV_STABLE=$(git tag --sort=-v:refname | grep -v "^${TAG}$" | grep -vE -- '-[a-zA-Z]' | head -n 1)
+            if [[ -n "$PREV_STABLE" ]]; then
+              echo "args=--previous-tag ${PREV_STABLE}" >> $GITHUB_OUTPUT
+            else
+              echo "args=" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "args=" >> $GITHUB_OUTPUT
+          fi
+
+      # ── 5. Run GoReleaser (creates release + artifacts + checksums.txt) ───────────────
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
           version: "~> v2"
-          args: release --clean
+          args: release --clean ${{ steps.prev_tag.outputs.args }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

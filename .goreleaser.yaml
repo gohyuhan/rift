@@ -62,21 +62,27 @@ changelog:
     # 2. Optimization
     # Display Order: 1
     - title: "♻️ Optimization"
-      regexp: "(?i)^(refactor|opt|perf|style|performance)(\\(.*\\))?!?:"
+      regexp: "(?i)^(refactor|opt|opts|perf|style|performance)(\\(.*\\))?!?:"
       order: 1
 
     # 3. Bug Fixes
     # Display Order: 2
     - title: "🐛 Bug Fixes"
-      regexp: "(?i)^(fix|hotfix|bug|fixes|hotfixes)(\\(.*\\))?!?:"
+      regexp: "(?i)^(fix|hotfix|bug|bugs|fixes|hotfixes)(\\(.*\\))?!?:"
       order: 2
 
-    # 4. Others
+    # 4. Docs
     # Display Order: 3
+    - title: "📝 Docs"
+      regexp: "(?i)^(doc|docs)(\\(.*\\))?!?:"
+      order: 3
+
+    # 4. Others
+    # Display Order: 4
     # Logic: Catch-all for anything else.
     - title: "Others"
       regexp: ".*"
-      order: 3
+      order: 4
 
 release:
   github:
