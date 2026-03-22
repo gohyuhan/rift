@@ -3,7 +3,7 @@ package cmd
 import (
 	"os"
 
-	"github.com/gohyuhan/rift/api"
+	"github.com/gohyuhan/rift/api/root"
 	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
@@ -14,7 +14,7 @@ const rootKeyword = "rift [waypoint name]"
 var rootCmd = &cobra.Command{
 	Use:  rootKeyword,
 	Args: cobra.MaximumNArgs(1),
-	RunE: api.RiftRootFunc,
+	RunE: root.RiftRootFunc,
 }
 
 func init() {

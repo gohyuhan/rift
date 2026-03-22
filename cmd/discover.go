@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/gohyuhan/rift/api"
+	"github.com/gohyuhan/rift/api/discover"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
 )
@@ -11,7 +11,7 @@ const discoverKeyword = "discover [waypoint name]"
 var discoverCmd = &cobra.Command{
 	Use:  discoverKeyword,
 	Args: cobra.ExactArgs(1),
-	RunE: api.RiftDiscoverFunc,
+	RunE: discover.RiftDiscoverFunc,
 }
 
 // ----------------------------------
