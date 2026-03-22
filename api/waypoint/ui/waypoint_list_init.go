@@ -84,7 +84,7 @@ func getAllWaypointsInfo(bboltDb *bbolt.DB) ([]waypointInfo, error) {
 	return waypointsInfo, viewErr
 }
 
-func initWaypointInfoListModel(m *WaypointInterctiveModel) error {
+func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 	previousSelectedWaypoint := m.WaypointInfoList.SelectedItem()
 	selectedWayPointCursorPosition := -1
 

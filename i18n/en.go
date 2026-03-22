@@ -98,6 +98,7 @@ var eN = LanguageMapping{
 	RiftWaypointReforgeSuccess:            "rift: waypoint %q reforged to %q",
 	WaypointInfoListTitle:                 "Waypoints",
 	WaypointInteractiveError:              "rift: waypoint interactive session failed, [ERROR: %s]",
+	RiftWaypointPathEmptyError:            "rift: waypoint %q has an empty or invalid path",
 	ListUpKeyHelp:                         "up",
 	ListDownKeyHelp:                       "down",
 	ListQuitKeyHelp:                       "quit",

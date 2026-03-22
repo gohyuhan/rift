@@ -98,6 +98,7 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointReforgeSuccess:            "rift：航点 %q 已重铸为 %q",
 	WaypointInfoListTitle:                 "航点列表",
 	WaypointInteractiveError:              "rift：航点交互界面启动失败，[ERROR: %s]",
+	RiftWaypointPathEmptyError:            "rift：航点 %q 的路径为空或无效",
 	ListUpKeyHelp:                         "上移",
 	ListDownKeyHelp:                       "下移",
 	ListQuitKeyHelp:                       "退出",

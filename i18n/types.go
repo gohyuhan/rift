@@ -104,6 +104,7 @@ type LanguageMapping struct {
 	RiftWaypointReforgeSuccess            string
 	WaypointInfoListTitle                 string
 	WaypointInteractiveError              string
+	RiftWaypointPathEmptyError            string
 	ListUpKeyHelp                         string
 	ListDownKeyHelp                       string
 	ListQuitKeyHelp                       string

@@ -98,6 +98,7 @@ var jA = LanguageMapping{
 	RiftWaypointReforgeSuccess:            "rift：ウェイポイント %q を %q にリフォージしました",
 	WaypointInfoListTitle:                 "ウェイポイント一覧",
 	WaypointInteractiveError:              "rift：ウェイポイントインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
+	RiftWaypointPathEmptyError:            "rift：ウェイポイント %q のパスが空または無効です",
 	ListUpKeyHelp:                         "上へ",
 	ListDownKeyHelp:                       "下へ",
 	ListQuitKeyHelp:                       "終了",

@@ -8,13 +8,13 @@ import (
 	"charm.land/bubbles/v2/list"
 	tea "charm.land/bubbletea/v2"
 	"github.com/gohyuhan/rift/i18n"
-	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/style"
 	"go.etcd.io/bbolt"
 )
 
-type WaypointInterctiveModel struct {
-	SelectedPath                   string
+type WaypointInteractiveModel struct {
+	SelectedWaypointPath           string
+	SelectedWaypointName           string
 	IsQuit                         bool
 	ErrMessage                     string
 	WaypointInfoList               list.Model
@@ -32,9 +32,9 @@ type waypointInfo struct {
 	WaypointSealedReason string
 }
 
-func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInterctiveModel {
-	waypointInteractiveModel := WaypointInterctiveModel{
-		SelectedPath:                   "",
+func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
+	waypointInteractiveModel := WaypointInteractiveModel{
+		SelectedWaypointPath:           "",
 		IsQuit:                         false,
 		ErrMessage:                     "",
 		WaypointInfoListCursorPosition: 0,
@@ -44,28 +44,27 @@ func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInterctiveModel {
 	return &waypointInteractiveModel
 }
 
-func RunWaypointInteractive(bboltDb *bbolt.DB) (string, bool) {
+func RunWaypointInteractive(bboltDb *bbolt.DB) (string, string, error) {
 	waypointInteractiveModel := initWaypointInteractiveModel(bboltDb)
 	p := tea.NewProgram(waypointInteractiveModel, tea.WithOutput(os.Stderr))
 	result, err := p.Run()
 	if err != nil {
 		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointInteractiveError, err), style.ColorError, false)
-		logger.LOGGER.LogToTerminal([]string{errorMessage})
-		return "", false
+		return "", "", fmt.Errorf("%s", errorMessage)
 	}
 
-	final := result.(*WaypointInterctiveModel)
-	if final.SelectedPath == "" {
-		return "", false
+	final := result.(*WaypointInteractiveModel)
+	if final.SelectedWaypointPath == "" || final.SelectedWaypointName == "" {
+		return "", "", fmt.Errorf(i18n.LANGUAGEMAPPING.RiftWaypointPathEmptyError, final.SelectedWaypointName)
 	}
-	return final.SelectedPath, true
+	return final.SelectedWaypointPath, final.SelectedWaypointName, nil
 }
 
-func (m *WaypointInterctiveModel) Init() tea.Cmd {
+func (m *WaypointInteractiveModel) Init() tea.Cmd {
 	return nil
 }
 
-func (m *WaypointInterctiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -84,7 +83,8 @@ func (m *WaypointInterctiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "enter":
 			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
 				if !i.WaypointIsSealed {
-					m.SelectedPath = i.WaypointPath
+					m.SelectedWaypointPath = i.WaypointPath
+					m.SelectedWaypointName = i.WaypointName
 					m.IsQuit = true
 					return m, tea.Quit
 				}
@@ -109,7 +109,7 @@ func (m *WaypointInterctiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
-func (m *WaypointInterctiveModel) View() tea.View {
+func (m *WaypointInteractiveModel) View() tea.View {
 	if m.IsQuit {
 		return tea.NewView("")
 	}

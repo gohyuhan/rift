@@ -1,6 +1,7 @@
 package waypoint
 
 import (
+	"fmt"
 	"strings"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
@@ -31,7 +32,17 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 
 	// no args — list all waypoints
 	if len(args) < 1 {
-		waypointUI.RunWaypointInteractive(bboltDB)
+		pathToNavigate, waypointName, interactiveErr := waypointUI.RunWaypointInteractive(bboltDB)
+		if interactiveErr != nil {
+			return interactiveErr
+		}
+
+		// Only this line goes to stdout — the shell wrapper evals it.
+		fmt.Printf("cd %q", pathToNavigate)
+
+		// best-effort: increment travel count; failure is silently ignored
+		apiUtils.UpdateWaypointTravelledCount(bboltDB, waypointName)
+
 		return nil
 	}
 
