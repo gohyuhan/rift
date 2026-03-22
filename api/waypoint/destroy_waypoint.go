@@ -33,6 +33,12 @@ func destroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string) error {
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroyError, waypointName, destroyWaypointErr.Error()), style.ColorError, false))
 		}
 
+		// when a waypoint was destroyed also destroy the corrupted data record for the waypoint (if available)
+		corruptedWaypointBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
+		if corruptedWaypointBucket != nil {
+			corruptedWaypointBucket.Delete([]byte(waypointName))
+		}
+
 		// report the destruction to the terminal
 		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroySuccess, waypointName), style.ColorGreenSoft, false)
 		logger.LOGGER.LogToTerminal([]string{message})
