@@ -12,6 +12,12 @@ import (
 	"go.etcd.io/bbolt"
 )
 
+// ----------------------------------
+//
+//	bubbletea model that drives the interactive waypoint selection UI;
+//	holds all display and navigation state across Init / Update / View
+//
+// ----------------------------------
 type WaypointInteractiveModel struct {
 	SelectedWaypointPath           string
 	SelectedWaypointName           string
@@ -25,6 +31,12 @@ type WaypointInteractiveModel struct {
 	IsRenderInit                   atomic.Bool
 }
 
+// ----------------------------------
+//
+//	raw data record for a single waypoint as read from the database;
+//	mirrors the proto fields relevant to the list UI
+//
+// ----------------------------------
 type waypointInfo struct {
 	WaypointName         string
 	WaypointPath         string
@@ -32,6 +44,13 @@ type waypointInfo struct {
 	WaypointSealedReason string
 }
 
+// ----------------------------------
+//
+//	allocates a WaypointInteractiveModel with safe zero-value defaults;
+//	list setup is deferred to the first WindowSizeMsg so that correct
+//	terminal dimensions are available when building item layouts
+//
+// ----------------------------------
 func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
 	waypointInteractiveModel := WaypointInteractiveModel{
 		SelectedWaypointPath:           "",
@@ -44,8 +63,16 @@ func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
 	return &waypointInteractiveModel
 }
 
+// ----------------------------------
+//
+//	starts the bubbletea program and blocks until the user selects a
+//	waypoint or quits; returns the selected waypoint path, name, and
+//	any error encountered during the program run or after selection
+//
+// ----------------------------------
 func RunWaypointInteractive(bboltDb *bbolt.DB) (string, string, error) {
 	waypointInteractiveModel := initWaypointInteractiveModel(bboltDb)
+	// route program output to stderr so stdout stays clean for callers
 	p := tea.NewProgram(waypointInteractiveModel, tea.WithOutput(os.Stderr))
 	result, err := p.Run()
 	if err != nil {
@@ -53,6 +80,7 @@ func RunWaypointInteractive(bboltDb *bbolt.DB) (string, string, error) {
 		return "", "", fmt.Errorf("%s", errorMessage)
 	}
 
+	// safe: Run always returns the model passed to NewProgram
 	final := result.(*WaypointInteractiveModel)
 	if final.SelectedWaypointPath == "" || final.SelectedWaypointName == "" {
 		return "", "", fmt.Errorf(i18n.LANGUAGEMAPPING.RiftWaypointPathEmptyError, final.SelectedWaypointName)
@@ -60,19 +88,31 @@ func RunWaypointInteractive(bboltDb *bbolt.DB) (string, string, error) {
 	return final.SelectedWaypointPath, final.SelectedWaypointName, nil
 }
 
+// ----------------------------------
+//
+//	satisfies the tea.Model interface; no startup commands are needed
+//
+// ----------------------------------
 func (m *WaypointInteractiveModel) Init() tea.Cmd {
 	return nil
 }
 
+// ----------------------------------
+//
+//	handles terminal resize, cursor navigation, selection, and quit;
+//	list component initialisation is deferred until the first resize
+//	event so that valid dimensions are available for layout calculation
+//
+// ----------------------------------
 func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmds []tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.Width = msg.Width
 		m.Height = msg.Height
-		// Initialize list components once, immediately after the first window resize.
-		// Valid dimensions are required to calculate item layouts (specifically text truncation);
-		// initializing earlier would cause the UI layout to break.
+		// initialize list components once, immediately after the first window resize;
+		// valid dimensions are required to calculate item layouts (specifically text
+		// truncation) — initializing earlier would cause the UI layout to break
 		if m.IsRenderInit.CompareAndSwap(false, true) {
 			if err := initWaypointInfoListModel(m); err != nil {
 				m.ErrMessage = err.Error()
@@ -82,6 +122,7 @@ func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "enter":
 			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
+				// sealed waypoints are non-navigable; silently ignore enter
 				if !i.WaypointIsSealed {
 					m.SelectedWaypointPath = i.WaypointPath
 					m.SelectedWaypointName = i.WaypointName
@@ -92,11 +133,13 @@ func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case "j", "down":
 			m.WaypointInfoList.CursorDown()
+			// refresh the help key map to reflect the sealed state of the new selection
 			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
 				initWaypointInfoListKeyMap(i.WaypointIsSealed)
 			}
 		case "k", "up":
 			m.WaypointInfoList.CursorUp()
+			// refresh the help key map to reflect the sealed state of the new selection
 			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
 				initWaypointInfoListKeyMap(i.WaypointIsSealed)
 			}
@@ -109,6 +152,12 @@ func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, tea.Batch(cmds...)
 }
 
+// ----------------------------------
+//
+//	renders the waypoint list; returns an empty view once the user
+//	has quit to avoid a final flash of stale content
+//
+// ----------------------------------
 func (m *WaypointInteractiveModel) View() tea.View {
 	if m.IsQuit {
 		return tea.NewView("")

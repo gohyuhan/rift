@@ -15,7 +15,7 @@ import (
 
 // ---------------------------------
 //
-// for list component of git branch
+//	list item and delegate types for the waypoint interactive UI
 //
 // ---------------------------------
 type (
@@ -28,14 +28,36 @@ type (
 	}
 )
 
+// ----------------------------------
+//
+//	returns the value used when the list filters items; waypoints are
+//	matched by name
+//
+// ----------------------------------
 func (i waypointInfoItem) FilterValue() string {
 	return i.WaypointName
 }
 
-// for list component of Git branch
+// ----------------------------------
+//
+//	Height and Spacing define the row layout for the bubbles list delegate;
+//	each waypoint occupies 2 lines (name + path) with no extra spacing;
+//	Update is a no-op as item-level updates are handled by the parent model
+//
+// ----------------------------------
 func (d waypointInfoDelegate) Height() int                             { return 2 }
 func (d waypointInfoDelegate) Spacing() int                            { return 0 }
 func (d waypointInfoDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
+
+// ----------------------------------
+//
+//	renders a single waypoint row as two lines: the waypoint name on the
+//	first line and the path (indented) on the second; sealed waypoints are
+//	rendered in a muted colour with a sealed label appended to the name,
+//	while active waypoints use the vibrant purple palette; the selected
+//	row is prefixed with a ❯ cursor, all others with two spaces
+//
+// ----------------------------------
 func (d waypointInfoDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
 	i, ok := listItem.(waypointInfoItem)
 	if !ok {
@@ -44,15 +66,18 @@ func (d waypointInfoDelegate) Render(w io.Writer, m list.Model, index int, listI
 
 	componentWidth := m.Width() - ListItemOrTitleWidthPad
 
+	// append sealed label when the waypoint cannot be navigated to
 	waypointName := fmt.Sprintf(" %s", i.WaypointName)
 	if i.WaypointIsSealed {
 		waypointName = fmt.Sprintf(" %s %s", i.WaypointName, i18n.LANGUAGEMAPPING.RiftWaypointSealedLabel)
 	}
 	waypointName = ansi.Truncate(waypointName, componentWidth, "…")
 
+	// path is indented with an extra space relative to the name
 	waypointPath := fmt.Sprintf("   %s", i.WaypointPath)
 	waypointPath = ansi.Truncate(waypointPath, componentWidth, "…")
 
+	// apply colour based on sealed state
 	if i.WaypointIsSealed {
 		waypointName = style.RenderStringWithColor(waypointName, style.ColorSealedMuted, true)
 		waypointPath = style.RenderStringWithColor(waypointPath, style.ColorSealedMuted, true)
@@ -63,6 +88,7 @@ func (d waypointInfoDelegate) Render(w io.Writer, m list.Model, index int, listI
 
 	str := fmt.Sprintf("%s\n%s", waypointName, waypointPath)
 
+	// prefix the selected row with a cursor glyph; all others get padding
 	var fn func(...string) string
 	if index == m.Index() {
 		fn = func(s ...string) string {

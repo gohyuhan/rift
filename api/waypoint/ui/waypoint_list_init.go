@@ -17,18 +17,13 @@ import (
 
 // ----------------------------------
 //
-//	Reads every entry in the waypoint bucket and builds a display list.
-//	Uses a read-only View transaction; any writes (corruption recording) are
-//	deferred to a separate Update transaction after View completes.
-//	Each waypoint occupies three consecutive lines in the returned slice:
-//	  1. waypoint name (cyan for active; muted/faint + sealed label for sealed)
-//	  2. waypoint path (blue-gray, faint, indented with two spaces)
-//	  3. blank line separator
-//	Corrupted proto data stops ForEach on the first affected entry; the name is
-//	captured, recorded in the corrupted-records bucket via a follow-up Update,
-//	and the caller receives a corruption-specific error for that waypoint.
+//	reads every entry in the waypoint bucket and returns a slice of
+//	waypointInfo records; uses a read-only View transaction so any
+//	corruption writes are deferred to a separate Update after View
+//	completes; corrupted proto entries are collected and recorded via
+//	RecordCorruptedWaypointInfo before the error is returned to the caller
 //
-// ---------------------------------
+// ----------------------------------
 func getAllWaypointsInfo(bboltDb *bbolt.DB) ([]waypointInfo, error) {
 	var waypointsInfo []waypointInfo
 	var corruptedWaypointName []string
@@ -84,6 +79,15 @@ func getAllWaypointsInfo(bboltDb *bbolt.DB) ([]waypointInfo, error) {
 	return waypointsInfo, viewErr
 }
 
+// ----------------------------------
+//
+//	builds or rebuilds the bubbles list model on the WaypointInteractiveModel;
+//	preserves the previously selected waypoint by name when re-initialising,
+//	and falls back to the stored cursor position when no match is found;
+//	called once after the first WindowSizeMsg so that layout dimensions
+//	are valid before the list is rendered
+//
+// ----------------------------------
 func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 	previousSelectedWaypoint := m.WaypointInfoList.SelectedItem()
 	selectedWayPointCursorPosition := -1
@@ -98,6 +102,8 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 	}
 
 	if previousSelectedWaypoint != nil {
+		// a previous selection exists; scan the fresh list to find a name match
+		// so the cursor lands on the same waypoint after re-initialisation
 		previousSelectedWaypointInfo := previousSelectedWaypoint.(waypointInfoItem)
 		for index, waypoint := range allWaypointsInfo {
 			if waypoint.WaypointName == previousSelectedWaypointInfo.WaypointName {
@@ -106,11 +112,13 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 			latestWaypointInfoArray = append(latestWaypointInfoArray, waypointInfoItem(waypoint))
 		}
 	} else {
+		// no previous selection; convert all records to list items
 		for _, waypoint := range allWaypointsInfo {
 			latestWaypointInfoArray = append(latestWaypointInfoArray, waypointInfoItem(waypoint))
 		}
 	}
 
+	// height is reduced by 5 to reserve space for the title and help bar rows
 	m.WaypointInfoList = list.New(latestWaypointInfoArray, waypointInfoDelegate{}, m.Width, m.Height-5)
 	m.WaypointInfoList.SetShowPagination(false)
 	m.WaypointInfoList.SetShowStatusBar(false)
@@ -118,6 +126,7 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 	m.WaypointInfoList.SetShowFilter(false)
 	m.WaypointInfoList.SetShowHelp(true)
 
+	// truncate the title to prevent overflow when the terminal is narrow
 	m.WaypointInfoList.Title = ansi.Truncate(i18n.LANGUAGEMAPPING.WaypointInfoListTitle, titleWidthLimit, "...")
 	m.WaypointInfoList.Styles.Title = style.NewStyle.Bold(true)
 	m.WaypointInfoList.Styles.PaginationStyle = style.NewStyle
@@ -126,6 +135,7 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 	m.WaypointInfoList.Help.Styles.ShortKey = style.NewStyle.Foreground(style.ColorBlueMuted).Bold(true)
 	m.WaypointInfoList.Help.Styles.ShortDesc = style.NewStyle.Foreground(style.ColorBlueMuted)
 	m.WaypointInfoList.Help.Styles.ShortSeparator = style.NewStyle.Foreground(style.ColorBlueGrayMuted)
+	// clear the default key map so only our custom bindings appear in the help bar
 	m.WaypointInfoList.KeyMap = list.KeyMap{}
 	m.WaypointInfoList.AdditionalShortHelpKeys = func() []key.Binding {
 		return []key.Binding{
@@ -134,9 +144,11 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 	}
 
 	if selectedWayPointCursorPosition >= 0 {
+		// restore the cursor to the previously selected waypoint by name match
 		m.WaypointInfoList.Select(selectedWayPointCursorPosition)
 		m.WaypointInfoListCursorPosition = selectedWayPointCursorPosition
 	} else {
+		// clamp the stored position to the last item if the list has shrunk
 		if m.WaypointInfoListCursorPosition > len(m.WaypointInfoList.Items())-1 {
 			m.WaypointInfoList.Select(len(m.WaypointInfoList.Items()) - 1)
 			m.WaypointInfoListCursorPosition = len(m.WaypointInfoList.Items()) - 1
@@ -145,6 +157,7 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 		}
 	}
 
+	// update the help key map to reflect whether the initial selection is sealed
 	currentSelectedWaypoint := m.WaypointInfoList.SelectedItem()
 	if currentSelectedWaypoint != nil {
 		currentSelectedWaypointInfo := currentSelectedWaypoint.(waypointInfoItem)
@@ -154,6 +167,13 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 	return nil
 }
 
+// ----------------------------------
+//
+//	returns an AdditionalShortHelpKeys func tailored to the sealed state
+//	of the currently selected waypoint; sealed items omit the enter binding
+//	since navigation is not permitted for them
+//
+// ----------------------------------
 func initWaypointInfoListKeyMap(isSealed bool) func() []key.Binding {
 	if isSealed {
 		return func() []key.Binding {
