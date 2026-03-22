@@ -1,6 +1,7 @@
-package api
+package awaken
 
 import (
+	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -10,5 +11,5 @@ import (
 //
 // ----------------------------------
 var RiftAwakenFunc = func(cmd *cobra.Command, args []string) error {
-	return RiftSetup()
+	return apiUtils.RiftSetup()
 }

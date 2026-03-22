@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/gohyuhan/rift/api"
+	"github.com/gohyuhan/rift/api/awaken"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
 )
@@ -10,7 +10,7 @@ const awakenKeyword = "awaken"
 
 var awakenCmd = &cobra.Command{
 	Use:  awakenKeyword,
-	RunE: api.RiftAwakenFunc,
+	RunE: awaken.RiftAwakenFunc,
 }
 
 // ----------------------------------

@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/gohyuhan/rift/api"
+	"github.com/gohyuhan/rift/api/waypoint"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
 )
@@ -11,7 +11,7 @@ const waypointKeyword = "waypoint [waypoint name <optional>]"
 var waypointCmd = &cobra.Command{
 	Use:  waypointKeyword,
 	Args: cobra.MaximumNArgs(1),
-	RunE: api.RiftWaypointFunc,
+	RunE: waypoint.RiftWaypointFunc,
 }
 
 // ----------------------------------

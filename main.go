@@ -13,7 +13,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/gohyuhan/rift/api"
+	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/cmd"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
@@ -30,7 +30,7 @@ func main() {
 	if settings.RIFTSETTINGS.AutoUpdate {
 		updater.AutoUpdater()
 	}
-	cARErr := api.CheckAndRunSetup()
+	cARErr := apiUtils.CheckAndRunSetup()
 	if cARErr != nil {
 		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.CheckAndRunSetupError, cARErr.Error()), style.ColorError, false)
 		logger.LOGGER.LogToTerminal([]string{errorMessage})
