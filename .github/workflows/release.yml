@@ -50,12 +50,14 @@ jobs:
             # List all tags sorted by version descending, skip current, find first stable tag
             PREV_STABLE=$(git tag --sort=-v:refname | grep -v "^${TAG}$" | grep -vE -- '-[a-zA-Z]' | head -n 1)
             if [[ -n "$PREV_STABLE" ]]; then
-              echo "args=--previous-tag ${PREV_STABLE}" >> $GITHUB_OUTPUT
+              echo "previous_tag=${PREV_STABLE}" >> $GITHUB_OUTPUT
             else
-              echo "args=" >> $GITHUB_OUTPUT
+              # No previous stable tag — use the initial commit so changelog includes everything
+              INITIAL_COMMIT=$(git rev-list --max-parents=0 HEAD)
+              echo "previous_tag=${INITIAL_COMMIT}" >> $GITHUB_OUTPUT
             fi
           else
-            echo "args=" >> $GITHUB_OUTPUT
+            echo "previous_tag=" >> $GITHUB_OUTPUT
           fi
 
       # ── 5. Run GoReleaser (creates release + artifacts + checksums.txt) ───────────────
@@ -63,11 +65,12 @@ jobs:
         uses: goreleaser/goreleaser-action@v6
         with:
           version: "~> v2"
-          args: release --clean ${{ steps.prev_tag.outputs.args }}
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GORELEASER_PREVIOUS_TAG: ${{ steps.prev_tag.outputs.previous_tag }}
 
-      # ── 5. Extract SHA256 checksums ────────────────────────────────────────────────────
+      # ── 6. Extract SHA256 checksums ────────────────────────────────────────────────────
       - name: Extract checksums
         id: checksums
         run: |

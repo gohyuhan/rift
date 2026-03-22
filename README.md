@@ -223,4 +223,21 @@ Remove-Item -Path "$env:APPDATA\rift" -Recurse -Force
 
 ### v0.1.0
 
-[coming soon]
+Core
+
+- Discover — save a waypoint by giving a custom name to any directory path
+- Navigate — jump to a saved waypoint instantly by name
+
+Waypoint Management
+- List — view all saved waypoints
+- Info — view details of a specific waypoint
+- Destroy — delete a waypoint
+- Rebind — change the path of an existing waypoint
+- Reforge — rename an existing waypoint
+
+Settings Flag
+- --update — check for updates
+- --version — show current version
+- --language — set the display language for rift
+- --autoupdate — enable or disable automatic update checks on startup
+- --download-pre-release — include pre-release versions when checking for updates
