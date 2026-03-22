@@ -37,11 +37,13 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 			return interactiveErr
 		}
 
-		// Only this line goes to stdout — the shell wrapper evals it.
-		fmt.Printf("cd %q", pathToNavigate)
+		if pathToNavigate != "" && waypointName != "" {
+			// Only this line goes to stdout — the shell wrapper evals it.
+			fmt.Printf("cd %q", pathToNavigate)
 
-		// best-effort: increment travel count; failure is silently ignored
-		apiUtils.UpdateWaypointTravelledCount(bboltDB, waypointName)
+			// best-effort: increment travel count; failure is silently ignored
+			apiUtils.UpdateWaypointTravelledCount(bboltDB, waypointName)
+		}
 
 		return nil
 	}

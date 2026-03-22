@@ -23,7 +23,6 @@ var jA = LanguageMapping{
 	DBPathError:                 "データベースディレクトリへのアクセスに失敗しました、[ERROR: %s]",
 	DBSetupError:                "データベースの初期化に失敗しました、[ERROR: %s]",
 	DBOpenError:                 "データベースのオープンに失敗しました — 以前のセッションが正常に終了せずロックが残っている可能性があります。rift がクラッシュまたは強制終了された場合は、`lsof | grep rift.db` を実行してプロセスを特定・終了してから再試行してください。初めてのインストールの場合は `rift awaken` を実行してください",
-	SettingsBucketNotFoundError: "データベースに設定バケットが見つかりません。`rift awaken` を再実行してください",
 	WaypointBucketNotFoundError: "データベースにウェイポイントバケットが見つかりません。`rift awaken` を再実行してください",
 	WaypointDataCorruptedError:  "ウェイポイント [%s] のデータが破損しており、読み込めません",
 
@@ -72,7 +71,6 @@ var jA = LanguageMapping{
 
 	// Waypoint related
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",
-	RiftUnknownWaypoint:                   "rift：不明なウェイポイント名 %q",
 	RiftWaypointAlreadyExistsError:        "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:          "rift：ウェイポイント %q は存在しません",
 	RiftWaypointUpdateError:               "rift：ウェイポイント %q の更新に失敗しました",
@@ -91,14 +89,12 @@ var jA = LanguageMapping{
 	RiftWaypointDestroyError:              "rift：ウェイポイント %q の削除に失敗しました、[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：再バインド先のパス %q はディレクトリではありません",
 	RiftWaypointRebindSuccess:             "rift：ウェイポイント %q を %s に再バインドしました",
-	RiftWaypointRebindError:               "rift：ウェイポイント %q の再バインドに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeEmptyError:         "rift：リフォージ名を空にすることはできません",
 	RiftWaypointReforgeError:              "rift：ウェイポイント %q のリフォージに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift：ウェイポイント %q は既に存在するため、既存の名前にリフォージすることはできません",
 	RiftWaypointReforgeSuccess:            "rift：ウェイポイント %q を %q にリフォージしました",
 	WaypointInfoListTitle:                 "ウェイポイント一覧",
 	WaypointInteractiveError:              "rift：ウェイポイントインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
-	RiftWaypointPathEmptyError:            "rift：ウェイポイント %q のパスが空または無効です",
 	ListUpKeyHelp:                         "上へ",
 	ListDownKeyHelp:                       "下へ",
 	ListQuitKeyHelp:                       "終了",

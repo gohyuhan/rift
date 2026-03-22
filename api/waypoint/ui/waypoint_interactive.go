@@ -83,7 +83,7 @@ func RunWaypointInteractive(bboltDb *bbolt.DB) (string, string, error) {
 	// safe: Run always returns the model passed to NewProgram
 	final := result.(*WaypointInteractiveModel)
 	if final.SelectedWaypointPath == "" || final.SelectedWaypointName == "" {
-		return "", "", fmt.Errorf(i18n.LANGUAGEMAPPING.RiftWaypointPathEmptyError, final.SelectedWaypointName)
+		return "", "", nil
 	}
 	return final.SelectedWaypointPath, final.SelectedWaypointName, nil
 }
