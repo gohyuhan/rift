@@ -22,7 +22,7 @@ var jA = LanguageMapping{
 	// DB related
 	DBPathError:                 "データベースディレクトリへのアクセスに失敗しました、[ERROR: %s]",
 	DBSetupError:                "データベースの初期化に失敗しました、[ERROR: %s]",
-	DBOpenError:                 "データベースのオープンに失敗しました。初期化されていない可能性があります。`rift awaken` を実行してください",
+	DBOpenError:                 "データベースのオープンに失敗しました — 以前のセッションが正常に終了せずロックが残っている可能性があります。rift がクラッシュまたは強制終了された場合は、`lsof | grep rift.db` を実行してプロセスを特定・終了してから再試行してください。初めてのインストールの場合は `rift awaken` を実行してください",
 	SettingsBucketNotFoundError: "データベースに設定バケットが見つかりません。`rift awaken` を再実行してください",
 	WaypointBucketNotFoundError: "データベースにウェイポイントバケットが見つかりません。`rift awaken` を再実行してください",
 	WaypointDataCorruptedError:  "ウェイポイント [%s] のデータが破損しており、読み込めません",

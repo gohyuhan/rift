@@ -22,7 +22,7 @@ var eN = LanguageMapping{
 	// DB related
 	DBPathError:                 "Failed to access database directory, [ERROR: %s]",
 	DBSetupError:                "Failed to initialize database, [ERROR: %s]",
-	DBOpenError:                 "Failed to open database, perhaps you haven't setup rift yet, run `rift awaken` for initialization",
+	DBOpenError:                 "Failed to open database — the database may be locked by a previous session that did not exit cleanly. If rift crashed or was force-killed, run `lsof | grep rift.db` to find and kill the stale process, then retry. If this is a fresh install, run `rift awaken` for initialization",
 	SettingsBucketNotFoundError: "Settings bucket not found in database, perhaps rerun `rift awaken`",
 	WaypointBucketNotFoundError: "Waypoint bucket not found in database, perhaps rerun `rift awaken`",
 	WaypointDataCorruptedError:  "Waypoint data for [%s] is corrupted and could not be read",
