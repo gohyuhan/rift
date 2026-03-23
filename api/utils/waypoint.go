@@ -105,6 +105,27 @@ func UpdateWaypointIsSeal(bboltDb *bbolt.DB, waypointName string, sealed bool, r
 
 // ----------------------------------
 //
+//	Clears the sealed flag and sealed reason on the named waypoint.
+//	After unsealing, rift will reattempt path validation on the next
+//	navigation; if the path is still missing it will be re-sealed immediately.
+//	Returns an error if the bucket is missing, the data is unreadable,
+//	or the waypoint does not exist.
+//
+// ----------------------------------
+func UpdateWaypointUnSeal(bboltDb *bbolt.DB, waypointName string) error {
+	return bboltDb.Update(func(tx *bbolt.Tx) error {
+		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
+		if err != nil {
+			return err
+		}
+		waypoint.WaypointIsSealed = false
+		waypoint.WaypointSealedReason = ""
+		return PutWaypoint(bucket, waypointName, waypoint)
+	})
+}
+
+// ----------------------------------
+//
 //	Increments the travelled count for the named waypoint in the DB bucket.
 //	Returns an error if the bucket is missing, the data is unreadable, or the
 //	waypoint does not exist.

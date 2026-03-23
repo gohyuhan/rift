@@ -100,6 +100,7 @@ var zH_HANT = LanguageMapping{
 	ListQuitKeyHelp:                       "退出",
 	WaypointNavigateKeyHelp:               "導航",
 	WaypointDestroyKeyHelp:                "銷毀",
+	WaypointUnsealKeyHelp:                 "解封",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",

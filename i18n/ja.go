@@ -100,6 +100,7 @@ var jA = LanguageMapping{
 	ListQuitKeyHelp:                       "終了",
 	WaypointNavigateKeyHelp:               "移動",
 	WaypointDestroyKeyHelp:                "破壊",
+	WaypointUnsealKeyHelp:                 "封印解除",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",

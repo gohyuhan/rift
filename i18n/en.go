@@ -100,6 +100,7 @@ var eN = LanguageMapping{
 	ListQuitKeyHelp:                       "quit",
 	WaypointNavigateKeyHelp:               "navigate",
 	WaypointDestroyKeyHelp:                "destroy",
+	WaypointUnsealKeyHelp:                 "unseal",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

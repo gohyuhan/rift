@@ -11,6 +11,7 @@ import (
 	"github.com/gohyuhan/rift/i18n"
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/utils"
 	"go.etcd.io/bbolt"
 	"google.golang.org/protobuf/proto"
 )
@@ -28,6 +29,14 @@ func getAllWaypointsInfo(bboltDb *bbolt.DB) ([]waypointInfo, error) {
 	var waypointsInfo []waypointInfo
 	var corruptedWaypointName []string
 	waypointCorrupted := false
+
+	// seal updates are collected during the read-only View and applied afterwards;
+	// calling a write transaction (Update) inside a View callback deadlocks bbolt
+	type pendingSeal struct {
+		name   string
+		reason string
+	}
+	var toSeal []pendingSeal
 
 	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before iterating
@@ -51,7 +60,15 @@ func getAllWaypointsInfo(bboltDb *bbolt.DB) ([]waypointInfo, error) {
 				return nil
 			}
 
-			// contruct the waypoint info type
+			// verify the path still exists on disk; if not, mark for sealing after View closes
+			isPathExist, isPathExistErr := utils.CheckIsPathExist(existingWaypoint.WaypointPath)
+			if !isPathExist {
+				existingWaypoint.WaypointIsSealed = true
+				existingWaypoint.WaypointSealedReason = isPathExistErr.Error()
+				toSeal = append(toSeal, pendingSeal{name: string(k), reason: existingWaypoint.WaypointSealedReason})
+			}
+
+			// construct the waypoint info type
 			info := waypointInfo{
 				WaypointName:         string(k),
 				WaypointPath:         existingWaypoint.WaypointPath,
@@ -71,6 +88,10 @@ func getAllWaypointsInfo(bboltDb *bbolt.DB) ([]waypointInfo, error) {
 
 		return nil
 	})
+
+	for _, s := range toSeal {
+		apiUtils.UpdateWaypointIsSeal(bboltDb, s.name, true, s.reason)
+	}
 
 	if waypointCorrupted {
 		viewErr = apiUtils.RecordCorruptedWaypointInfo(bboltDb, corruptedWaypointName)
@@ -170,8 +191,9 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 // ----------------------------------
 //
 //	returns an AdditionalShortHelpKeys func tailored to the sealed state
-//	of the currently selected waypoint; sealed items omit the enter binding
-//	since navigation is not permitted for them
+//	of the currently selected waypoint; sealed items replace the enter
+//	(navigate) binding with a u/U (unseal) binding, since navigation is
+//	not permitted until the waypoint is explicitly unsealed
 //
 // ----------------------------------
 func initWaypointInfoListKeyMap(isSealed bool) func() []key.Binding {
@@ -180,6 +202,7 @@ func initWaypointInfoListKeyMap(isSealed bool) func() []key.Binding {
 			return []key.Binding{
 				key.NewBinding(key.WithKeys("↑", "k"), key.WithHelp("↑/k", i18n.LANGUAGEMAPPING.ListUpKeyHelp)),
 				key.NewBinding(key.WithKeys("↓", "j"), key.WithHelp("↓/j", i18n.LANGUAGEMAPPING.ListDownKeyHelp)),
+				key.NewBinding(key.WithKeys("u", "U"), key.WithHelp("u/U", i18n.LANGUAGEMAPPING.WaypointUnsealKeyHelp)),
 				key.NewBinding(key.WithKeys("backspace"), key.WithHelp("backspace", i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelp)),
 				key.NewBinding(key.WithKeys("q", "esc", "ctrl+c"), key.WithHelp("q/esc/ctrl+c", i18n.LANGUAGEMAPPING.ListQuitKeyHelp)),
 			}

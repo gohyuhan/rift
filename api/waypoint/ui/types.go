@@ -41,11 +41,12 @@ func (i waypointInfoItem) FilterValue() string {
 // ----------------------------------
 //
 //	Height and Spacing define the row layout for the bubbles list delegate;
-//	each waypoint occupies 2 lines (name + path) with no extra spacing;
+//	each waypoint occupies 3 lines (name + path + sealed reason) with no
+//	extra spacing; the sealed-reason line is empty for active waypoints;
 //	Update is a no-op as item-level updates are handled by the parent model
 //
 // ----------------------------------
-func (d waypointInfoDelegate) Height() int                             { return 2 }
+func (d waypointInfoDelegate) Height() int                             { return 3 }
 func (d waypointInfoDelegate) Spacing() int                            { return 0 }
 func (d waypointInfoDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
 
@@ -77,16 +78,22 @@ func (d waypointInfoDelegate) Render(w io.Writer, m list.Model, index int, listI
 	waypointPath := fmt.Sprintf("   %s", i.WaypointPath)
 	waypointPath = ansi.Truncate(waypointPath, componentWidth, "…")
 
+	var waypointSealedReason string
+
 	// apply colour based on sealed state
 	if i.WaypointIsSealed {
 		waypointName = style.RenderStringWithColor(waypointName, style.ColorSealedMuted, true)
 		waypointPath = style.RenderStringWithColor(waypointPath, style.ColorSealedMuted, true)
+
+		waypointSealedReason = fmt.Sprintf("   %s %s", i18n.LANGUAGEMAPPING.RiftWaypointDetailSealedReason, i.WaypointSealedReason)
+		waypointSealedReason = ansi.Truncate(waypointSealedReason, componentWidth, "...")
+		waypointSealedReason = style.RenderStringWithColor(waypointSealedReason, style.ColorSealedMuted, true)
 	} else {
 		waypointName = style.RenderStringWithColor(waypointName, style.ColorPurpleVibrant, false)
 		waypointPath = style.RenderStringWithColor(waypointPath, style.ColorPurpleSoft, true)
 	}
 
-	str := fmt.Sprintf("%s\n%s", waypointName, waypointPath)
+	str := fmt.Sprintf("%s\n%s\n%s", waypointName, waypointPath, waypointSealedReason)
 
 	// prefix the selected row with a cursor glyph; all others get padding
 	var fn func(...string) string

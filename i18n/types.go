@@ -106,6 +106,7 @@ type LanguageMapping struct {
 	ListQuitKeyHelp                       string
 	WaypointNavigateKeyHelp               string
 	WaypointDestroyKeyHelp                string
+	WaypointUnsealKeyHelp                 string
 
 	// Flag related
 	RiftFlagRetrieveError string

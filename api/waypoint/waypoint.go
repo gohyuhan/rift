@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
+	"github.com/gohyuhan/rift/api/waypoint/features"
 	waypointUI "github.com/gohyuhan/rift/api/waypoint/ui"
 	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/logger"
@@ -14,7 +15,8 @@ import (
 // ----------------------------------
 //
 //	Cobra handler for the waypoint command.
-//	With no args, lists every stored waypoint (name + path, sealed state).
+//	With no args, launches the interactive TUI; if the user selects a waypoint,
+//	prints a cd command for the shell wrapper to eval and increments the travel count.
 //	With a waypoint name arg and:
 //	  --destroy  : permanently removes the named waypoint from the DB
 //	  --rebind   : reassigns the waypoint to a new path (defaults to CWD)
@@ -58,7 +60,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 
 	if destroyFlagCalled {
 		// if destroy flag is called, we destroy the discovered waypoint in the waypoint bucket
-		destroyWaypointErr := destroyDiscoveredWaypoint(bboltDB, waypointName)
+		destroyWaypointErr := features.DestroyDiscoveredWaypoint(bboltDB, waypointName, true)
 
 		if destroyWaypointErr != nil {
 			return destroyWaypointErr
@@ -69,7 +71,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		if rebindToErr != nil {
 			return rebindToErr
 		}
-		rebindWaypointErr := rebindWaypoint(bboltDB, waypointName, rebindTo)
+		rebindWaypointErr := features.RebindWaypoint(bboltDB, waypointName, rebindTo)
 
 		if rebindWaypointErr != nil {
 			return rebindWaypointErr
@@ -80,13 +82,13 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		if reforgeToErr != nil {
 			return reforgeToErr
 		}
-		reforgeWaypointErr := reforgeWaypoint(bboltDB, waypointName, reforgeTo)
+		reforgeWaypointErr := features.ReforgeWaypoint(bboltDB, waypointName, reforgeTo)
 
 		if reforgeWaypointErr != nil {
 			return reforgeWaypointErr
 		}
 	} else {
-		retrieveWaypointInfoDetail, retrieveWaypointInfoDetailErr := retrieveWaypointInfoDetail(bboltDB, waypointName)
+		retrieveWaypointInfoDetail, retrieveWaypointInfoDetailErr := features.RetrieveWaypointInfoDetail(bboltDB, waypointName)
 
 		if retrieveWaypointInfoDetailErr != nil {
 			return retrieveWaypointInfoDetailErr
