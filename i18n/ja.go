@@ -101,6 +101,8 @@ var jA = LanguageMapping{
 	WaypointNavigateKeyHelp:               "移動",
 	WaypointDestroyKeyHelp:                "破壊",
 	WaypointUnsealKeyHelp:                 "封印解除",
+	WaypointNameCopyKeyHelp:               "ウェイポイント名をコピー",
+	WaypointPathCopyKeyHelp:               "パスをコピー",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",

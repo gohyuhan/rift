@@ -202,6 +202,8 @@ func initWaypointInfoListKeyMap(isSealed bool) func() []key.Binding {
 				key.NewBinding(key.WithKeys("↑", "k"), key.WithHelp("↑/k", i18n.LANGUAGEMAPPING.ListUpKeyHelp)),
 				key.NewBinding(key.WithKeys("↓", "j"), key.WithHelp("↓/j", i18n.LANGUAGEMAPPING.ListDownKeyHelp)),
 				key.NewBinding(key.WithKeys("u", "U"), key.WithHelp("u/U", i18n.LANGUAGEMAPPING.WaypointUnsealKeyHelp)),
+				key.NewBinding(key.WithKeys("y"), key.WithHelp("y", i18n.LANGUAGEMAPPING.WaypointNameCopyKeyHelp)),
+				key.NewBinding(key.WithKeys("Y"), key.WithHelp("Y", i18n.LANGUAGEMAPPING.WaypointPathCopyKeyHelp)),
 				key.NewBinding(key.WithKeys("backspace"), key.WithHelp("backspace", i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelp)),
 				key.NewBinding(key.WithKeys("q", "esc", "ctrl+c"), key.WithHelp("q/esc/ctrl+c", i18n.LANGUAGEMAPPING.ListQuitKeyHelp)),
 			}
@@ -212,6 +214,8 @@ func initWaypointInfoListKeyMap(isSealed bool) func() []key.Binding {
 				key.NewBinding(key.WithKeys("↑", "k"), key.WithHelp("↑/k", i18n.LANGUAGEMAPPING.ListUpKeyHelp)),
 				key.NewBinding(key.WithKeys("↓", "j"), key.WithHelp("↓/j", i18n.LANGUAGEMAPPING.ListDownKeyHelp)),
 				key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.WaypointNavigateKeyHelp)),
+				key.NewBinding(key.WithKeys("y"), key.WithHelp("y", i18n.LANGUAGEMAPPING.WaypointNameCopyKeyHelp)),
+				key.NewBinding(key.WithKeys("Y"), key.WithHelp("Y", i18n.LANGUAGEMAPPING.WaypointPathCopyKeyHelp)),
 				key.NewBinding(key.WithKeys("backspace"), key.WithHelp("backspace", i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelp)),
 				key.NewBinding(key.WithKeys("q", "esc", "ctrl+c"), key.WithHelp("q/esc/ctrl+c", i18n.LANGUAGEMAPPING.ListQuitKeyHelp)),
 			}

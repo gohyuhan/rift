@@ -7,6 +7,7 @@ import (
 
 	"charm.land/bubbles/v2/list"
 	tea "charm.land/bubbletea/v2"
+	"github.com/atotto/clipboard"
 	"github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/api/waypoint/features"
 	"github.com/gohyuhan/rift/i18n"
@@ -159,6 +160,18 @@ func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				// it will still be resealed when performing the list reinitialization
 				utils.UpdateWaypointUnSeal(m.BboltDb, i.WaypointName)
 				initWaypointInfoListModel(m)
+				return m, nil
+			}
+		case "y":
+			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
+				// copy the waypoint name to the clipboard
+				clipboard.WriteAll(i.WaypointName)
+				return m, nil
+			}
+		case "Y":
+			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
+				// copy the waypoint absolute path to the clipboard
+				clipboard.WriteAll(i.WaypointPath)
 				return m, nil
 			}
 		case "j", "down":

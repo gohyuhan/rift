@@ -101,6 +101,8 @@ var eN = LanguageMapping{
 	WaypointNavigateKeyHelp:               "navigate",
 	WaypointDestroyKeyHelp:                "destroy",
 	WaypointUnsealKeyHelp:                 "unseal",
+	WaypointNameCopyKeyHelp:               "copy waypoint name",
+	WaypointPathCopyKeyHelp:               "copy path",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

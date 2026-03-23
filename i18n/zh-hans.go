@@ -101,6 +101,8 @@ var zH_HANS = LanguageMapping{
 	WaypointNavigateKeyHelp:               "导航",
 	WaypointDestroyKeyHelp:                "销毁",
 	WaypointUnsealKeyHelp:                 "解封",
+	WaypointNameCopyKeyHelp:               "复制路径点名称",
+	WaypointPathCopyKeyHelp:               "复制路径",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：获取标志 %q 失败，[ERROR: %s]",

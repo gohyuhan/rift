@@ -94,6 +94,9 @@ Memorized locations are stored in a [bbolt](https://github.com/etcd-io/bbolt) da
 
 ### Linux
 
+> **Requirement:** The copy feature requires either `xclip` or `xsel` to be installed.
+> Install one via your package manager, e.g. `sudo apt install xclip` or `sudo apt install xsel`.
+
 ```bash
 curl --proto "=https" -sSfL https://github.com/gohyuhan/rift/releases/latest/download/install.sh | bash
 ```
