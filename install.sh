@@ -46,7 +46,7 @@ esac
 log_info "Detected OS: ${OS_TYPE}, Architecture: ${ARCH_TYPE}"
 
 # Version to install
-VERSION="v0.1.0"
+VERSION="v0.2.0-pr.1"
 
 log_info "Installing version: ${VERSION}"
 
