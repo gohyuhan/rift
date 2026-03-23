@@ -1,4 +1,4 @@
-package waypoint
+package features
 
 import (
 	"fmt"
@@ -18,7 +18,7 @@ import (
 //	Fails only when the bucket itself is missing or bbolt returns a hard error.
 //
 // ----------------------------------
-func destroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string) error {
+func DestroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string, logToTerminal bool) error {
 	return bboltDb.Update(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before attempting the delete
 		waypointBucket := tx.Bucket(db.WaypointBucket)
@@ -40,8 +40,10 @@ func destroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string) error {
 		}
 
 		// report the destruction to the terminal
-		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroySuccess, waypointName), style.ColorGreenSoft, false)
-		logger.LOGGER.LogToTerminal([]string{message})
+		if logToTerminal {
+			message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroySuccess, waypointName), style.ColorGreenSoft, false)
+			logger.LOGGER.LogToTerminal([]string{message})
+		}
 
 		return nil
 	})

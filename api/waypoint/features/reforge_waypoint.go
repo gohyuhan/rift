@@ -1,4 +1,4 @@
-package waypoint
+package features
 
 import (
 	"fmt"
@@ -22,7 +22,7 @@ import (
 //	sealed state, travelled count, timestamps) are preserved unchanged.
 //
 // ----------------------------------
-func reforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string) error {
+func ReforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string) error {
 	// validate that a non-empty new name was provided before opening the Update transaction;
 	// unlike rebind, there is no sensible default — an empty name is always an error
 	if reforgeTo == "" {

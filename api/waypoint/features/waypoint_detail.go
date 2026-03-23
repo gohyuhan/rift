@@ -1,4 +1,4 @@
-package waypoint
+package features
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ import (
 //	align in a clean column regardless of the active language.
 //
 // ----------------------------------
-func retrieveWaypointInfoDetail(bboltDb *bbolt.DB, waypointName string) ([]string, error) {
+func RetrieveWaypointInfoDetail(bboltDb *bbolt.DB, waypointName string) ([]string, error) {
 	var waypointDetailInfo []string
 	waypointCorrupted := false
 
