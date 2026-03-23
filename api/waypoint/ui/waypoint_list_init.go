@@ -115,7 +115,7 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 
 	latestWaypointInfoArray := []list.Item{}
 
-	titleWidthLimit := m.Width - ListItemOrTitleWidthPad - 2
+	titleWidthLimit := m.Width - ListItemOrTitleWidthPad - ListTitleHorizontalPadding
 
 	allWaypointsInfo, err := getAllWaypointsInfo(m.BboltDb)
 	if err != nil {
@@ -139,8 +139,7 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 		}
 	}
 
-	// height is reduced by 5 to reserve space for the title and help bar rows
-	m.WaypointInfoList = list.New(latestWaypointInfoArray, waypointInfoDelegate{}, m.Width, m.Height-5)
+	m.WaypointInfoList = list.New(latestWaypointInfoArray, waypointInfoDelegate{}, m.Width, m.Height)
 	m.WaypointInfoList.SetShowPagination(false)
 	m.WaypointInfoList.SetShowStatusBar(false)
 	m.WaypointInfoList.SetFilteringEnabled(false)
