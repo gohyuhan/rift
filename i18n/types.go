@@ -29,7 +29,6 @@ type LanguageMapping struct {
 	DBPathError                 string
 	DBSetupError                string
 	DBOpenError                 string
-	SettingsBucketNotFoundError string
 	WaypointBucketNotFoundError string
 	WaypointDataCorruptedError  string
 
@@ -78,7 +77,6 @@ type LanguageMapping struct {
 
 	// Waypoint related
 	RiftSavedWaypoint                     string
-	RiftUnknownWaypoint                   string
 	RiftWaypointAlreadyExistsError        string
 	RiftWaypointDoNotExistsError          string
 	RiftWaypointUpdateError               string
@@ -97,11 +95,20 @@ type LanguageMapping struct {
 	RiftWaypointDestroyError              string
 	RiftWaypointRebindNotDirError         string
 	RiftWaypointRebindSuccess             string
-	RiftWaypointRebindError               string
 	RiftWaypointReforgeEmptyError         string
 	RiftWaypointReforgeAlreadyExistsError string
 	RiftWaypointReforgeError              string
 	RiftWaypointReforgeSuccess            string
+	WaypointInfoListTitle                 string
+	WaypointInteractiveError              string
+	ListUpKeyHelp                         string
+	ListDownKeyHelp                       string
+	ListQuitKeyHelp                       string
+	WaypointNavigateKeyHelp               string
+	WaypointDestroyKeyHelp                string
+	WaypointUnsealKeyHelp                 string
+	WaypointNameCopyKeyHelp               string
+	WaypointPathCopyKeyHelp               string
 
 	// Flag related
 	RiftFlagRetrieveError string

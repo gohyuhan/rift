@@ -8,6 +8,7 @@ package utils
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
@@ -26,16 +27,18 @@ import (
 //	best-effort; the corruption error is always returned to the caller.
 //
 // ----------------------------------
-func RecordCorruptedWaypointInfo(bboltDB *bbolt.DB, waypointName string) error {
+func RecordCorruptedWaypointInfo(bboltDB *bbolt.DB, corruptedWaypointsName []string) error {
 	// best-effort write — ignore the Update error; the caller always gets the corruption message
 	bboltDB.Update(func(tx *bbolt.Tx) error {
 		waypointCorruptedBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
 		if waypointCorruptedBucket != nil {
-			waypointCorruptedBucket.Put([]byte(waypointName), []byte(waypointName))
+			for _, corruptedWaypoint := range corruptedWaypointsName {
+				waypointCorruptedBucket.Put([]byte(corruptedWaypoint), []byte(corruptedWaypoint))
+			}
 		}
 		return nil
 	})
-	return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
+	return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, strings.Join(corruptedWaypointsName, ",")), style.ColorError, false))
 }
 
 // ----------------------------------
@@ -96,6 +99,27 @@ func UpdateWaypointIsSeal(bboltDb *bbolt.DB, waypointName string, sealed bool, r
 		}
 		waypoint.WaypointIsSealed = sealed
 		waypoint.WaypointSealedReason = reason
+		return PutWaypoint(bucket, waypointName, waypoint)
+	})
+}
+
+// ----------------------------------
+//
+//	Clears the sealed flag and sealed reason on the named waypoint.
+//	After unsealing, rift will reattempt path validation on the next
+//	navigation; if the path is still missing it will be re-sealed immediately.
+//	Returns an error if the bucket is missing, the data is unreadable,
+//	or the waypoint does not exist.
+//
+// ----------------------------------
+func UpdateWaypointUnSeal(bboltDb *bbolt.DB, waypointName string) error {
+	return bboltDb.Update(func(tx *bbolt.Tx) error {
+		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
+		if err != nil {
+			return err
+		}
+		waypoint.WaypointIsSealed = false
+		waypoint.WaypointSealedReason = ""
 		return PutWaypoint(bucket, waypointName, waypoint)
 	})
 }

@@ -94,6 +94,9 @@ Memorized locations are stored in a [bbolt](https://github.com/etcd-io/bbolt) da
 
 ### Linux
 
+> **Requirement:** The copy feature requires either `xclip` or `xsel` to be installed.
+> Install one via your package manager, e.g. `sudo apt install xclip` or `sudo apt install xsel`.
+
 ```bash
 curl --proto "=https" -sSfL https://github.com/gohyuhan/rift/releases/latest/download/install.sh | bash
 ```
@@ -216,6 +219,36 @@ rm -rf "$HOME/.config/rift"
 ```powershell
 Remove-Item -Path "$env:APPDATA\rift" -Recurse -Force
 ```
+
+---
+
+## Troubleshooting
+
+### Database locked after a crash
+
+If rift crashed or was force-killed, the bbolt database file may still be held open by a stale process. When this happens, any rift command will fail with:
+
+```
+Failed to open database — the database may be locked by a previous session that did not exit cleanly.
+```
+
+**To fix:**
+
+1. Find the process holding the lock:
+
+```bash
+lsof | grep rift.db
+```
+
+2. Kill it using the PID shown in the output:
+
+```bash
+kill <PID>
+```
+
+3. Retry your rift command.
+
+> **Note:** Do not delete the database file — that will erase all your saved waypoints. Only kill the stale process to release the lock.
 
 ---
 

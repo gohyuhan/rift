@@ -1,4 +1,4 @@
-package waypoint
+package features
 
 import (
 	"fmt"
@@ -21,7 +21,7 @@ import (
 //	and updates the discovered timestamp to now (UTC).
 //
 // ----------------------------------
-func rebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) error {
+func RebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) error {
 	// validate if the rebindTo is valid or not before opening the Update transaction;
 	// this avoids unnecessary DB writes if the path is invalid
 	// and also prevent holding the DB lock during potentially slow filesystem operations

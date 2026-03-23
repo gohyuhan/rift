@@ -1,4 +1,4 @@
-package waypoint
+package features
 
 import (
 	"fmt"
@@ -26,7 +26,7 @@ import (
 //	align in a clean column regardless of the active language.
 //
 // ----------------------------------
-func retrieveWaypointInfoDetail(bboltDb *bbolt.DB, waypointName string) ([]string, error) {
+func RetrieveWaypointInfoDetail(bboltDb *bbolt.DB, waypointName string) ([]string, error) {
 	var waypointDetailInfo []string
 	waypointCorrupted := false
 
@@ -111,7 +111,7 @@ func retrieveWaypointInfoDetail(bboltDb *bbolt.DB, waypointName string) ([]strin
 
 	// View is complete — safe to open an Update for the corruption write
 	if waypointCorrupted {
-		viewErr = apiUtils.RecordCorruptedWaypointInfo(bboltDb, waypointName)
+		viewErr = apiUtils.RecordCorruptedWaypointInfo(bboltDb, []string{waypointName})
 	}
 
 	return waypointDetailInfo, viewErr

@@ -23,6 +23,10 @@ var (
 	ColorSealedMuted   = lipgloss.Color("#5C5470")
 )
 
+var SelectedItemStyle = lipgloss.NewStyle().Foreground(ColorPurpleVibrant).Bold(true)
+var ItemStyle = lipgloss.NewStyle().Foreground(ColorPurpleSoft)
+var NewStyle = lipgloss.NewStyle()
+
 // ----------------------------------
 //
 //	Renders text with the given foreground color. If faint is true, the text

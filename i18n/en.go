@@ -22,10 +22,9 @@ var eN = LanguageMapping{
 	// DB related
 	DBPathError:                 "Failed to access database directory, [ERROR: %s]",
 	DBSetupError:                "Failed to initialize database, [ERROR: %s]",
-	DBOpenError:                 "Failed to open database, perhaps you haven't setup rift yet, run `rift awaken` for initialization",
-	SettingsBucketNotFoundError: "Settings bucket not found in database, perhaps rerun `rift awaken`",
+	DBOpenError:                 "Failed to open database — the database may be locked by a previous session that did not exit cleanly, or another rift process is already running. If rift crashed or was force-killed, run `lsof | grep rift.db` to find and kill the stale process, then retry. If this is a fresh install, run `rift awaken` for initialization",
 	WaypointBucketNotFoundError: "Waypoint bucket not found in database, perhaps rerun `rift awaken`",
-	WaypointDataCorruptedError:  "Waypoint data for %q is corrupted and could not be read",
+	WaypointDataCorruptedError:  "Waypoint data for [%s] is corrupted and could not be read",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
@@ -72,7 +71,6 @@ var eN = LanguageMapping{
 
 	// Waypoint related
 	RiftSavedWaypoint:                     "rift: saved %q -> %s",
-	RiftUnknownWaypoint:                   "rift: unknown waypoint name %q",
 	RiftWaypointAlreadyExistsError:        "Waypoint %q already exists, pointing to %s",
 	RiftWaypointDoNotExistsError:          "rift: waypoint %q does not exist",
 	RiftWaypointUpdateError:               "rift: failed to update waypoint %q",
@@ -91,11 +89,20 @@ var eN = LanguageMapping{
 	RiftWaypointDestroyError:              "rift: failed to destroy waypoint %q, [ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift: rebind path %q is not a directory",
 	RiftWaypointRebindSuccess:             "rift: waypoint %q rebound to %s",
-	RiftWaypointRebindError:               "rift: failed to rebind waypoint %q, [ERROR: %s]",
 	RiftWaypointReforgeEmptyError:         "rift: reforge name cannot be empty",
 	RiftWaypointReforgeError:              "rift: failed to reforge waypoint %q, [ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift: waypoint %q already exists, cannot reforge to an existing name",
 	RiftWaypointReforgeSuccess:            "rift: waypoint %q reforged to %q",
+	WaypointInfoListTitle:                 "Waypoints",
+	WaypointInteractiveError:              "rift: waypoint interactive session failed, [ERROR: %s]",
+	ListUpKeyHelp:                         "up",
+	ListDownKeyHelp:                       "down",
+	ListQuitKeyHelp:                       "quit",
+	WaypointNavigateKeyHelp:               "navigate",
+	WaypointDestroyKeyHelp:                "destroy",
+	WaypointUnsealKeyHelp:                 "unseal",
+	WaypointNameCopyKeyHelp:               "copy waypoint name",
+	WaypointPathCopyKeyHelp:               "copy path",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",

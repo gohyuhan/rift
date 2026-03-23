@@ -22,10 +22,9 @@ var zH_HANS = LanguageMapping{
 	// DB related
 	DBPathError:                 "无法访问数据库目录，[ERROR: %s]",
 	DBSetupError:                "数据库初始化失败，[ERROR: %s]",
-	DBOpenError:                 "数据库打开失败，请确认是否已初始化，运行 `rift awaken` 进行初始化",
-	SettingsBucketNotFoundError: "在数据库中找不到设置存储区，请重新运行 `rift awaken`",
+	DBOpenError:                 "数据库打开失败 — 数据库可能被上一个未正常退出的进程锁定，或有另一个 rift 进程正在运行。若 rift 曾崩溃或被强制终止，请运行 `lsof | grep rift.db` 找到并终止残留进程后重试。若为全新安装，请运行 `rift awaken` 进行初始化",
 	WaypointBucketNotFoundError: "在数据库中找不到航点存储区，请重新运行 `rift awaken`",
-	WaypointDataCorruptedError:  "航点 %q 的数据已损坏，无法读取",
+	WaypointDataCorruptedError:  "航点 [%s] 的数据已损坏，无法读取",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "发现新版本 %s，是否立即下载？(y/n): ",
@@ -72,7 +71,6 @@ var zH_HANS = LanguageMapping{
 
 	// Waypoint related
 	RiftSavedWaypoint:                     "rift：已保存 %q -> %s",
-	RiftUnknownWaypoint:                   "rift：未知的航点名称 %q",
 	RiftWaypointAlreadyExistsError:        "航点 %q 已存在，指向 %s",
 	RiftWaypointDoNotExistsError:          "rift：航点 %q 不存在",
 	RiftWaypointUpdateError:               "rift：更新航点 %q 失败",
@@ -91,11 +89,20 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointDestroyError:              "rift：销毁航点 %q 失败，[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：重新绑定的路径 %q 不是一个目录",
 	RiftWaypointRebindSuccess:             "rift：航点 %q 已重新绑定至 %s",
-	RiftWaypointRebindError:               "rift：重新绑定航点 %q 失败，[ERROR: %s]",
 	RiftWaypointReforgeEmptyError:         "rift：重铸名称不能为空",
 	RiftWaypointReforgeError:              "rift：重铸航点 %q 失败，[ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift：航点 %q 已存在，无法重铸为已有名称",
 	RiftWaypointReforgeSuccess:            "rift：航点 %q 已重铸为 %q",
+	WaypointInfoListTitle:                 "航点列表",
+	WaypointInteractiveError:              "rift：航点交互界面启动失败，[ERROR: %s]",
+	ListUpKeyHelp:                         "上移",
+	ListDownKeyHelp:                       "下移",
+	ListQuitKeyHelp:                       "退出",
+	WaypointNavigateKeyHelp:               "导航",
+	WaypointDestroyKeyHelp:                "销毁",
+	WaypointUnsealKeyHelp:                 "解封",
+	WaypointNameCopyKeyHelp:               "复制路径点名称",
+	WaypointPathCopyKeyHelp:               "复制路径",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：获取标志 %q 失败，[ERROR: %s]",

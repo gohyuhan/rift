@@ -22,10 +22,9 @@ var jA = LanguageMapping{
 	// DB related
 	DBPathError:                 "データベースディレクトリへのアクセスに失敗しました、[ERROR: %s]",
 	DBSetupError:                "データベースの初期化に失敗しました、[ERROR: %s]",
-	DBOpenError:                 "データベースのオープンに失敗しました。初期化されていない可能性があります。`rift awaken` を実行してください",
-	SettingsBucketNotFoundError: "データベースに設定バケットが見つかりません。`rift awaken` を再実行してください",
+	DBOpenError:                 "データベースのオープンに失敗しました — 以前のセッションが正常に終了せずロックが残っているか、別の rift プロセスがすでに起動中の可能性があります。rift がクラッシュまたは強制終了された場合は、`lsof | grep rift.db` を実行してプロセスを特定・終了してから再試行してください。初めてのインストールの場合は `rift awaken` を実行してください",
 	WaypointBucketNotFoundError: "データベースにウェイポイントバケットが見つかりません。`rift awaken` を再実行してください",
-	WaypointDataCorruptedError:  "ウェイポイント %q のデータが破損しており、読み込めません",
+	WaypointDataCorruptedError:  "ウェイポイント [%s] のデータが破損しており、読み込めません",
 
 	// Updater related
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
@@ -72,7 +71,6 @@ var jA = LanguageMapping{
 
 	// Waypoint related
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",
-	RiftUnknownWaypoint:                   "rift：不明なウェイポイント名 %q",
 	RiftWaypointAlreadyExistsError:        "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:          "rift：ウェイポイント %q は存在しません",
 	RiftWaypointUpdateError:               "rift：ウェイポイント %q の更新に失敗しました",
@@ -91,11 +89,20 @@ var jA = LanguageMapping{
 	RiftWaypointDestroyError:              "rift：ウェイポイント %q の削除に失敗しました、[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：再バインド先のパス %q はディレクトリではありません",
 	RiftWaypointRebindSuccess:             "rift：ウェイポイント %q を %s に再バインドしました",
-	RiftWaypointRebindError:               "rift：ウェイポイント %q の再バインドに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeEmptyError:         "rift：リフォージ名を空にすることはできません",
 	RiftWaypointReforgeError:              "rift：ウェイポイント %q のリフォージに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift：ウェイポイント %q は既に存在するため、既存の名前にリフォージすることはできません",
 	RiftWaypointReforgeSuccess:            "rift：ウェイポイント %q を %q にリフォージしました",
+	WaypointInfoListTitle:                 "ウェイポイント一覧",
+	WaypointInteractiveError:              "rift：ウェイポイントインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
+	ListUpKeyHelp:                         "上へ",
+	ListDownKeyHelp:                       "下へ",
+	ListQuitKeyHelp:                       "終了",
+	WaypointNavigateKeyHelp:               "移動",
+	WaypointDestroyKeyHelp:                "破壊",
+	WaypointUnsealKeyHelp:                 "封印解除",
+	WaypointNameCopyKeyHelp:               "ウェイポイント名をコピー",
+	WaypointPathCopyKeyHelp:               "パスをコピー",
 
 	// Flag related
 	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",

@@ -73,7 +73,7 @@ func retrieveWaypointInfoForNavigate(bboltDb *bbolt.DB, waypointName string) (st
 	})
 
 	if waypointCorrupted {
-		viewErr = apiUtils.RecordCorruptedWaypointInfo(bboltDb, waypointName)
+		viewErr = apiUtils.RecordCorruptedWaypointInfo(bboltDb, []string{waypointName})
 	}
 
 	if needToSealWaypoint {
