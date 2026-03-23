@@ -22,7 +22,7 @@ var zH_HANS = LanguageMapping{
 	// DB related
 	DBPathError:                 "无法访问数据库目录，[ERROR: %s]",
 	DBSetupError:                "数据库初始化失败，[ERROR: %s]",
-	DBOpenError:                 "数据库打开失败 — 数据库可能被上一个未正常退出的进程锁定。若 rift 曾崩溃或被强制终止，请运行 `lsof | grep rift.db` 找到并终止残留进程后重试。若为全新安装，请运行 `rift awaken` 进行初始化",
+	DBOpenError:                 "数据库打开失败 — 数据库可能被上一个未正常退出的进程锁定，或有另一个 rift 进程正在运行。若 rift 曾崩溃或被强制终止，请运行 `lsof | grep rift.db` 找到并终止残留进程后重试。若为全新安装，请运行 `rift awaken` 进行初始化",
 	WaypointBucketNotFoundError: "在数据库中找不到航点存储区，请重新运行 `rift awaken`",
 	WaypointDataCorruptedError:  "航点 [%s] 的数据已损坏，无法读取",
 

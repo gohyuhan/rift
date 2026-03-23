@@ -22,7 +22,7 @@ var zH_HANT = LanguageMapping{
 	// DB related
 	DBPathError:                 "無法存取資料庫目錄，[ERROR: %s]",
 	DBSetupError:                "資料庫初始化失敗，[ERROR: %s]",
-	DBOpenError:                 "資料庫開啟失敗 — 資料庫可能被上一個未正常退出的程序鎖定。若 rift 曾崩潰或被強制結束，請執行 `lsof | grep rift.db` 找到並終止殘留程序後重試。若為全新安裝，請執行 `rift awaken` 進行初始化",
+	DBOpenError:                 "資料庫開啟失敗 — 資料庫可能被上一個未正常退出的程序鎖定，或另一個 rift 程序正在執行中。若 rift 曾崩潰或被強制結束，請執行 `lsof | grep rift.db` 找到並終止殘留程序後重試。若為全新安裝，請執行 `rift awaken` 進行初始化",
 	WaypointBucketNotFoundError: "在資料庫中找不到航點儲存區，請重新執行 `rift awaken`",
 	WaypointDataCorruptedError:  "航點 [%s] 的資料已損毀，無法讀取",
 
