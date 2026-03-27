@@ -222,6 +222,23 @@ Remove-Item -Path "$env:APPDATA\rift" -Recurse -Force
 
 ---
 
+## After Running `rift awaken`
+
+Once rift awaken or the initial automatic setup completes, reload your shell config to activate the integration in your current session:
+
+| Shell      | Command                              |
+| ---------- | ------------------------------------ |
+| zsh        | `source ~/.zshrc`                    |
+| bash (Linux) | `source ~/.bashrc`                 |
+| bash (macOS) | `source ~/.bash_profile`           |
+| fish       | `source ~/.config/fish/config.fish`  |
+| ksh        | `source ~/.kshrc`                    |
+| PowerShell | `. $PROFILE`                         |
+
+> **If you skip this step** and try to navigate before reloading, you will see a raw `cd /path/to/dir` printed in your terminal instead of your shell changing directory. Run the `source` command above (or open a new terminal) and rift will work as expected.
+
+---
+
 ## Troubleshooting
 
 ### Database locked after a crash
