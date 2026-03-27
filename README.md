@@ -224,7 +224,7 @@ Remove-Item -Path "$env:APPDATA\rift" -Recurse -Force
 
 ## After Running `rift awaken`
 
-Once `rift awaken` completes, reload your shell config to activate the integration in your current session:
+Once rift awaken or the initial automatic setup completes, reload your shell config to activate the integration in your current session:
 
 | Shell      | Command                              |
 | ---------- | ------------------------------------ |
