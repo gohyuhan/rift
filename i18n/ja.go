@@ -52,7 +52,7 @@ var jA = LanguageMapping{
 	ShellNoConfigFile:     "シェル %q の既知の設定ファイルがありません",
 	ShellAlreadyInstalled: "rift：シェル統合はすでに %s に存在します",
 	ShellInstallSuccess:   "rift：シェル統合を %s に追加しました",
-	ShellInstallReload:    "rift：シェルを再起動するか、次を実行してください：%s",
+	ShellReloadHint:       "rift：シェルを再起動するか、次を実行してください：%s",
 	BinaryNotInPath:       "rift：PATH にバイナリが見つかりません — このセッション後も使用するには rift を PATH に追加してください",
 
 	// cmd description

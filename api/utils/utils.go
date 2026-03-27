@@ -58,10 +58,10 @@ func RiftSetup() error {
 	}
 
 	if installed {
-		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellAlreadyInstalled, cfgFile), style.ColorGreenSoft, false)
-		logger.LOGGER.LogToTerminal([]string{message})
-		message = style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallReload, shell.ReloadHint(sh, cfgFile)), style.ColorCyanSoft, false)
-		logger.LOGGER.LogToTerminal([]string{message})
+		var messages []string
+		messages = append(messages, style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellAlreadyInstalled, cfgFile), style.ColorGreenSoft, false))
+		messages = append(messages, style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellReloadHint, shell.ReloadHint(sh, cfgFile)), style.ColorCyanSoft, false))
+		logger.LOGGER.LogToTerminal(messages)
 	} else {
 		if err := shell.Install(sh); err != nil {
 			return err

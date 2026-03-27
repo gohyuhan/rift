@@ -52,7 +52,7 @@ var zH_HANT = LanguageMapping{
 	ShellNoConfigFile:     "Shell %q 沒有已知的設定檔",
 	ShellAlreadyInstalled: "rift：Shell 整合已存在於 %s",
 	ShellInstallSuccess:   "rift：Shell 整合已新增至 %s",
-	ShellInstallReload:    "rift：請重新啟動 Shell 或執行：%s",
+	ShellReloadHint:       "rift：請重新啟動 Shell 或執行：%s",
 	BinaryNotInPath:       "rift：在 PATH 中找不到執行檔 — 請將 rift 加入 PATH 以便在此工作階段後繼續使用",
 
 	// cmd description

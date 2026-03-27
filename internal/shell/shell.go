@@ -262,7 +262,7 @@ func Install(sh Shell) error {
 
 	message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallSuccess, cfgFile), style.ColorGreenSoft, false)
 	logger.LOGGER.LogToTerminal([]string{message})
-	message = style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellInstallReload, ReloadHint(sh, cfgFile)), style.ColorCyanSoft, false)
+	message = style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.ShellReloadHint, ReloadHint(sh, cfgFile)), style.ColorCyanSoft, false)
 	logger.LOGGER.LogToTerminal([]string{message})
 	return nil
 }

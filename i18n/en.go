@@ -52,7 +52,7 @@ var eN = LanguageMapping{
 	ShellNoConfigFile:     "shell %q does not have a known config file",
 	ShellAlreadyInstalled: "rift: shell integration already present in %s",
 	ShellInstallSuccess:   "rift: shell integration added to %s",
-	ShellInstallReload:    "rift: restart your shell or run: %s",
+	ShellReloadHint:       "rift: restart your shell or run: %s",
 	BinaryNotInPath:       "rift: binary not found in PATH — add rift to your PATH to use it after this session",
 
 	// cmd description

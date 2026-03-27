@@ -58,7 +58,7 @@ type LanguageMapping struct {
 	ShellNoConfigFile     string
 	ShellAlreadyInstalled string
 	ShellInstallSuccess   string
-	ShellInstallReload    string
+	ShellReloadHint       string
 	BinaryNotInPath       string
 
 	// cmd description
