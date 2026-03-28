@@ -20,4 +20,4 @@ const (
 
 // this will be injected during build
 // example: go build -ldflags "-X rift/constant.APPVERSION=v1.x.x" -o main
-var APPVERSION = "v0.2.0-pr.1"
+var APPVERSION = "v0.2.0-pr.2"
