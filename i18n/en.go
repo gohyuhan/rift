@@ -9,7 +9,7 @@ var eN = LanguageMapping{
 	PathNotAbsoluteError:     "Path must be absolute, got: %s",
 	NotFileOrDirError:        "Path does not exist as a file or directory",
 
-	// Settings related
+	// Settings
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",
 	SettingsReadError:                 "Failed to read settings file, [ERROR: %s]",
 	SettingsParseError:                "Failed to parse settings file, resetting to defaults, [ERROR: %s]",
@@ -19,14 +19,14 @@ var eN = LanguageMapping{
 	SettingsAutoUpdateUpdated:         "rift: auto-update set to %t",
 	SettingsDownloadPreReleaseUpdated: "rift: download pre-release set to %t",
 
-	// DB related
+	// Database
 	DBPathError:                 "Failed to access database directory, [ERROR: %s]",
 	DBSetupError:                "Failed to initialize database, [ERROR: %s]",
 	DBOpenError:                 "Failed to open database — the database may be locked by a previous session that did not exit cleanly, or another rift process is already running. If rift crashed or was force-killed, run `lsof | grep rift.db` to find and kill the stale process, then retry. If this is a fresh install, run `rift awaken` for initialization",
 	WaypointBucketNotFoundError: "Waypoint bucket not found in database, perhaps rerun `rift awaken`",
 	WaypointDataCorruptedError:  "Waypoint data for [%s] is corrupted and could not be read",
 
-	// Updater related
+	// Updater
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
 	UpdaterFailToCheckForUpdate:         "Failed to check for updates: %v",
 	UpdaterFailToCreateRequest:          "failed to create request: %v",
@@ -46,7 +46,7 @@ var eN = LanguageMapping{
 	UpdaterDownloadUnexpectedStatusCode: "unexpected status code: %d",
 	UpdaterRequiresSudo:                 "Permission denied. Retrying with sudo...",
 
-	// Shell related
+	// Shell
 	ShellCMDNotSupported:  "Windows Command Prompt does not support shell functions.\nPlease use PowerShell, Git Bash, or WSL instead, then re-run `rift awaken`.",
 	ShellUnsupported:      "shell %q is not supported by rift.\nSupported shells: bash, zsh, fish, ksh, PowerShell.\nYou can add the integration manually — see docs/shell-integration.md",
 	ShellNoConfigFile:     "shell %q does not have a known config file",
@@ -55,7 +55,7 @@ var eN = LanguageMapping{
 	ShellReloadHint:       "rift: restart your shell or run: %s",
 	BinaryNotInPath:       "rift: binary not found in PATH — add rift to your PATH to use it after this session",
 
-	// cmd description
+	// Commands and flags
 	RiftDescription:                       "Navigate path easily by your predefined waypoint name",
 	RiftAwakenDescription:                 "Awaken rift within your shell [setup and initialize for the first time for using rift]",
 	RiftDiscoverDescription:               "Assign a waypoint name to the current working directory",
@@ -68,8 +68,9 @@ var eN = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "Rename an existing waypoint to a new name",
 	RiftFlagUpdateDescription:             "Manually trigger a check for the latest version and update if available",
 	RiftFlagVersionDescription:            "Print the current version of rift",
+	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
 
-	// Waypoint related
+	// Waypoint operations
 	RiftSavedWaypoint:                     "rift: saved %q -> %s",
 	RiftWaypointAlreadyExistsError:        "Waypoint %q already exists, pointing to %s",
 	RiftWaypointDoNotExistsError:          "rift: waypoint %q does not exist",
@@ -77,37 +78,55 @@ var eN = LanguageMapping{
 	RiftWaypointSealedError:               "rift: waypoint %q is sealed and cannot be travelled to due to %q",
 	RiftWaypointSealedLabel:               "(SEALED)",
 	RiftWaypointRetrieveAllError:          "rift: failed to retrieve waypoints",
-	RiftWaypointDetailName:                "Waypoint Name:",
-	RiftWaypointDetailPath:                "Waypoint Path:",
-	RiftWaypointDetailDiscovered:          "Waypoint Discovered:",
-	RiftWaypointDetailTravelledCount:      "Waypoint Travelled Count:",
-	RiftWaypointDetailSealed:              "Waypoint Sealed:",
-	RiftWaypointDetailSealedReason:        "Sealed Reason:",
-	RiftWaypointDetailSealedTrue:          "Yes",
-	RiftWaypointDetailSealedFalse:         "No",
 	RiftWaypointDestroySuccess:            "rift: waypoint %q has been destroyed",
 	RiftWaypointDestroyError:              "rift: failed to destroy waypoint %q, [ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift: rebind path %q is not a directory",
 	RiftWaypointRebindSuccess:             "rift: waypoint %q rebound to %s",
 	RiftWaypointReforgeEmptyError:         "rift: reforge name cannot be empty",
-	RiftWaypointReforgeError:              "rift: failed to reforge waypoint %q, [ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift: waypoint %q already exists, cannot reforge to an existing name",
+	RiftWaypointReforgeError:              "rift: failed to reforge waypoint %q, [ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift: waypoint %q reforged to %q",
-	WaypointInfoListTitle:                 "Waypoints",
-	WaypointInteractiveError:              "rift: waypoint interactive session failed, [ERROR: %s]",
-	ListUpKeyHelp:                         "up",
-	ListDownKeyHelp:                       "down",
-	ListQuitKeyHelp:                       "quit",
-	WaypointNavigateKeyHelp:               "navigate",
-	WaypointDestroyKeyHelp:                "destroy",
-	WaypointUnsealKeyHelp:                 "unseal",
-	WaypointNameCopyKeyHelp:               "copy waypoint name",
-	WaypointPathCopyKeyHelp:               "copy path",
 
-	// Flag related
-	RiftFlagRetrieveError: "rift: failed to retrieve flag %q, [ERROR: %s]",
+	// Waypoint detail view
+	RiftWaypointDetailName:           "Waypoint Name:",
+	RiftWaypointDetailPath:           "Waypoint Path:",
+	RiftWaypointDetailDiscovered:     "Waypoint Discovered:",
+	RiftWaypointDetailTravelledCount: "Waypoint Travelled Count:",
+	RiftWaypointDetailSealed:         "Waypoint Sealed:",
+	RiftWaypointDetailSealedReason:   "Sealed Reason:",
+	RiftWaypointDetailSealedTrue:     "Yes",
+	RiftWaypointDetailSealedFalse:    "No",
 
-	// Setup related
+	// Waypoint interactive UI
+	WaypointInfoListTitle:                      "Waypoints",
+	WaypointInteractiveError:                   "rift: waypoint interactive session failed, [ERROR: %s]",
+	RebindPathInputPlaceHolder:                 "Enter an absolute path, or leave empty to use the current working directory",
+	WaypointRebindTitle:                        "Rebind",
+	WaypointUIUpKeyHelp:                        "up",
+	WaypointUIUpKeyHelpDescription:             "move the cursor to the previous waypoint",
+	WaypointUIDownKeyHelp:                      "down",
+	WaypointUIDownKeyHelpDescription:           "move the cursor to the next waypoint",
+	WaypointUIQuitKeyHelp:                      "quit",
+	WaypointUIQuitKeyHelpDescription:           "exit waypoint interactive UI",
+	WaypointUIHelpKeyHelp:                      "help",
+	WaypointUIHelpKeyHelpDescription:           "show or hide the full key binding list",
+	WaypointNavigateKeyHelp:                    "navigate",
+	WaypointNavigateKeyHelpDescription:         "travel to the selected waypoint",
+	WaypointDestroyKeyHelp:                     "destroy",
+	WaypointDestroyKeyHelpDescription:          "permanently delete the selected waypoint",
+	WaypointUnsealKeyHelp:                      "unseal",
+	WaypointUnsealKeyHelpDescription:           "attempt to unseal the selected waypoint",
+	WaypointRebindKeyHelp:                      "rebind waypoint path",
+	WaypointRebindKeyHelpDescription:           "reassign the selected waypoint to a new path",
+	WaypointReforgeKeyHelp:                     "reforge waypoint name",
+	WaypointReforgeKeyHelpDescription:          "rename the selected waypoint to a new name",
+	WaypointNameCopyPathCopyKeyHelp:            "copy waypoint name / path to clipboard",
+	WaypointNameCopyPathCopyKeyHelpDescription: "copy the waypoint name (y) or path (Y) to clipboard",
+	WaypointCopyFromInputValueKeyHelp:          "copy input value",
+	WaypointPasteIntoInputValueKeyHelp:         "paste into input",
+	WaypointClosePopUp:                         "close popup",
+
+	// Setup
 	CheckAndRunSetupError:  "rift: setup failed, [ERROR: %s]",
 	RiftAutoSetupTriggered: "rift: settings and config setup triggered automatically",
 }

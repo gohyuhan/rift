@@ -6,10 +6,8 @@ import (
 	"sync/atomic"
 
 	"charm.land/bubbles/v2/list"
+	"charm.land/bubbles/v2/viewport"
 	tea "charm.land/bubbletea/v2"
-	"github.com/atotto/clipboard"
-	"github.com/gohyuhan/rift/api/utils"
-	"github.com/gohyuhan/rift/api/waypoint/features"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
 	"go.etcd.io/bbolt"
@@ -25,9 +23,14 @@ type WaypointInteractiveModel struct {
 	SelectedWaypointPath           string
 	SelectedWaypointName           string
 	IsQuit                         bool
+	ShowPopUp                      atomic.Bool
+	PopUpType                      string
+	IsTypingMode                   atomic.Bool
 	ErrMessage                     error
 	WaypointInfoList               list.Model
 	WaypointInfoListCursorPosition int
+	WaypointHelpViewport           viewport.Model
+	WaypointPopUpModel             interface{}
 	Width                          int
 	Height                         int
 	BboltDb                        *bbolt.DB
@@ -55,12 +58,22 @@ type waypointInfo struct {
 //
 // ----------------------------------
 func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
+	vp := viewport.New()
+	vp.SoftWrap = false
+	vp.MouseWheelEnabled = false
+	vp.SetHorizontalStep(1)
+
 	waypointInteractiveModel := WaypointInteractiveModel{
 		SelectedWaypointPath:           "",
 		IsQuit:                         false,
+		PopUpType:                      NoPopUp,
 		WaypointInfoListCursorPosition: 0,
+		WaypointHelpViewport:           vp,
 		BboltDb:                        bboltDb,
 	}
+	waypointInteractiveModel.ShowPopUp.Store(false)
+	waypointInteractiveModel.IsTypingMode.Store(false)
+	initWaypointHelpViewport(&waypointInteractiveModel)
 
 	return &waypointInteractiveModel
 }
@@ -69,7 +82,10 @@ func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
 //
 //	starts the bubbletea program and blocks until the user selects a
 //	waypoint or quits; returns the selected waypoint path, name, and
-//	any error encountered during the program run or after selection
+//	any error encountered during the program run or after selection;
+//	note: live terminal window resizing is not supported — rift is a
+//	CLI-first tool and the interactive UI is a quality-of-life convenience,
+//	not a full TUI application
 //
 // ----------------------------------
 func RunWaypointInteractive(bboltDb *bbolt.DB) (string, string, error) {
@@ -118,6 +134,7 @@ func (m *WaypointInteractiveModel) Init() tea.Cmd {
 //
 // ----------------------------------
 func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	var cmd tea.Cmd
 	var cmds []tea.Cmd
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
@@ -131,69 +148,41 @@ func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	case tea.KeyPressMsg:
 		switch msg.String() {
-		case "enter":
-			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-				// sealed waypoints are non-navigable; silently ignore enter
-				if !i.WaypointIsSealed {
-					m.SelectedWaypointPath = i.WaypointPath
-					m.SelectedWaypointName = i.WaypointName
-					m.IsQuit = true
-					return m, tea.Quit
+		case "ctrl+c", "q":
+			m.IsQuit = true
+			return m, tea.Quit
+		case "esc":
+			if m.ShowPopUp.Load() {
+				m.ShowPopUp.Store(false)
+				m.IsTypingMode.Store(false)
+				m.PopUpType = NoPopUp
+				// refresh the help key map to reflect the sealed state of the new selection
+				if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
+					m.WaypointInfoList.AdditionalFullHelpKeys = initWaypointInfoListKeyMap(m.PopUpType, i.WaypointIsSealed)
+					m.WaypointInfoList.AdditionalShortHelpKeys = initShortWaypointInfoListKeyMap(m.PopUpType, i.WaypointIsSealed)
 				}
 				return m, nil
 			}
-		case "backspace":
-			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-				// perform a destroy on the selected waypoint
-				destoryErr := features.DestroyDiscoveredWaypoint(m.BboltDb, i.WaypointName, false)
-				if destoryErr != nil {
-					m.ErrMessage = destoryErr
-					m.IsQuit = true
-					return m, tea.Quit
-				}
-				initWaypointInfoListModel(m)
-				return m, nil
-			}
-		case "u", "U":
-			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-				// perform an unseal of waypoint, but if the waypoint is still having invalid path,
-				// it will still be resealed when performing the list reinitialization
-				utils.UpdateWaypointUnSeal(m.BboltDb, i.WaypointName)
-				initWaypointInfoListModel(m)
-				return m, nil
-			}
-		case "y":
-			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-				// copy the waypoint name to the clipboard
-				clipboard.WriteAll(i.WaypointName)
-				return m, nil
-			}
-		case "Y":
-			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-				// copy the waypoint absolute path to the clipboard
-				clipboard.WriteAll(i.WaypointPath)
-				return m, nil
-			}
-		case "j", "down":
-			m.WaypointInfoList.CursorDown()
-			m.WaypointInfoListCursorPosition = m.WaypointInfoList.Index()
-			// refresh the help key map to reflect the sealed state of the new selection
-			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-				m.WaypointInfoList.AdditionalShortHelpKeys = initWaypointInfoListKeyMap(i.WaypointIsSealed)
-			}
-		case "k", "up":
-			m.WaypointInfoList.CursorUp()
-			m.WaypointInfoListCursorPosition = m.WaypointInfoList.Index()
-			// refresh the help key map to reflect the sealed state of the new selection
-			if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-				m.WaypointInfoList.AdditionalShortHelpKeys = initWaypointInfoListKeyMap(i.WaypointIsSealed)
-			}
-		case "ctrl+c", "esc", "q":
 			m.IsQuit = true
 			return m, tea.Quit
 		}
-	}
+		if m.IsTypingMode.Load() {
+			m, cmd = handleTypingInteraction(m, msg)
+		} else {
+			m, cmd = handleNonTypingInteraction(m, msg)
+		}
 
+		cmds = append(cmds, cmd)
+
+		// refresh the help key map to reflect the sealed state of the new selection
+		if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
+			m.WaypointInfoList.AdditionalFullHelpKeys = initWaypointInfoListKeyMap(m.PopUpType, i.WaypointIsSealed)
+			m.WaypointInfoList.AdditionalShortHelpKeys = initShortWaypointInfoListKeyMap(m.PopUpType, i.WaypointIsSealed)
+		}
+
+		return m, tea.Batch(cmds...)
+
+	}
 	return m, tea.Batch(cmds...)
 }
 
@@ -207,5 +196,5 @@ func (m *WaypointInteractiveModel) View() tea.View {
 	if m.IsQuit {
 		return tea.NewView("")
 	}
-	return tea.NewView(m.WaypointInfoList.View())
+	return tea.NewView(renderWaypointInteractiveUIView(m))
 }

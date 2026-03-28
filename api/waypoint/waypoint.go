@@ -71,7 +71,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		if rebindToErr != nil {
 			return rebindToErr
 		}
-		rebindWaypointErr := features.RebindWaypoint(bboltDB, waypointName, rebindTo)
+		rebindWaypointErr := features.RebindWaypoint(bboltDB, waypointName, rebindTo, true)
 
 		if rebindWaypointErr != nil {
 			return rebindWaypointErr
@@ -82,7 +82,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		if reforgeToErr != nil {
 			return reforgeToErr
 		}
-		reforgeWaypointErr := features.ReforgeWaypoint(bboltDB, waypointName, reforgeTo)
+		reforgeWaypointErr := features.ReforgeWaypoint(bboltDB, waypointName, reforgeTo, true)
 
 		if reforgeWaypointErr != nil {
 			return reforgeWaypointErr

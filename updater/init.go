@@ -2,7 +2,8 @@ package updater
 
 // ----------------------------------
 //
-//	InitUpdater initializes the updater and checks for updates if needed
+//	Checks whether an update is due, fetches the latest release if so,
+//	and prompts the user to download it when a newer version is available.
 //
 // ----------------------------------
 func AutoUpdater() {
