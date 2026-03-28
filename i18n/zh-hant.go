@@ -9,7 +9,7 @@ var zH_HANT = LanguageMapping{
 	PathNotAbsoluteError:     "路徑必須為絕對路徑，收到: %s",
 	NotFileOrDirError:        "指定路徑不存在（非檔案或目錄）",
 
-	// Settings related
+	// Settings
 	SettingsPathError:                 "無法存取設定目錄，[ERROR: %s]",
 	SettingsReadError:                 "讀取設定檔失敗，[ERROR: %s]",
 	SettingsParseError:                "解析設定檔失敗，已重置為預設值，[ERROR: %s]",
@@ -19,14 +19,14 @@ var zH_HANT = LanguageMapping{
 	SettingsAutoUpdateUpdated:         "rift: 自動更新已設定為 %t",
 	SettingsDownloadPreReleaseUpdated: "rift: 下載預發布版本已設定為 %t",
 
-	// DB related
+	// Database
 	DBPathError:                 "無法存取資料庫目錄，[ERROR: %s]",
 	DBSetupError:                "資料庫初始化失敗，[ERROR: %s]",
 	DBOpenError:                 "資料庫開啟失敗 — 資料庫可能被上一個未正常退出的程序鎖定，或另一個 rift 程序正在執行中。若 rift 曾崩潰或被強制結束，請執行 `lsof | grep rift.db` 找到並終止殘留程序後重試。若為全新安裝，請執行 `rift awaken` 進行初始化",
 	WaypointBucketNotFoundError: "在資料庫中找不到航點儲存區，請重新執行 `rift awaken`",
 	WaypointDataCorruptedError:  "航點 [%s] 的資料已損毀，無法讀取",
 
-	// Updater related
+	// Updater
 	UpdaterDownloadPrompt:               "發現新版本 %s，是否立即下載？(y/n): ",
 	UpdaterFailToCheckForUpdate:         "檢查更新失敗：%v",
 	UpdaterFailToCreateRequest:          "無法建立請求：%v",
@@ -46,7 +46,7 @@ var zH_HANT = LanguageMapping{
 	UpdaterDownloadUnexpectedStatusCode: "非預期的狀態碼：%d",
 	UpdaterRequiresSudo:                 "權限不足，嘗試以 sudo 重試...",
 
-	// Shell related
+	// Shell
 	ShellCMDNotSupported:  "Windows 命令提示字元不支援 Shell 函式。\n請改用 PowerShell、Git Bash 或 WSL，然後重新執行 `rift awaken`。",
 	ShellUnsupported:      "rift 不支援 Shell %q。\n支援的 Shell：bash、zsh、fish、ksh、PowerShell。\n您可以手動新增整合 — 請參閱 docs/shell-integration.md",
 	ShellNoConfigFile:     "Shell %q 沒有已知的設定檔",
@@ -55,7 +55,7 @@ var zH_HANT = LanguageMapping{
 	ShellReloadHint:       "rift：請重新啟動 Shell 或執行：%s",
 	BinaryNotInPath:       "rift：在 PATH 中找不到執行檔 — 請將 rift 加入 PATH 以便在此工作階段後繼續使用",
 
-	// cmd description
+	// Commands and flags
 	RiftDescription:                       "透過您預先定義的檢查點名稱輕鬆導航路徑",
 	RiftAwakenDescription:                 "在您的 Shell 中喚醒 rift【首次使用前請執行此指令進行設定與初始化】",
 	RiftDiscoverDescription:               "為目前工作目錄指定一個航點名稱",
@@ -68,8 +68,9 @@ var zH_HANT = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "將現有航點重新命名為新名稱",
 	RiftFlagUpdateDescription:             "手動觸發檢查最新版本，如有可用更新則進行升級",
 	RiftFlagVersionDescription:            "列印 rift 的目前版本",
+	RiftFlagRetrieveError:                 "rift：取得旗標 %q 失敗，[ERROR: %s]",
 
-	// Waypoint related
+	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：已儲存 %q -> %s",
 	RiftWaypointAlreadyExistsError:        "航點 %q 已存在，指向 %s",
 	RiftWaypointDoNotExistsError:          "rift：航點 %q 不存在",
@@ -77,37 +78,60 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointSealedError:               "rift：航點 %q 已封印，無法前往，原因：%q",
 	RiftWaypointSealedLabel:               "（已封印）",
 	RiftWaypointRetrieveAllError:          "rift：取得航點清單失敗",
-	RiftWaypointDetailName:                "航點名稱：",
-	RiftWaypointDetailPath:                "航點路徑：",
-	RiftWaypointDetailDiscovered:          "航點發現時間：",
-	RiftWaypointDetailTravelledCount:      "航點移動次數：",
-	RiftWaypointDetailSealed:              "航點封印：",
-	RiftWaypointDetailSealedReason:        "封印原因：",
-	RiftWaypointDetailSealedTrue:          "是",
-	RiftWaypointDetailSealedFalse:         "否",
 	RiftWaypointDestroySuccess:            "rift：航點 %q 已被銷毀",
 	RiftWaypointDestroyError:              "rift：銷毀航點 %q 失敗，[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：重新綁定的路徑 %q 不是一個目錄",
 	RiftWaypointRebindSuccess:             "rift：航點 %q 已重新綁定至 %s",
 	RiftWaypointReforgeEmptyError:         "rift：重鑄名稱不能為空",
-	RiftWaypointReforgeError:              "rift：重鑄航點 %q 失敗，[ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift：航點 %q 已存在，無法重鑄為已有名稱",
+	RiftWaypointReforgeError:              "rift：重鑄航點 %q 失敗，[ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift：航點 %q 已重鑄為 %q",
-	WaypointInfoListTitle:                 "航點列表",
-	WaypointInteractiveError:              "rift：航點互動介面啟動失敗，[ERROR: %s]",
-	ListUpKeyHelp:                         "上移",
-	ListDownKeyHelp:                       "下移",
-	ListQuitKeyHelp:                       "退出",
-	WaypointNavigateKeyHelp:               "導航",
-	WaypointDestroyKeyHelp:                "銷毀",
-	WaypointUnsealKeyHelp:                 "解封",
-	WaypointNameCopyKeyHelp:               "複製路徑點名稱",
-	WaypointPathCopyKeyHelp:               "複製路徑",
 
-	// Flag related
-	RiftFlagRetrieveError: "rift：取得旗標 %q 失敗，[ERROR: %s]",
+	// Waypoint detail view
+	RiftWaypointDetailName:           "航點名稱：",
+	RiftWaypointDetailPath:           "航點路徑：",
+	RiftWaypointDetailDiscovered:     "航點發現時間：",
+	RiftWaypointDetailTravelledCount: "航點移動次數：",
+	RiftWaypointDetailSealed:         "航點封印：",
+	RiftWaypointDetailSealedReason:   "封印原因：",
+	RiftWaypointDetailSealedTrue:     "是",
+	RiftWaypointDetailSealedFalse:    "否",
 
-	// Setup related
+	// Waypoint interactive UI
+	WaypointInfoListTitle:                         "航點列表",
+	WaypointInteractiveError:                      "rift：航點互動介面啟動失敗，[ERROR: %s]",
+	RebindPathInputPlaceHolder:                    "輸入絕對路徑，留空則使用目前工作目錄",
+	WaypointRebindTitle:                           "重新綁定",
+	ReforgeWaypointNameInputPlaceHolder:           "輸入航點的新名稱",
+	WaypointReforgeTitle:                          "重鑄",
+	WaypointUIUpKeyHelp:                           "上移",
+	WaypointUIUpKeyHelpDescription:                "將游標移至上一個航點",
+	WaypointUIDownKeyHelp:                         "下移",
+	WaypointUIDownKeyHelpDescription:              "將游標移至下一個航點",
+	WaypointUIQuitKeyHelp:                         "退出",
+	WaypointUIQuitKeyHelpDescription:              "退出航點互動介面",
+	WaypointUIHelpKeyHelp:                         "說明",
+	WaypointUIHelpKeyHelpDescription:              "顯示或隱藏完整的快捷鍵列表",
+	WaypointNavigateKeyHelp:                       "導航",
+	WaypointNavigateKeyHelpDescription:            "前往所選航點",
+	WaypointDestroyKeyHelp:                        "銷毀",
+	WaypointDestroyKeyHelpDescription:             "永久刪除所選航點",
+	WaypointUnsealKeyHelp:                         "解封",
+	WaypointUnsealKeyHelpDescription:              "嘗試解封所選航點",
+	WaypointRebindKeyHelp:                         "重新綁定航點路徑",
+	WaypointRebindKeyHelpDescription:              "將所選航點重新指定至新路徑",
+	WaypointReforgeKeyHelp:                        "重鑄航點名稱",
+	WaypointReforgeKeyHelpDescription:             "將所選航點重新命名為新名稱",
+	WaypointNameCopyPathCopyKeyHelp:               "複製航點名稱 / 路徑至剪貼簿",
+	WaypointNameCopyPathCopyKeyHelpDescription:    "將航點名稱 (y) 或路徑 (Y) 複製至剪貼簿",
+	WaypointCopyFromInputValueKeyHelp:             "複製輸入內容",
+	WaypointCopyFromInputValueKeyHelpDescription:  "將當前輸入框的內容複製至剪貼簿",
+	WaypointPasteIntoInputValueKeyHelp:            "貼上至輸入框",
+	WaypointPasteIntoInputValueKeyHelpDescription: "將剪貼簿內容貼上至輸入框",
+	WaypointClosePopUp:                            "關閉彈窗",
+	WaypointClosePopUpDescription:                 "關閉目前彈窗而不儲存",
+
+	// Setup
 	CheckAndRunSetupError:  "rift：設定失敗，[ERROR: %s]",
 	RiftAutoSetupTriggered: "rift：設定與配置已自動觸發",
 }

@@ -5,5 +5,15 @@ package ui
 // the remaining available width without overflowing the terminal.
 const (
 	ListItemOrTitleWidthPad    = 4
+	TextInputWidthPad          = 6
 	ListTitleHorizontalPadding = 2
+)
+
+// PopUpType sentinel values stored on WaypointInteractiveModel.PopUpType to
+// indicate which popup (if any) is currently active.
+const (
+	NoPopUp      = "NoPopUp"
+	RebindPopUp  = "RebindPopUp"
+	ReforgePopUp = "ReforgePopUp"
+	HelpPopUp    = "HelpPopUp"
 )

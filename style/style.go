@@ -23,9 +23,12 @@ var (
 	ColorSealedMuted   = lipgloss.Color("#5C5470")
 )
 
-var SelectedItemStyle = lipgloss.NewStyle().Foreground(ColorPurpleVibrant).Bold(true)
-var ItemStyle = lipgloss.NewStyle().Foreground(ColorPurpleSoft)
-var NewStyle = lipgloss.NewStyle()
+var (
+	SelectedItemStyle = lipgloss.NewStyle().Foreground(ColorPurpleVibrant).Bold(true)
+	ItemStyle         = lipgloss.NewStyle().Foreground(ColorPurpleSoft)
+	NewStyle          = lipgloss.NewStyle()
+	BorderStyle       = NewStyle.Border(lipgloss.RoundedBorder()).Padding(0).Margin(0).BorderForeground(ColorBlueGrayMuted)
+)
 
 // ----------------------------------
 //

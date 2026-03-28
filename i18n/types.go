@@ -15,7 +15,7 @@ type LanguageMapping struct {
 	PathNotAbsoluteError     string
 	NotFileOrDirError        string
 
-	// Settings related
+	// Settings
 	SettingsPathError                 string
 	SettingsReadError                 string
 	SettingsParseError                string
@@ -25,14 +25,14 @@ type LanguageMapping struct {
 	SettingsAutoUpdateUpdated         string
 	SettingsDownloadPreReleaseUpdated string
 
-	// DB related
+	// Database
 	DBPathError                 string
 	DBSetupError                string
 	DBOpenError                 string
 	WaypointBucketNotFoundError string
 	WaypointDataCorruptedError  string
 
-	// Updater related
+	// Updater
 	UpdaterDownloadPrompt               string
 	UpdaterFailToCheckForUpdate         string
 	UpdaterFailToCreateRequest          string
@@ -52,7 +52,7 @@ type LanguageMapping struct {
 	UpdaterDownloadUnexpectedStatusCode string
 	UpdaterRequiresSudo                 string
 
-	// Shell related
+	// Shell
 	ShellCMDNotSupported  string
 	ShellUnsupported      string
 	ShellNoConfigFile     string
@@ -61,7 +61,7 @@ type LanguageMapping struct {
 	ShellReloadHint       string
 	BinaryNotInPath       string
 
-	// cmd description
+	// Commands and flags
 	RiftDescription                       string
 	RiftAwakenDescription                 string
 	RiftDiscoverDescription               string
@@ -74,8 +74,9 @@ type LanguageMapping struct {
 	RiftFlagWaypointReforgeDescription    string
 	RiftFlagUpdateDescription             string
 	RiftFlagVersionDescription            string
+	RiftFlagRetrieveError                 string
 
-	// Waypoint related
+	// Waypoint operations
 	RiftSavedWaypoint                     string
 	RiftWaypointAlreadyExistsError        string
 	RiftWaypointDoNotExistsError          string
@@ -83,14 +84,6 @@ type LanguageMapping struct {
 	RiftWaypointSealedError               string
 	RiftWaypointSealedLabel               string
 	RiftWaypointRetrieveAllError          string
-	RiftWaypointDetailName                string
-	RiftWaypointDetailPath                string
-	RiftWaypointDetailDiscovered          string
-	RiftWaypointDetailTravelledCount      string
-	RiftWaypointDetailSealed              string
-	RiftWaypointDetailSealedReason        string
-	RiftWaypointDetailSealedTrue          string
-	RiftWaypointDetailSealedFalse         string
 	RiftWaypointDestroySuccess            string
 	RiftWaypointDestroyError              string
 	RiftWaypointRebindNotDirError         string
@@ -99,21 +92,52 @@ type LanguageMapping struct {
 	RiftWaypointReforgeAlreadyExistsError string
 	RiftWaypointReforgeError              string
 	RiftWaypointReforgeSuccess            string
-	WaypointInfoListTitle                 string
-	WaypointInteractiveError              string
-	ListUpKeyHelp                         string
-	ListDownKeyHelp                       string
-	ListQuitKeyHelp                       string
-	WaypointNavigateKeyHelp               string
-	WaypointDestroyKeyHelp                string
-	WaypointUnsealKeyHelp                 string
-	WaypointNameCopyKeyHelp               string
-	WaypointPathCopyKeyHelp               string
 
-	// Flag related
-	RiftFlagRetrieveError string
+	// Waypoint detail view
+	RiftWaypointDetailName           string
+	RiftWaypointDetailPath           string
+	RiftWaypointDetailDiscovered     string
+	RiftWaypointDetailTravelledCount string
+	RiftWaypointDetailSealed         string
+	RiftWaypointDetailSealedReason   string
+	RiftWaypointDetailSealedTrue     string
+	RiftWaypointDetailSealedFalse    string
 
-	// Setup related
+	// Waypoint interactive UI
+	WaypointInfoListTitle                         string
+	WaypointInteractiveError                      string
+	RebindPathInputPlaceHolder                    string
+	WaypointRebindTitle                           string
+	ReforgeWaypointNameInputPlaceHolder           string
+	WaypointReforgeTitle                          string
+	WaypointUIUpKeyHelp                           string
+	WaypointUIUpKeyHelpDescription                string
+	WaypointUIDownKeyHelp                         string
+	WaypointUIDownKeyHelpDescription              string
+	WaypointUIQuitKeyHelp                         string
+	WaypointUIQuitKeyHelpDescription              string
+	WaypointUIHelpKeyHelp                         string
+	WaypointUIHelpKeyHelpDescription              string
+	WaypointNavigateKeyHelp                       string
+	WaypointNavigateKeyHelpDescription            string
+	WaypointDestroyKeyHelp                        string
+	WaypointDestroyKeyHelpDescription             string
+	WaypointUnsealKeyHelp                         string
+	WaypointUnsealKeyHelpDescription              string
+	WaypointRebindKeyHelp                         string
+	WaypointRebindKeyHelpDescription              string
+	WaypointReforgeKeyHelp                        string
+	WaypointReforgeKeyHelpDescription             string
+	WaypointNameCopyPathCopyKeyHelp               string
+	WaypointNameCopyPathCopyKeyHelpDescription    string
+	WaypointCopyFromInputValueKeyHelp             string
+	WaypointCopyFromInputValueKeyHelpDescription  string
+	WaypointPasteIntoInputValueKeyHelp            string
+	WaypointPasteIntoInputValueKeyHelpDescription string
+	WaypointClosePopUp                            string
+	WaypointClosePopUpDescription                 string
+
+	// Setup
 	CheckAndRunSetupError  string
 	RiftAutoSetupTriggered string
 }

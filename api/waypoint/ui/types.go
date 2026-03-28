@@ -8,10 +8,19 @@ import (
 	"github.com/charmbracelet/x/ansi"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
+	"go.etcd.io/bbolt"
 
 	"charm.land/bubbles/v2/list"
+	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
 )
+
+// HelpListItem holds the display data for a single row in the help popup.
+type HelpListItem struct {
+	Keybinding  string
+	Action      string
+	Description string
+}
 
 // ---------------------------------
 //
@@ -108,4 +117,20 @@ func (d waypointInfoDelegate) Render(w io.Writer, m list.Model, index int, listI
 	}
 
 	fmt.Fprint(w, fn(str))
+}
+
+// RebindPopUpModel holds the state for the rebind path input popup.
+type RebindPopUpModel struct {
+	RebindPathInput    textinput.Model
+	WaypointName       string
+	Error              error
+	OnInputFuncTrigger func(bboltDb *bbolt.DB, waypointName string, rebindTo string, logToTerminal bool) error
+}
+
+// ReforgePopUpModel holds the state for the reforge name input popup.
+type ReforgePopUpModel struct {
+	ReforgeWaypointNameInput textinput.Model
+	WaypointName             string
+	Error                    error
+	OnInputFuncTrigger       func(bboltDb *bbolt.DB, waypointName string, reforgeTo string, logToTerminal bool) error
 }

@@ -22,7 +22,7 @@ import (
 //	sealed state, travelled count, timestamps) are preserved unchanged.
 //
 // ----------------------------------
-func ReforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string) error {
+func ReforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string, logToTerminal bool) error {
 	// validate that a non-empty new name was provided before opening the Update transaction;
 	// unlike rebind, there is no sensible default — an empty name is always an error
 	if reforgeTo == "" {
@@ -56,9 +56,10 @@ func ReforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string) e
 		}
 
 		// report the rename to the terminal
-		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointReforgeSuccess, waypointName, reforgeTo), style.ColorGreenSoft, false)
-		logger.LOGGER.LogToTerminal([]string{message})
-
+		if logToTerminal {
+			message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointReforgeSuccess, waypointName, reforgeTo), style.ColorGreenSoft, false)
+			logger.LOGGER.LogToTerminal([]string{message})
+		}
 		return nil
 	})
 

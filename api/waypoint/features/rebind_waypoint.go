@@ -21,7 +21,7 @@ import (
 //	and updates the discovered timestamp to now (UTC).
 //
 // ----------------------------------
-func RebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) error {
+func RebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string, logToTerminal bool) error {
 	// validate if the rebindTo is valid or not before opening the Update transaction;
 	// this avoids unnecessary DB writes if the path is invalid
 	// and also prevent holding the DB lock during potentially slow filesystem operations
@@ -61,9 +61,10 @@ func RebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string) err
 		}
 
 		// report the new binding to the terminal
-		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindSuccess, waypointName, rebindTo), style.ColorGreenSoft, false)
-		logger.LOGGER.LogToTerminal([]string{message})
-
+		if logToTerminal {
+			message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindSuccess, waypointName, rebindTo), style.ColorGreenSoft, false)
+			logger.LOGGER.LogToTerminal([]string{message})
+		}
 		return nil
 	})
 

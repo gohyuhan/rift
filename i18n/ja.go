@@ -9,7 +9,7 @@ var jA = LanguageMapping{
 	PathNotAbsoluteError:     "パスは絶対パスである必要があります。指定されたパス: %s",
 	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
 
-	// Settings related
+	// Settings
 	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
 	SettingsReadError:                 "設定ファイルの読み込みに失敗しました、[ERROR: %s]",
 	SettingsParseError:                "設定ファイルの解析に失敗しました。デフォルトにリセットします、[ERROR: %s]",
@@ -19,14 +19,14 @@ var jA = LanguageMapping{
 	SettingsAutoUpdateUpdated:         "rift: 自動アップデートを %t に設定しました",
 	SettingsDownloadPreReleaseUpdated: "rift: プレリリースのダウンロードを %t に設定しました",
 
-	// DB related
+	// Database
 	DBPathError:                 "データベースディレクトリへのアクセスに失敗しました、[ERROR: %s]",
 	DBSetupError:                "データベースの初期化に失敗しました、[ERROR: %s]",
 	DBOpenError:                 "データベースのオープンに失敗しました — 以前のセッションが正常に終了せずロックが残っているか、別の rift プロセスがすでに起動中の可能性があります。rift がクラッシュまたは強制終了された場合は、`lsof | grep rift.db` を実行してプロセスを特定・終了してから再試行してください。初めてのインストールの場合は `rift awaken` を実行してください",
 	WaypointBucketNotFoundError: "データベースにウェイポイントバケットが見つかりません。`rift awaken` を再実行してください",
 	WaypointDataCorruptedError:  "ウェイポイント [%s] のデータが破損しており、読み込めません",
 
-	// Updater related
+	// Updater
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
 	UpdaterFailToCheckForUpdate:         "アップデートの確認に失敗しました：%v",
 	UpdaterFailToCreateRequest:          "リクエストの作成に失敗しました：%v",
@@ -46,7 +46,7 @@ var jA = LanguageMapping{
 	UpdaterDownloadUnexpectedStatusCode: "予期しないステータスコード：%d",
 	UpdaterRequiresSudo:                 "権限がありません。sudoで再試行します...",
 
-	// Shell related
+	// Shell
 	ShellCMDNotSupported:  "Windows コマンドプロンプトはシェル関数をサポートしていません。\nPowerShell、Git Bash、または WSL を使用し、`rift awaken` を再実行してください。",
 	ShellUnsupported:      "シェル %q は rift でサポートされていません。\nサポートされているシェル：bash、zsh、fish、ksh、PowerShell。\n手動で統合を追加できます — docs/shell-integration.md を参照してください",
 	ShellNoConfigFile:     "シェル %q の既知の設定ファイルがありません",
@@ -55,7 +55,7 @@ var jA = LanguageMapping{
 	ShellReloadHint:       "rift：シェルを再起動するか、次を実行してください：%s",
 	BinaryNotInPath:       "rift：PATH にバイナリが見つかりません — このセッション後も使用するには rift を PATH に追加してください",
 
-	// cmd description
+	// Commands and flags
 	RiftDescription:                       "事前に定義したチェックポイント名でパスを簡単に移動できます",
 	RiftAwakenDescription:                 "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
 	RiftDiscoverDescription:               "現在の作業ディレクトリにウェイポイント名を割り当てます",
@@ -68,8 +68,9 @@ var jA = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "既存のウェイポイントを新しい名前に変更します",
 	RiftFlagUpdateDescription:             "最新バージョンの確認を手動でトリガーし、利用可能な場合はアップデートします",
 	RiftFlagVersionDescription:            "rift の現在のバージョンを表示します",
+	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 
-	// Waypoint related
+	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",
 	RiftWaypointAlreadyExistsError:        "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:          "rift：ウェイポイント %q は存在しません",
@@ -77,37 +78,60 @@ var jA = LanguageMapping{
 	RiftWaypointSealedError:               "rift：ウェイポイント %q は封印されており、移動できません。理由：%q",
 	RiftWaypointSealedLabel:               "(封印済み)",
 	RiftWaypointRetrieveAllError:          "rift：ウェイポイントの取得に失敗しました",
-	RiftWaypointDetailName:                "ウェイポイント名：",
-	RiftWaypointDetailPath:                "ウェイポイントパス：",
-	RiftWaypointDetailDiscovered:          "ウェイポイント発見日時：",
-	RiftWaypointDetailTravelledCount:      "ウェイポイント移動回数：",
-	RiftWaypointDetailSealed:              "ウェイポイント封印：",
-	RiftWaypointDetailSealedReason:        "封印理由：",
-	RiftWaypointDetailSealedTrue:          "はい",
-	RiftWaypointDetailSealedFalse:         "いいえ",
 	RiftWaypointDestroySuccess:            "rift：ウェイポイント %q を削除しました",
 	RiftWaypointDestroyError:              "rift：ウェイポイント %q の削除に失敗しました、[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：再バインド先のパス %q はディレクトリではありません",
 	RiftWaypointRebindSuccess:             "rift：ウェイポイント %q を %s に再バインドしました",
 	RiftWaypointReforgeEmptyError:         "rift：リフォージ名を空にすることはできません",
-	RiftWaypointReforgeError:              "rift：ウェイポイント %q のリフォージに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeAlreadyExistsError: "rift：ウェイポイント %q は既に存在するため、既存の名前にリフォージすることはできません",
+	RiftWaypointReforgeError:              "rift：ウェイポイント %q のリフォージに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift：ウェイポイント %q を %q にリフォージしました",
-	WaypointInfoListTitle:                 "ウェイポイント一覧",
-	WaypointInteractiveError:              "rift：ウェイポイントインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
-	ListUpKeyHelp:                         "上へ",
-	ListDownKeyHelp:                       "下へ",
-	ListQuitKeyHelp:                       "終了",
-	WaypointNavigateKeyHelp:               "移動",
-	WaypointDestroyKeyHelp:                "破壊",
-	WaypointUnsealKeyHelp:                 "封印解除",
-	WaypointNameCopyKeyHelp:               "ウェイポイント名をコピー",
-	WaypointPathCopyKeyHelp:               "パスをコピー",
 
-	// Flag related
-	RiftFlagRetrieveError: "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
+	// Waypoint detail view
+	RiftWaypointDetailName:           "ウェイポイント名：",
+	RiftWaypointDetailPath:           "ウェイポイントパス：",
+	RiftWaypointDetailDiscovered:     "ウェイポイント発見日時：",
+	RiftWaypointDetailTravelledCount: "ウェイポイント移動回数：",
+	RiftWaypointDetailSealed:         "ウェイポイント封印：",
+	RiftWaypointDetailSealedReason:   "封印理由：",
+	RiftWaypointDetailSealedTrue:     "はい",
+	RiftWaypointDetailSealedFalse:    "いいえ",
 
-	// Setup related
+	// Waypoint interactive UI
+	WaypointInfoListTitle:                         "ウェイポイント一覧",
+	WaypointInteractiveError:                      "rift：ウェイポイントインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
+	RebindPathInputPlaceHolder:                    "絶対パスを入力してください。空のままにすると現在の作業ディレクトリが使用されます",
+	WaypointRebindTitle:                           "リバインド",
+	ReforgeWaypointNameInputPlaceHolder:           "ウェイポイントの新しい名前を入力してください",
+	WaypointReforgeTitle:                          "リフォージ",
+	WaypointUIUpKeyHelp:                           "上へ",
+	WaypointUIUpKeyHelpDescription:                "前のウェイポイントにカーソルを移動する",
+	WaypointUIDownKeyHelp:                         "下へ",
+	WaypointUIDownKeyHelpDescription:              "次のウェイポイントにカーソルを移動する",
+	WaypointUIQuitKeyHelp:                         "終了",
+	WaypointUIQuitKeyHelpDescription:              "ウェイポイントインタラクティブUIを終了する",
+	WaypointUIHelpKeyHelp:                         "ヘルプ",
+	WaypointUIHelpKeyHelpDescription:              "キーバインド一覧の表示・非表示を切り替える",
+	WaypointNavigateKeyHelp:                       "移動",
+	WaypointNavigateKeyHelpDescription:            "選択したウェイポイントへ移動する",
+	WaypointDestroyKeyHelp:                        "破壊",
+	WaypointDestroyKeyHelpDescription:             "選択したウェイポイントを完全に削除する",
+	WaypointUnsealKeyHelp:                         "封印解除",
+	WaypointUnsealKeyHelpDescription:              "選択したウェイポイントの封印を解除する",
+	WaypointRebindKeyHelp:                         "パスをリバインド",
+	WaypointRebindKeyHelpDescription:              "選択したウェイポイントを新しいパスに再割り当てする",
+	WaypointReforgeKeyHelp:                        "名前をリフォージ",
+	WaypointReforgeKeyHelpDescription:             "選択したウェイポイントを新しい名前に変更する",
+	WaypointNameCopyPathCopyKeyHelp:               "ウェイポイント名 / パスをクリップボードにコピー",
+	WaypointNameCopyPathCopyKeyHelpDescription:    "ウェイポイント名 (y) またはパス (Y) をクリップボードにコピーする",
+	WaypointCopyFromInputValueKeyHelp:             "入力値をコピー",
+	WaypointCopyFromInputValueKeyHelpDescription:  "現在の入力フィールドの内容をクリップボードにコピーする",
+	WaypointPasteIntoInputValueKeyHelp:            "入力欄に貼り付け",
+	WaypointPasteIntoInputValueKeyHelpDescription: "クリップボードの内容を入力フィールドに貼り付ける",
+	WaypointClosePopUp:                            "ポップアップを閉じる",
+	WaypointClosePopUpDescription:                 "保存せずに現在のポップアップを閉じる",
+
+	// Setup
 	CheckAndRunSetupError:  "rift：セットアップに失敗しました、[ERROR: %s]",
 	RiftAutoSetupTriggered: "rift：設定とコンフィグのセットアップが自動的にトリガーされました",
 }
