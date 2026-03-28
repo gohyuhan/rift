@@ -102,6 +102,8 @@ var zH_HANS = LanguageMapping{
 	WaypointInteractiveError:                   "rift：航点交互界面启动失败，[ERROR: %s]",
 	RebindPathInputPlaceHolder:                 "输入绝对路径，留空则使用当前工作目录",
 	WaypointRebindTitle:                        "重新绑定",
+	ReforgeWaypointNameInputPlaceHolder:        "输入航点的新名称",
+	WaypointReforgeTitle:                       "重铸",
 	WaypointUIUpKeyHelp:                        "上移",
 	WaypointUIUpKeyHelpDescription:             "将光标移至上一个航点",
 	WaypointUIDownKeyHelp:                      "下移",

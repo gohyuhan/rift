@@ -102,6 +102,8 @@ var jA = LanguageMapping{
 	WaypointInteractiveError:                   "rift：ウェイポイントインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
 	RebindPathInputPlaceHolder:                 "絶対パスを入力してください。空のままにすると現在の作業ディレクトリが使用されます",
 	WaypointRebindTitle:                        "リバインド",
+	ReforgeWaypointNameInputPlaceHolder:        "ウェイポイントの新しい名前を入力してください",
+	WaypointReforgeTitle:                       "リフォージ",
 	WaypointUIUpKeyHelp:                        "上へ",
 	WaypointUIUpKeyHelpDescription:             "前のウェイポイントにカーソルを移動する",
 	WaypointUIDownKeyHelp:                      "下へ",

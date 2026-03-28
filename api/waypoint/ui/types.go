@@ -129,8 +129,8 @@ type RebindPopUpModel struct {
 
 // ReforgePopUpModel holds the state for the reforge name input popup.
 type ReforgePopUpModel struct {
-	ReforgeNameInput   textinput.Model
-	WaypointName       string
-	Error              error
-	OnInputFuncTrigger func(bboltDb *bbolt.DB, waypointName string, reforgeTo string, logToTerminal bool) error
+	ReforgeWaypointNameInput textinput.Model
+	WaypointName             string
+	Error                    error
+	OnInputFuncTrigger       func(bboltDb *bbolt.DB, waypointName string, reforgeTo string, logToTerminal bool) error
 }

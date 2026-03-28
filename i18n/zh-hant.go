@@ -102,6 +102,8 @@ var zH_HANT = LanguageMapping{
 	WaypointInteractiveError:                   "rift：航點互動介面啟動失敗，[ERROR: %s]",
 	RebindPathInputPlaceHolder:                 "輸入絕對路徑，留空則使用目前工作目錄",
 	WaypointRebindTitle:                        "重新綁定",
+	ReforgeWaypointNameInputPlaceHolder:        "輸入航點的新名稱",
+	WaypointReforgeTitle:                       "重鑄",
 	WaypointUIUpKeyHelp:                        "上移",
 	WaypointUIUpKeyHelpDescription:             "將游標移至上一個航點",
 	WaypointUIDownKeyHelp:                      "下移",

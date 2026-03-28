@@ -12,14 +12,12 @@ import (
 // ----------------------------------
 //
 //	processes key events when the model is not in typing mode;
-//	j/↓ and k/↑ move the cursor and refresh the key map to reflect the sealed
-//	state of the newly focused waypoint; when the help popup is open, j/↓ and
-//	k/↑ scroll the viewport instead; u/U attempts to unseal and rebuilds the
-//	list; r opens the rebind path input popup; R is reserved for the reforge
-//	popup (not yet implemented); y copies the waypoint name to the clipboard;
-//	Y copies the path; ? opens the help popup; enter navigates to the selected
-//	waypoint (skipped if sealed); backspace destroys the selected waypoint and
-//	rebuilds the list
+//	j/↓ and k/↑ move the cursor; when the help popup is open, j/↓ and k/↑
+//	scroll the viewport instead; u/U attempts to unseal and rebuilds the list;
+//	r opens the rebind path input popup; R opens the reforge name input popup;
+//	y copies the waypoint name to the clipboard; Y copies the path;
+//	? opens the help popup; enter navigates to the selected waypoint (skipped
+//	if sealed); backspace destroys the selected waypoint and rebuilds the list
 //
 // ----------------------------------
 func handleNonTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (*WaypointInteractiveModel, tea.Cmd) {
@@ -52,7 +50,15 @@ func handleNonTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg
 		}
 		return m, nil
 	case "R":
-		// reforge (rename) popup — not yet implemented; key is reserved
+		// open the reforge name input popup for the selected waypoint
+		selectedWaypoint := m.WaypointInfoList.SelectedItem()
+		if selectedWaypoint != nil {
+			parsedWaypointName := selectedWaypoint.(waypointInfoItem).WaypointName
+			m.ShowPopUp.Store(true)
+			m.IsTypingMode.Store(true)
+			m.PopUpType = ReforgePopUp
+			initReforgePopUp(m, parsedWaypointName)
+		}
 		return m, nil
 	case "u", "U":
 		if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
@@ -107,10 +113,11 @@ func handleNonTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg
 // ----------------------------------
 //
 //	processes key events when the model is in typing mode (e.g. an input popup
-//	is active); on enter, submits the active popup's input: for RebindPopUp it
-//	calls the stored trigger function and closes the popup on success, or
-//	surfaces the error inline on failure; for all other keys, forwards the
-//	event to the active popup's input component so text editing works normally
+//	is active); on enter, submits the active popup's input: for RebindPopUp and
+//	ReforgePopUp it calls the stored trigger function and closes the popup on
+//	success, or surfaces the error inline on failure; for all other keys,
+//	forwards the event to the active popup's input component so text editing
+//	works normally
 //
 // ----------------------------------
 func handleTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (*WaypointInteractiveModel, tea.Cmd) {
@@ -132,6 +139,20 @@ func handleTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (
 				closePopUp = true
 				initWaypointInfoListModel(m)
 			}
+		case ReforgePopUp:
+			popUp, ok := m.WaypointPopUpModel.(*ReforgePopUpModel)
+			if ok {
+				newWaypointName := strings.TrimSpace(popUp.ReforgeWaypointNameInput.Value())
+				reforgeErr := popUp.OnInputFuncTrigger(m.BboltDb, popUp.WaypointName, newWaypointName, false)
+				if reforgeErr != nil {
+					// surface the error in the popup rather than quitting
+					popUp.Error = reforgeErr
+					return m, nil
+				}
+				closePopUp = true
+				initWaypointInfoListModel(m)
+			}
+
 		}
 
 		if closePopUp {
@@ -150,6 +171,12 @@ func handleTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (
 		popUp, ok := m.WaypointPopUpModel.(*RebindPopUpModel)
 		if ok {
 			popUp.RebindPathInput, cmd = popUp.RebindPathInput.Update(msg)
+			return m, cmd
+		}
+	case ReforgePopUp:
+		popUp, ok := m.WaypointPopUpModel.(*ReforgePopUpModel)
+		if ok {
+			popUp.ReforgeWaypointNameInput, cmd = popUp.ReforgeWaypointNameInput.Update(msg)
 			return m, cmd
 		}
 	}

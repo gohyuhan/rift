@@ -108,6 +108,8 @@ type LanguageMapping struct {
 	WaypointInteractiveError                   string
 	RebindPathInputPlaceHolder                 string
 	WaypointRebindTitle                        string
+	ReforgeWaypointNameInputPlaceHolder        string
+	WaypointReforgeTitle                       string
 	WaypointUIUpKeyHelp                        string
 	WaypointUIUpKeyHelpDescription             string
 	WaypointUIDownKeyHelp                      string

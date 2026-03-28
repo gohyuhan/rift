@@ -122,15 +122,14 @@ func (m *WaypointInteractiveModel) Init() tea.Cmd {
 
 // ----------------------------------
 //
-//	handles terminal resize, cursor navigation, selection, quit, and unseal;
-//	list component initialisation is deferred until the first resize
-//	event so that valid dimensions are available for layout calculation;
-//	enter navigates to the selected waypoint (no-op if sealed);
-//	u/U attempts to unseal the selected waypoint and rebuilds the list
-//	(if the path is still missing the waypoint will be re-sealed immediately);
-//	backspace permanently destroys the selected waypoint and rebuilds the list;
-//	j/k and ↓/↑ move the cursor and refresh the help key map to reflect
-//	the sealed state of the newly focused item
+//	handles terminal resize and key events; list initialisation is deferred
+//	until the first WindowSizeMsg so that valid dimensions are available for
+//	layout calculation; ctrl+c/q always quit; esc closes the active popup
+//	(if any) or quits when no popup is open; all other key events are
+//	dispatched to handleTypingInteraction when a text input popup is active,
+//	or to handleNonTypingInteraction otherwise; the help key map is refreshed
+//	after every key event to stay consistent with the current popup type and
+//	sealed state of the selected waypoint
 //
 // ----------------------------------
 func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {

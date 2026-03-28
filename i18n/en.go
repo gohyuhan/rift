@@ -102,6 +102,8 @@ var eN = LanguageMapping{
 	WaypointInteractiveError:                   "rift: waypoint interactive session failed, [ERROR: %s]",
 	RebindPathInputPlaceHolder:                 "Enter an absolute path, or leave empty to use the current working directory",
 	WaypointRebindTitle:                        "Rebind",
+	ReforgeWaypointNameInputPlaceHolder:        "Enter a new name for the waypoint",
+	WaypointReforgeTitle:                       "Reforge",
 	WaypointUIUpKeyHelp:                        "up",
 	WaypointUIUpKeyHelpDescription:             "move the cursor to the previous waypoint",
 	WaypointUIDownKeyHelp:                      "down",

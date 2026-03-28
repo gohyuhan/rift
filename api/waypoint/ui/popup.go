@@ -19,6 +19,7 @@ func renderPopUpComponent(m *WaypointInteractiveModel) string {
 	case RebindPopUp:
 		return renderRebindPopUp(m)
 	case ReforgePopUp:
+		return renderReforgePopUp(m)
 	}
 	return ""
 }
@@ -68,6 +69,44 @@ func renderRebindPopUp(m *WaypointInteractiveModel) string {
 				lipgloss.Left,
 				i18n.LANGUAGEMAPPING.WaypointRebindTitle,
 				popUp.RebindPathInput.View(),
+			)
+		}
+		return style.BorderStyle.
+			MaxWidth(maxWidth).
+			MaxHeight(maxHeight).
+			Render(content)
+	}
+	return ""
+}
+
+// ----------------------------------
+//
+//	renders the reforge name input popup: sizes the text input to 80 % width,
+//	stacks the title and input vertically, appends a coloured error line when
+//	the last submit attempt failed, then wraps the whole block in a rounded
+//	border; returns an empty string if the popup model is the wrong type
+//
+// ----------------------------------
+func renderReforgePopUp(m *WaypointInteractiveModel) string {
+	popUp, ok := m.WaypointPopUpModel.(*ReforgePopUpModel)
+	if ok {
+		maxWidth := int(float64(m.Width) * 0.8)
+		maxHeight := int(float64(m.Height) * 0.7)
+		popUp.ReforgeWaypointNameInput.SetWidth(maxWidth - TextInputWidthPad)
+		var content string
+		if popUp.Error != nil {
+			errMessage := style.RenderStringWithColor(popUp.Error.Error(), style.ColorError, true)
+			content = lipgloss.JoinVertical(
+				lipgloss.Left,
+				i18n.LANGUAGEMAPPING.WaypointReforgeTitle,
+				popUp.ReforgeWaypointNameInput.View(),
+				errMessage,
+			)
+		} else {
+			content = lipgloss.JoinVertical(
+				lipgloss.Left,
+				i18n.LANGUAGEMAPPING.WaypointReforgeTitle,
+				popUp.ReforgeWaypointNameInput.View(),
 			)
 		}
 		return style.BorderStyle.
