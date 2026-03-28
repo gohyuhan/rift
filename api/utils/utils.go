@@ -1,4 +1,4 @@
-// ----------------------------------
+// -----------------
 //
 //	GENERAL API RELATED UTILS
 //
@@ -148,25 +148,27 @@ func IsVersionGreater(binaryVersion, settingsVersion string) bool {
 //
 // ----------------------------------
 var ReservedCommandKeywords = []string{
-	"rift",
-	"awaken",
-	"discover",
-	"waypoint",
-	"spell",
-	"spellbook",
-	"cast",
-	"ritual",
-	"scroll",
-	"sorcery",
-	"summon",
-	"deploy",
-	"rune",
-	"seer",
-	"recall",
-	"loot",
-	"grimore",
-	"lore",
-	"stats",
+	constant.RIFT_CMD_KEYWORD,
+	constant.AWAKEN_CMD_KEYWORD,
+	constant.DISCOVER_CMD_KEYWORD,
+	constant.WAYPOINT_CMD_KEYWORD,
+	constant.SPELL_CMD_KEYWORD,
+	constant.LEARN_CMD_KEYWORD,
+	constant.SPELLBOOK_CMD_KEYWORD,
+	constant.CAST_CMD_KEYWORD,
+	constant.RITUAL_CMD_KEYWORD,
+	constant.INSCRIBE_CMD_KEYWORD,
+	constant.SCROLL_CMD_KEYWORD,
+	constant.SORCERY_CMD_KEYWORD,
+	constant.SUMMON_CMD_KEYWORD,
+	constant.DEPLOY_CMD_KEYWORD,
+	constant.RUNE_CMD_KEYWORD,
+	constant.SEER_CMD_KEYWORD,
+	constant.RECALL_CMD_KEYWORD,
+	constant.LOOT_CMD_KEYWORD,
+	constant.GRIMOIRE_CMD_KEYWORD,
+	constant.LORE_CMD_KEYWORD,
+	constant.STATS_CMD_KEYWORD,
 }
 
 // ----------------------------------

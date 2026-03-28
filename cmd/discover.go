@@ -1,12 +1,15 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/gohyuhan/rift/api/discover"
+	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
 )
 
-const discoverKeyword = "discover [waypoint name]"
+var discoverKeyword = fmt.Sprintf("%s [waypoint name]", constant.DISCOVER_CMD_KEYWORD)
 
 var discoverCmd = &cobra.Command{
 	Use:  discoverKeyword,

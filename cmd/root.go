@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/gohyuhan/rift/api/root"
@@ -9,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const rootKeyword = "rift [waypoint name]"
+var rootKeyword = fmt.Sprintf("%s [waypoint name]", constant.RIFT_CMD_KEYWORD)
 
 var rootCmd = &cobra.Command{
 	Use:  rootKeyword,
