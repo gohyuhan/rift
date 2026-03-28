@@ -121,7 +121,44 @@ func handleNonTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg
 //
 // ----------------------------------
 func handleTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (*WaypointInteractiveModel, tea.Cmd) {
+	var cmd tea.Cmd
 	switch msg.String() {
+	case "ctrl+y":
+		switch m.PopUpType {
+		case RebindPopUp:
+			popUp, ok := m.WaypointPopUpModel.(*RebindPopUpModel)
+			if ok {
+				clipboard.WriteAll(popUp.RebindPathInput.Value())
+			}
+		case ReforgePopUp:
+			popUp, ok := m.WaypointPopUpModel.(*ReforgePopUpModel)
+			if ok {
+				clipboard.WriteAll(popUp.ReforgeWaypointNameInput.Value())
+			}
+		}
+
+	case "ctrl+p":
+		content, err := clipboard.ReadAll()
+		if err != nil {
+			return m, nil
+		}
+		msg := tea.PasteMsg{
+			Content: content,
+		}
+		switch m.PopUpType {
+		case RebindPopUp:
+			popUp, ok := m.WaypointPopUpModel.(*RebindPopUpModel)
+			if ok {
+				popUp.RebindPathInput, cmd = popUp.RebindPathInput.Update(msg)
+			}
+		case ReforgePopUp:
+			popUp, ok := m.WaypointPopUpModel.(*ReforgePopUpModel)
+			if ok {
+				popUp.ReforgeWaypointNameInput, cmd = popUp.ReforgeWaypointNameInput.Update(msg)
+			}
+		}
+		return m, cmd
+
 	case "enter":
 		closePopUp := false
 
@@ -152,7 +189,6 @@ func handleTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (
 				closePopUp = true
 				initWaypointInfoListModel(m)
 			}
-
 		}
 
 		if closePopUp {
@@ -165,7 +201,6 @@ func handleTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (
 	}
 
 	// forward all other key events to the active popup's input component
-	var cmd tea.Cmd
 	switch m.PopUpType {
 	case RebindPopUp:
 		popUp, ok := m.WaypointPopUpModel.(*RebindPopUpModel)
