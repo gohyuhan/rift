@@ -12,7 +12,7 @@ const (
 // PopUpType sentinel values stored on WaypointInteractiveModel.PopUpType to
 // indicate which popup (if any) is currently active.
 const (
-	NoPopUp      = "NOPOPUP"
+	NoPopUp      = "NoPopUp"
 	RebindPopUp  = "RebindPopUp"
 	ReforgePopUp = "ReforgePopUp"
 	HelpPopUp    = "HelpPopUp"
