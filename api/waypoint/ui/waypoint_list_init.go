@@ -182,73 +182,10 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 	currentSelectedWaypoint := m.WaypointInfoList.SelectedItem()
 	if currentSelectedWaypoint != nil {
 		currentSelectedWaypointInfo := currentSelectedWaypoint.(waypointInfoItem)
-		m.WaypointInfoList.AdditionalFullHelpKeys = initWaypointInfoListKeyMap(NoPopUp, currentSelectedWaypointInfo.WaypointIsSealed)
 		m.WaypointInfoList.AdditionalShortHelpKeys = initShortWaypointInfoListKeyMap(NoPopUp, currentSelectedWaypointInfo.WaypointIsSealed)
 	}
 
 	return nil
-}
-
-// ----------------------------------
-//
-//	returns an AdditionalFullHelpKeys func whose bindings are determined by
-//	popUpType and, when popUpType is NoPopUp, by isSealed; for NoPopUp the
-//	full waypoint action set is returned — sealed items swap the enter
-//	(navigate) binding for u/U (unseal) since navigation is blocked until
-//	the waypoint is explicitly unsealed; for RebindPopUp and ReforgePopUp
-//	the bindings switch to popup-input context: enter submits, ctrl+y copies
-//	the current input value, ctrl+p pastes, and esc closes the popup
-//
-// ----------------------------------
-func initWaypointInfoListKeyMap(popUpType string, isSealed bool) func() []key.Binding {
-	switch popUpType {
-	case NoPopUp:
-		if isSealed {
-			return func() []key.Binding {
-				return []key.Binding{
-					key.NewBinding(key.WithKeys("u", "U"), key.WithHelp("u/U", i18n.LANGUAGEMAPPING.WaypointUnsealKeyHelp)),
-					key.NewBinding(key.WithKeys("r"), key.WithHelp("r", i18n.LANGUAGEMAPPING.WaypointRebindKeyHelp)),
-					key.NewBinding(key.WithKeys("R"), key.WithHelp("R", i18n.LANGUAGEMAPPING.WaypointReforgeKeyHelp)),
-					key.NewBinding(key.WithKeys("y", "Y"), key.WithHelp("y/Y", i18n.LANGUAGEMAPPING.WaypointNameCopyPathCopyKeyHelp)),
-					key.NewBinding(key.WithKeys("backspace"), key.WithHelp("backspace", i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelp)),
-					key.NewBinding(key.WithKeys("q", "esc", "ctrl+c"), key.WithHelp("q/esc/ctrl+c", i18n.LANGUAGEMAPPING.WaypointUIQuitKeyHelp)),
-				}
-			}
-		} else {
-			return func() []key.Binding {
-				return []key.Binding{
-					key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.WaypointNavigateKeyHelp)),
-					key.NewBinding(key.WithKeys("r"), key.WithHelp("r", i18n.LANGUAGEMAPPING.WaypointRebindKeyHelp)),
-					key.NewBinding(key.WithKeys("R"), key.WithHelp("R", i18n.LANGUAGEMAPPING.WaypointReforgeKeyHelp)),
-					key.NewBinding(key.WithKeys("y", "Y"), key.WithHelp("y/Y", i18n.LANGUAGEMAPPING.WaypointNameCopyPathCopyKeyHelp)),
-					key.NewBinding(key.WithKeys("backspace"), key.WithHelp("backspace", i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelp)),
-					key.NewBinding(key.WithKeys("q", "esc", "ctrl+c"), key.WithHelp("q/esc/ctrl+c", i18n.LANGUAGEMAPPING.WaypointUIQuitKeyHelp)),
-				}
-			}
-		}
-	case RebindPopUp:
-		return func() []key.Binding {
-			return []key.Binding{
-				key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.WaypointRebindKeyHelp)),
-				key.NewBinding(key.WithKeys("ctrl+y"), key.WithHelp("ctrl+y", i18n.LANGUAGEMAPPING.WaypointCopyFromInputValueKeyHelp)),
-				key.NewBinding(key.WithKeys("ctrl+p"), key.WithHelp("ctrl+p", i18n.LANGUAGEMAPPING.WaypointPasteIntoInputValueKeyHelp)),
-				key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", i18n.LANGUAGEMAPPING.WaypointClosePopUp)),
-				key.NewBinding(key.WithKeys("q", "ctrl+c"), key.WithHelp("q/ctrl+c", i18n.LANGUAGEMAPPING.WaypointUIQuitKeyHelp)),
-			}
-		}
-	case ReforgePopUp:
-		return func() []key.Binding {
-			return []key.Binding{
-				key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.WaypointReforgeKeyHelp)),
-				key.NewBinding(key.WithKeys("ctrl+y"), key.WithHelp("ctrl+y", i18n.LANGUAGEMAPPING.WaypointCopyFromInputValueKeyHelp)),
-				key.NewBinding(key.WithKeys("ctrl+p"), key.WithHelp("ctrl+p", i18n.LANGUAGEMAPPING.WaypointPasteIntoInputValueKeyHelp)),
-				key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", i18n.LANGUAGEMAPPING.WaypointClosePopUp)),
-				key.NewBinding(key.WithKeys("q", "ctrl+c"), key.WithHelp("q/ctrl+c", i18n.LANGUAGEMAPPING.WaypointUIQuitKeyHelp)),
-			}
-		}
-	}
-
-	return func() []key.Binding { return []key.Binding{} }
 }
 
 // ----------------------------------
@@ -320,6 +257,9 @@ func initWaypointHelpViewport(m *WaypointInteractiveModel) {
 		{Keybinding: "R", Action: i18n.LANGUAGEMAPPING.WaypointReforgeKeyHelp, Description: i18n.LANGUAGEMAPPING.WaypointReforgeKeyHelpDescription},
 		{Keybinding: "y/Y", Action: i18n.LANGUAGEMAPPING.WaypointNameCopyPathCopyKeyHelp, Description: i18n.LANGUAGEMAPPING.WaypointNameCopyPathCopyKeyHelpDescription},
 		{Keybinding: "backspace", Action: i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelp, Description: i18n.LANGUAGEMAPPING.WaypointDestroyKeyHelpDescription},
+		{Keybinding: "ctrl+y", Action: i18n.LANGUAGEMAPPING.WaypointCopyFromInputValueKeyHelp, Description: i18n.LANGUAGEMAPPING.WaypointCopyFromInputValueKeyHelpDescription},
+		{Keybinding: "ctrl+p", Action: i18n.LANGUAGEMAPPING.WaypointPasteIntoInputValueKeyHelp, Description: i18n.LANGUAGEMAPPING.WaypointPasteIntoInputValueKeyHelpDescription},
+		{Keybinding: "esc", Action: i18n.LANGUAGEMAPPING.WaypointClosePopUp, Description: i18n.LANGUAGEMAPPING.WaypointClosePopUpDescription},
 		{Keybinding: "q/esc/ctrl+c", Action: i18n.LANGUAGEMAPPING.WaypointUIQuitKeyHelp, Description: i18n.LANGUAGEMAPPING.WaypointUIQuitKeyHelpDescription},
 	}
 

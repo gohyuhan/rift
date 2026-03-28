@@ -104,35 +104,38 @@ type LanguageMapping struct {
 	RiftWaypointDetailSealedFalse    string
 
 	// Waypoint interactive UI
-	WaypointInfoListTitle                      string
-	WaypointInteractiveError                   string
-	RebindPathInputPlaceHolder                 string
-	WaypointRebindTitle                        string
-	ReforgeWaypointNameInputPlaceHolder        string
-	WaypointReforgeTitle                       string
-	WaypointUIUpKeyHelp                        string
-	WaypointUIUpKeyHelpDescription             string
-	WaypointUIDownKeyHelp                      string
-	WaypointUIDownKeyHelpDescription           string
-	WaypointUIQuitKeyHelp                      string
-	WaypointUIQuitKeyHelpDescription           string
-	WaypointUIHelpKeyHelp                      string
-	WaypointUIHelpKeyHelpDescription           string
-	WaypointNavigateKeyHelp                    string
-	WaypointNavigateKeyHelpDescription         string
-	WaypointDestroyKeyHelp                     string
-	WaypointDestroyKeyHelpDescription          string
-	WaypointUnsealKeyHelp                      string
-	WaypointUnsealKeyHelpDescription           string
-	WaypointRebindKeyHelp                      string
-	WaypointRebindKeyHelpDescription           string
-	WaypointReforgeKeyHelp                     string
-	WaypointReforgeKeyHelpDescription          string
-	WaypointNameCopyPathCopyKeyHelp            string
-	WaypointNameCopyPathCopyKeyHelpDescription string
-	WaypointCopyFromInputValueKeyHelp          string
-	WaypointPasteIntoInputValueKeyHelp         string
-	WaypointClosePopUp                         string
+	WaypointInfoListTitle                         string
+	WaypointInteractiveError                      string
+	RebindPathInputPlaceHolder                    string
+	WaypointRebindTitle                           string
+	ReforgeWaypointNameInputPlaceHolder           string
+	WaypointReforgeTitle                          string
+	WaypointUIUpKeyHelp                           string
+	WaypointUIUpKeyHelpDescription                string
+	WaypointUIDownKeyHelp                         string
+	WaypointUIDownKeyHelpDescription              string
+	WaypointUIQuitKeyHelp                         string
+	WaypointUIQuitKeyHelpDescription              string
+	WaypointUIHelpKeyHelp                         string
+	WaypointUIHelpKeyHelpDescription              string
+	WaypointNavigateKeyHelp                       string
+	WaypointNavigateKeyHelpDescription            string
+	WaypointDestroyKeyHelp                        string
+	WaypointDestroyKeyHelpDescription             string
+	WaypointUnsealKeyHelp                         string
+	WaypointUnsealKeyHelpDescription              string
+	WaypointRebindKeyHelp                         string
+	WaypointRebindKeyHelpDescription              string
+	WaypointReforgeKeyHelp                        string
+	WaypointReforgeKeyHelpDescription             string
+	WaypointNameCopyPathCopyKeyHelp               string
+	WaypointNameCopyPathCopyKeyHelpDescription    string
+	WaypointCopyFromInputValueKeyHelp             string
+	WaypointCopyFromInputValueKeyHelpDescription  string
+	WaypointPasteIntoInputValueKeyHelp            string
+	WaypointPasteIntoInputValueKeyHelpDescription string
+	WaypointClosePopUp                            string
+	WaypointClosePopUpDescription                 string
 
 	// Setup
 	CheckAndRunSetupError  string

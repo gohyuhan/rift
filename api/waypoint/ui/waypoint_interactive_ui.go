@@ -157,7 +157,6 @@ func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.PopUpType = NoPopUp
 				// refresh the help key map to reflect the sealed state of the new selection
 				if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-					m.WaypointInfoList.AdditionalFullHelpKeys = initWaypointInfoListKeyMap(m.PopUpType, i.WaypointIsSealed)
 					m.WaypointInfoList.AdditionalShortHelpKeys = initShortWaypointInfoListKeyMap(m.PopUpType, i.WaypointIsSealed)
 				}
 				return m, nil
@@ -175,7 +174,6 @@ func (m *WaypointInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// refresh the help key map to reflect the sealed state of the new selection
 		if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
-			m.WaypointInfoList.AdditionalFullHelpKeys = initWaypointInfoListKeyMap(m.PopUpType, i.WaypointIsSealed)
 			m.WaypointInfoList.AdditionalShortHelpKeys = initShortWaypointInfoListKeyMap(m.PopUpType, i.WaypointIsSealed)
 		}
 
