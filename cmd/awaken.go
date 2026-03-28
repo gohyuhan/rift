@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"github.com/gohyuhan/rift/api/awaken"
+	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
 )
 
-const awakenKeyword = "awaken"
+var awakenKeyword = constant.AWAKEN_CMD_KEYWORD
 
 var awakenCmd = &cobra.Command{
 	Use:  awakenKeyword,

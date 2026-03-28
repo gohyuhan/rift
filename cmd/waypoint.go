@@ -1,12 +1,15 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/gohyuhan/rift/api/waypoint"
+	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/spf13/cobra"
 )
 
-const waypointKeyword = "waypoint [waypoint name <optional>]"
+var waypointKeyword = fmt.Sprintf("%s [waypoint name <optional>]", constant.WAYPOINT_CMD_KEYWORD)
 
 var waypointCmd = &cobra.Command{
 	Use:  waypointKeyword,
