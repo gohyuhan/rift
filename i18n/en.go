@@ -79,6 +79,7 @@ var eN = LanguageMapping{
 	RiftSpellUpdated:          "rift: spell %q updated -> %s",
 	RiftSpellDoNotExistsError: "rift: spell %q does not exist",
 	RiftSpellUpdateError:      "rift: failed to update spell %q, [ERROR: %s]",
+	ForbiddenCDSpellCommand:   "rift: terminal commands that change the working path are not allowed as a spell",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift: saved %q -> %s",

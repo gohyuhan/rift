@@ -85,6 +85,7 @@ type LanguageMapping struct {
 	RiftSpellUpdated          string
 	RiftSpellDoNotExistsError string
 	RiftSpellUpdateError      string
+	ForbiddenCDSpellCommand   string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string

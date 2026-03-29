@@ -79,6 +79,7 @@ var jA = LanguageMapping{
 	RiftSpellUpdated:          "rift：スペル %q を更新しました -> %s",
 	RiftSpellDoNotExistsError: "rift：スペル %q は存在しません",
 	RiftSpellUpdateError:      "rift：スペル %q の更新に失敗しました、[ERROR: %s]",
+	ForbiddenCDSpellCommand:   "rift：作業パスを変更するターミナルコマンドはスペルとして使用できません",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",

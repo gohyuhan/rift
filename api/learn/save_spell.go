@@ -2,6 +2,7 @@ package learn
 
 import (
 	"fmt"
+	"slices"
 	"time"
 
 	"github.com/gohyuhan/rift/db"
@@ -24,6 +25,11 @@ func saveSpell(bboltDb *bbolt.DB, spellName string, spellCommandArray []string) 
 		bucket := tx.Bucket(db.SpellBucket)
 		if bucket == nil {
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellBucketNotFoundError, style.ColorError, false))
+		}
+
+		if slices.Contains(spellCommandArray, "cd") {
+			errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ForbiddenCDSpellCommand, style.ColorError, false)
+			return fmt.Errorf("%s", errMessage)
 		}
 
 		existing := bucket.Get([]byte(spellName))

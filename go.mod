@@ -12,6 +12,7 @@ require (
 	go.etcd.io/bbolt v1.4.3
 	golang.org/x/mod v0.34.0
 	google.golang.org/protobuf v1.36.11
+	mvdan.cc/sh/v3 v3.13.0
 )
 
 require (

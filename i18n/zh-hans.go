@@ -79,6 +79,7 @@ var zH_HANS = LanguageMapping{
 	RiftSpellUpdated:          "rift：咒语 %q 已更新 -> %s",
 	RiftSpellDoNotExistsError: "rift：咒语 %q 不存在",
 	RiftSpellUpdateError:      "rift：更新咒语 %q 失败，[ERROR: %s]",
+	ForbiddenCDSpellCommand:   "rift：会更改工作路径的终端命令不能作为咒语使用",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：已保存 %q -> %s",

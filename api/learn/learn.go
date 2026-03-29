@@ -10,6 +10,7 @@ import (
 	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/style"
 	"github.com/spf13/cobra"
+	"mvdan.cc/sh/v3/shell"
 )
 
 // ----------------------------------
@@ -23,7 +24,10 @@ import (
 var RiftLearnFunc = func(command *cobra.Command, args []string) error {
 	spellName := strings.TrimSpace(args[0])
 	spellCmd := strings.TrimSpace(args[1])
-	spellCmdArray := strings.Fields(spellCmd)
+	spellCmdArray, spellCmdArrayErr := shell.Fields(spellCmd, nil)
+	if spellCmdArrayErr != nil {
+		return spellCmdArrayErr
+	}
 
 	// reject names that clash with rift's own subcommands
 	if err := apiUtils.CheckIfKeywordIsReservedForRift(spellName); err != nil {
