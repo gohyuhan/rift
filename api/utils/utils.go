@@ -11,6 +11,7 @@ import (
 	"os"
 	"slices"
 	"strings"
+	"unicode"
 
 	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/db"

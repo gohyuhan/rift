@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package store;
+package proto;
 
 option go_package = "github.com/gohyuhan/rift/proto";
 
