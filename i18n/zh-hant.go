@@ -74,6 +74,7 @@ var zH_HANT = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "將現有航點重新命名為新名稱",
 	RiftFlagUpdateDescription:             "手動觸發檢查最新版本，如有可用更新則進行升級",
 	RiftFlagVersionDescription:            "列印 rift 的目前版本",
+	RiftFlagCastDescription:               "取代導航，對航點的路徑施放已習得的咒語；咒語命令將在航點的路徑作為工作目錄時執行",
 	RiftFlagRetrieveError:                 "rift：取得旗標 %q 失敗，[ERROR: %s]",
 
 	// Spell operations

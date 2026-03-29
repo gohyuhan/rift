@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/gohyuhan/rift/api/spell"
 	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/db"
@@ -17,13 +18,18 @@ import (
 
 // ----------------------------------
 //
-//	Cobra handler for the root rift command.
-//	If --update is passed, triggers an immediate update check and returns.
-//	If --version is passed, prints the current app version and returns.
-//	When called with no args, it handles settings flags (language, autoupdate,
-//	download-pre-release); if no flags were passed it falls through to help.
-//	When called with an arg, it travels to the named waypoint by printing a
-//	cd command for the shell wrapper to eval, then increments the travel count.
+//		Cobra handler for the root rift command.
+//		If --update is passed, triggers an immediate update check and returns.
+//		If --version is passed, prints the current app version and returns.
+//
+//		When called with no args, it handles settings flags (language, autoupdate,
+//		download-pre-release); if no flags were passed it falls through to help.
+//
+//		When called with an arg, it travels to the named waypoint by printing a
+//		cd command for the shell wrapper to eval, then increments the travel count.
+//
+//		If --cast is passed with a spell name, it casts the spell at the waypoint path
+//	    instead of just traveling there.
 //
 // ----------------------------------
 var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
@@ -77,6 +83,7 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 	}
 
 	waypointName := strings.TrimSpace(args[0])
+	castFlagCalled := cmd.Flags().Changed("cast")
 
 	// open DB for reading waypoint data
 	bboltDB, bboltDBErr := db.OpenDB()
@@ -91,11 +98,21 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 		return retrieveErr
 	}
 
-	// Only this line goes to stdout — the shell wrapper evals it.
-	fmt.Printf("cd %q", retrievedPath)
+	if castFlagCalled {
+		// retrieve the spell name from the --cast flag; errors here are user-visible (missing, corrupted)
+		castArg, castArgErr := cmd.Flags().GetString("cast")
+		if castArgErr != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "cast", castArgErr.Error()), style.ColorError, false))
+		}
 
-	// best-effort: increment travel count; failure is silently ignored
-	apiUtils.UpdateWaypointTravelledCount(bboltDB, waypointName)
+		return spell.RetrieveAndCastSpell(bboltDB, castArg, retrievedPath)
+	} else {
+		// Only this line goes to stdout — the shell wrapper evals it.
+		fmt.Printf("cd %q", retrievedPath)
+
+		// best-effort: increment travel count; failure is silently ignored
+		apiUtils.UpdateWaypointTravelledCount(bboltDB, waypointName)
+	}
 
 	return nil
 }

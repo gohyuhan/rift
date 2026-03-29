@@ -74,6 +74,7 @@ var eN = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "Rename an existing waypoint to a new name",
 	RiftFlagUpdateDescription:             "Manually trigger a check for the latest version and update if available",
 	RiftFlagVersionDescription:            "Print the current version of rift",
+	RiftFlagCastDescription:               "Instead of navigation, cast a learned spell on the waypoint's path; the spell command will be executed with the waypoint's path as the working directory",
 	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
 
 	// Spell operations

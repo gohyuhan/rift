@@ -74,6 +74,7 @@ var jA = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "既存のウェイポイントを新しい名前に変更します",
 	RiftFlagUpdateDescription:             "最新バージョンの確認を手動でトリガーし、利用可能な場合はアップデートします",
 	RiftFlagVersionDescription:            "rift の現在のバージョンを表示します",
+	RiftFlagCastDescription:               "ナビゲーションの代わりに、習得したスペルをウェイポイントのパスでキャストします。スペルコマンドは、ウェイポイントのパスを作業ディレクトリとして実行されます",
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 
 	// Spell operations
