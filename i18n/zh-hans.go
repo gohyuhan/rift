@@ -78,13 +78,13 @@ var zH_HANS = LanguageMapping{
 	RiftSpellSaved:            "rift：已习得 %q -> %s",
 	RiftSpellUpdated:          "rift：咒语 %q 已更新 -> %s",
 	RiftSpellDoNotExistsError: "rift：咒语 %q 不存在",
-	RiftSpellUpdateError:      "rift：更新咒语 %q 失败",
+	RiftSpellUpdateError:      "rift：更新咒语 %q 失败，[ERROR: %s]",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：已保存 %q -> %s",
 	RiftWaypointAlreadyExistsError:        "航点 %q 已存在，指向 %s",
 	RiftWaypointDoNotExistsError:          "rift：航点 %q 不存在",
-	RiftWaypointUpdateError:               "rift：更新航点 %q 失败",
+	RiftWaypointUpdateError:               "rift：更新航点 %q 失败，[ERROR: %s]",
 	RiftWaypointSealedError:               "rift：航点 %q 已封印，无法前往，原因：%q",
 	RiftWaypointSealedLabel:               "（已封印）",
 	RiftWaypointRetrieveAllError:          "rift：获取航点列表失败",

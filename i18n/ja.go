@@ -78,13 +78,13 @@ var jA = LanguageMapping{
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
 	RiftSpellUpdated:          "rift：スペル %q を更新しました -> %s",
 	RiftSpellDoNotExistsError: "rift：スペル %q は存在しません",
-	RiftSpellUpdateError:      "rift：スペル %q の更新に失敗しました",
+	RiftSpellUpdateError:      "rift：スペル %q の更新に失敗しました、[ERROR: %s]",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",
 	RiftWaypointAlreadyExistsError:        "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:          "rift：ウェイポイント %q は存在しません",
-	RiftWaypointUpdateError:               "rift：ウェイポイント %q の更新に失敗しました",
+	RiftWaypointUpdateError:               "rift：ウェイポイント %q の更新に失敗しました、[ERROR: %s]",
 	RiftWaypointSealedError:               "rift：ウェイポイント %q は封印されており、移動できません。理由：%q",
 	RiftWaypointSealedLabel:               "(封印済み)",
 	RiftWaypointRetrieveAllError:          "rift：ウェイポイントの取得に失敗しました",

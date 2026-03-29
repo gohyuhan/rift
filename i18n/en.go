@@ -78,13 +78,13 @@ var eN = LanguageMapping{
 	RiftSpellSaved:            "rift: learned %q -> %s",
 	RiftSpellUpdated:          "rift: spell %q updated -> %s",
 	RiftSpellDoNotExistsError: "rift: spell %q does not exist",
-	RiftSpellUpdateError:      "rift: failed to update spell %q",
+	RiftSpellUpdateError:      "rift: failed to update spell %q, [ERROR: %s]",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift: saved %q -> %s",
 	RiftWaypointAlreadyExistsError:        "Waypoint %q already exists, pointing to %s",
 	RiftWaypointDoNotExistsError:          "rift: waypoint %q does not exist",
-	RiftWaypointUpdateError:               "rift: failed to update waypoint %q",
+	RiftWaypointUpdateError:               "rift: failed to update waypoint %q, [ERROR: %s]",
 	RiftWaypointSealedError:               "rift: waypoint %q is sealed and cannot be travelled to due to %q",
 	RiftWaypointSealedLabel:               "(SEALED)",
 	RiftWaypointRetrieveAllError:          "rift: failed to retrieve waypoints",

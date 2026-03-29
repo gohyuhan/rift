@@ -78,7 +78,7 @@ func GetSpellForUpdate(tx *bbolt.Tx, spellName string) (*bbolt.Bucket, *pb.Spell
 func PutSpell(bucket *bbolt.Bucket, spellName string, spell *pb.Spell) error {
 	data, err := proto.Marshal(spell)
 	if err != nil {
-		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSpellUpdateError, spellName), style.ColorError, false))
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSpellUpdateError, spellName, err.Error()), style.ColorError, false))
 	}
 	return bucket.Put([]byte(spellName), data)
 }
