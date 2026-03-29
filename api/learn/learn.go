@@ -15,9 +15,9 @@ import (
 // ----------------------------------
 //
 //	Cobra handler for the learn command.
-//	Resolves the current working directory, validates it is a real directory,
-//	guards against reserved keyword names, then persists the waypoint mapping
-//	(name → CWD) into the DB.
+//	Validates the spell name against reserved keywords and naming rules,
+//	then persists the spell (name → command) into the DB,
+//	creating a new entry or overriding an existing one.
 //
 // ----------------------------------
 var RiftLearnFunc = func(command *cobra.Command, args []string) error {

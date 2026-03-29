@@ -90,7 +90,7 @@ func PutSpell(bucket *bbolt.Bucket, spellName string, spell *pb.Spell) error {
 //	spell does not exist.
 //
 // ----------------------------------
-func UpdateWaypointCastedCount(bboltDb *bbolt.DB, spellName string) error {
+func UpdateSpellCastedCount(bboltDb *bbolt.DB, spellName string) error {
 	return bboltDb.Update(func(tx *bbolt.Tx) error {
 		bucket, spell, err := GetSpellForUpdate(tx, spellName)
 		if err != nil {
