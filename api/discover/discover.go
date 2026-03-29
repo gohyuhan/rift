@@ -44,6 +44,11 @@ var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
 		return err
 	}
 
+	// reject names that contain spaces
+	if err := apiUtils.IsNickNameValid(waypointName); err != nil {
+		return err
+	}
+
 	// open DB and persist the new waypoint
 	bboltDB, bboltDBErr := db.OpenDB()
 	if bboltDBErr != nil {
