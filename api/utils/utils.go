@@ -209,7 +209,7 @@ func GetFlagString(cmd *cobra.Command, flagName string) (string, error) {
 //
 // ----------------------------------
 func IsNickNameValid(nickname string) error {
-	if strings.Contains(nickname, " ") {
+	if strings.IndexFunc(nickname, unicode.IsSpace) != -1 {
 		return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.InvalidValueProvided, style.ColorError, false))
 	}
 
