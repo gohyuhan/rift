@@ -32,6 +32,8 @@ type LanguageMapping struct {
 	DBOpenError                 string
 	WaypointBucketNotFoundError string
 	WaypointDataCorruptedError  string
+	SpellBucketNotFoundError    string
+	SpellDataCorruptedError     string
 
 	// Updater
 	UpdaterDownloadPrompt               string
@@ -67,6 +69,7 @@ type LanguageMapping struct {
 	RiftAwakenDescription                 string
 	RiftDiscoverDescription               string
 	RiftWaypointDescription               string
+	RiftLearnDescription                  string
 	RiftFlagLanguageDescription           string
 	RiftFlagAutoUpdateDescription         string
 	RiftFlagDownloadPreReleaseDescription string
@@ -76,6 +79,12 @@ type LanguageMapping struct {
 	RiftFlagUpdateDescription             string
 	RiftFlagVersionDescription            string
 	RiftFlagRetrieveError                 string
+
+	// Spell operations
+	RiftSpellSaved            string
+	RiftSpellUpdated          string
+	RiftSpellDoNotExistsError string
+	RiftSpellUpdateError      string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string

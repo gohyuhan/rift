@@ -26,6 +26,8 @@ var zH_HANS = LanguageMapping{
 	DBOpenError:                 "数据库打开失败 — 数据库可能被上一个未正常退出的进程锁定，或有另一个 rift 进程正在运行。若 rift 曾崩溃或被强制终止，请运行 `lsof | grep rift.db` 找到并终止残留进程后重试。若为全新安装，请运行 `rift awaken` 进行初始化",
 	WaypointBucketNotFoundError: "在数据库中找不到航点存储区，请重新运行 `rift awaken`",
 	WaypointDataCorruptedError:  "航点 [%s] 的数据已损坏，无法读取",
+	SpellBucketNotFoundError:    "在数据库中找不到咒语存储区，请重新运行 `rift awaken`",
+	SpellDataCorruptedError:     "咒语 [%s] 的数据已损坏，无法读取",
 
 	// Updater
 	UpdaterDownloadPrompt:               "发现新版本 %s，是否立即下载？(y/n): ",
@@ -60,7 +62,8 @@ var zH_HANS = LanguageMapping{
 	RiftDescription:                       "通过您预先定义的检查点名称轻松导航路径",
 	RiftAwakenDescription:                 "在您的 Shell 中唤醒 rift【首次使用前请执行此命令进行设置与初始化】",
 	RiftDiscoverDescription:               "为当前工作目录指定一个航点名称",
-	RiftWaypointDescription:               "列出所有航点或显示指定航点的详细信息",
+	RiftWaypointDescription:               "启动航点交互界面或显示指定航点的详细信息",
+	RiftLearnDescription:                  "通过为指令指定名称来教 rift 一个新咒语；多词指令请用引号括起（例：rift learn build \"docker compose up --build\"）",
 	RiftFlagLanguageDescription:           "设置 rift 的语言（支持：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "设置 rift 是否自动检查更新（使用 --autoupdate 设为启用，--autoupdate=false 设为禁用）",
 	RiftFlagDownloadPreReleaseDescription: "设置 rift 是否也下载预发布版本，或仅限稳定版本（使用 --download-pre-release 设为启用，--download-pre-release=false 设为禁用）",
@@ -70,6 +73,12 @@ var zH_HANS = LanguageMapping{
 	RiftFlagUpdateDescription:             "手动触发检查最新版本，如有可用更新则进行升级",
 	RiftFlagVersionDescription:            "打印 rift 的当前版本",
 	RiftFlagRetrieveError:                 "rift：获取标志 %q 失败，[ERROR: %s]",
+
+	// Spell operations
+	RiftSpellSaved:            "rift：已习得 %q -> %s",
+	RiftSpellUpdated:          "rift：咒语 %q 已更新 -> %s",
+	RiftSpellDoNotExistsError: "rift：咒语 %q 不存在",
+	RiftSpellUpdateError:      "rift：更新咒语 %q 失败",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：已保存 %q -> %s",

@@ -26,6 +26,8 @@ var zH_HANT = LanguageMapping{
 	DBOpenError:                 "資料庫開啟失敗 — 資料庫可能被上一個未正常退出的程序鎖定，或另一個 rift 程序正在執行中。若 rift 曾崩潰或被強制結束，請執行 `lsof | grep rift.db` 找到並終止殘留程序後重試。若為全新安裝，請執行 `rift awaken` 進行初始化",
 	WaypointBucketNotFoundError: "在資料庫中找不到航點儲存區，請重新執行 `rift awaken`",
 	WaypointDataCorruptedError:  "航點 [%s] 的資料已損毀，無法讀取",
+	SpellBucketNotFoundError:    "在資料庫中找不到咒語儲存區，請重新執行 `rift awaken`",
+	SpellDataCorruptedError:     "咒語 [%s] 的資料已損毀，無法讀取",
 
 	// Updater
 	UpdaterDownloadPrompt:               "發現新版本 %s，是否立即下載？(y/n): ",
@@ -60,7 +62,8 @@ var zH_HANT = LanguageMapping{
 	RiftDescription:                       "透過您預先定義的檢查點名稱輕鬆導航路徑",
 	RiftAwakenDescription:                 "在您的 Shell 中喚醒 rift【首次使用前請執行此指令進行設定與初始化】",
 	RiftDiscoverDescription:               "為目前工作目錄指定一個航點名稱",
-	RiftWaypointDescription:               "列出所有航點或顯示指定航點的詳細資訊",
+	RiftWaypointDescription:               "啟動航點互動介面或顯示指定航點的詳細資訊",
+	RiftLearnDescription:                  "透過為指令指定名稱來教 rift 一個新咒語；多詞指令請用引號括起（例：rift learn build \"docker compose up --build\"）",
 	RiftFlagLanguageDescription:           "設定 rift 的語言（支援：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "設定 rift 是否自動檢查更新（使用 --autoupdate 設為啟用，--autoupdate=false 設為停用）",
 	RiftFlagDownloadPreReleaseDescription: "設定 rift 是否也下載預發布版本，或僅限穩定版本（使用 --download-pre-release 設為啟用，--download-pre-release=false 設為停用）",
@@ -70,6 +73,12 @@ var zH_HANT = LanguageMapping{
 	RiftFlagUpdateDescription:             "手動觸發檢查最新版本，如有可用更新則進行升級",
 	RiftFlagVersionDescription:            "列印 rift 的目前版本",
 	RiftFlagRetrieveError:                 "rift：取得旗標 %q 失敗，[ERROR: %s]",
+
+	// Spell operations
+	RiftSpellSaved:            "rift：已習得 %q -> %s",
+	RiftSpellUpdated:          "rift：咒語 %q 已更新 -> %s",
+	RiftSpellDoNotExistsError: "rift：咒語 %q 不存在",
+	RiftSpellUpdateError:      "rift：更新咒語 %q 失敗",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：已儲存 %q -> %s",

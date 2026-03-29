@@ -26,6 +26,8 @@ var eN = LanguageMapping{
 	DBOpenError:                 "Failed to open database — the database may be locked by a previous session that did not exit cleanly, or another rift process is already running. If rift crashed or was force-killed, run `lsof | grep rift.db` to find and kill the stale process, then retry. If this is a fresh install, run `rift awaken` for initialization",
 	WaypointBucketNotFoundError: "Waypoint bucket not found in database, perhaps rerun `rift awaken`",
 	WaypointDataCorruptedError:  "Waypoint data for [%s] is corrupted and could not be read",
+	SpellBucketNotFoundError:    "Spell bucket not found in database, perhaps rerun `rift awaken`",
+	SpellDataCorruptedError:     "Spell data for [%s] is corrupted and could not be read",
 
 	// Updater
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
@@ -60,7 +62,8 @@ var eN = LanguageMapping{
 	RiftDescription:                       "Navigate path easily by your predefined waypoint name",
 	RiftAwakenDescription:                 "Awaken rift within your shell [setup and initialize for the first time for using rift]",
 	RiftDiscoverDescription:               "Assign a waypoint name to the current working directory",
-	RiftWaypointDescription:               "List all waypoints or display info for a specific waypoint",
+	RiftWaypointDescription:               "Start interactive UI for waypoints or display info for a specific waypoint",
+	RiftLearnDescription:                  "Teach rift a new spell by assigning a name to a command; wrap multi-word commands in quotes (e.g. rift learn build \"docker compose up --build\")",
 	RiftFlagLanguageDescription:           "Set the language for rift (supported: EN, JA, ZH-HANS, ZH-HANT)",
 	RiftFlagAutoUpdateDescription:         "Set whether rift should automatically check for updates (use --autoupdate to set true, --autoupdate=false to set false)",
 	RiftFlagDownloadPreReleaseDescription: "Set whether rift should also download pre-release versions, or only stable releases (use --download-pre-release to set true, --download-pre-release=false to set false)",
@@ -70,6 +73,12 @@ var eN = LanguageMapping{
 	RiftFlagUpdateDescription:             "Manually trigger a check for the latest version and update if available",
 	RiftFlagVersionDescription:            "Print the current version of rift",
 	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
+
+	// Spell operations
+	RiftSpellSaved:            "rift: learned %q -> %s",
+	RiftSpellUpdated:          "rift: spell %q updated -> %s",
+	RiftSpellDoNotExistsError: "rift: spell %q does not exist",
+	RiftSpellUpdateError:      "rift: failed to update spell %q",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift: saved %q -> %s",
