@@ -80,11 +80,18 @@ rift discover ui
 
 ### travel
 
-Tears open a rift and teleports you to the directory bound to a waypoint name.
+Tears open a rift and teleports you to the directory bound to a waypoint name. Pass `--cast` to run a spell at the waypoint's path instead of navigating there.
 
 ```sh
 rift <name>
+rift <name> --cast <spell-name>
 ```
+
+**Flags**
+
+| Flag | Description |
+| ---- | ----------- |
+| `--cast <spell-name>` | Cast the named spell with the waypoint's path as the working directory instead of navigating there |
 
 **Examples**
 
@@ -95,11 +102,17 @@ rift api
 
 rift ui
 # You are now at /Users/alice/projects/frontend/src/components
+
+# Cast a spell at a waypoint's path without changing your current directory
+rift api --cast build
+# runs: docker compose up --build (in /Users/alice/projects/backend/src/api)
 ```
 
 **Notes**
 - If the waypoint name does not exist, rift will tell you.
 - Waypoints persist across sessions — discover once, travel forever.
+- `--cast` requires the named spell to have been saved with `rift learn`.
+- When `--cast` is used, your working directory does not change.
 
 ---
 
@@ -221,11 +234,18 @@ rift learn build "make build"
 
 ### spell
 
-Casts a learned spell by name — runs its bound terminal command in the current working directory.
+Casts a learned spell by name — runs its bound terminal command in the current working directory. Pass `--forget` to remove the spell instead.
 
 ```sh
 rift spell <name>
+rift spell <name> --forget
 ```
+
+**Flags**
+
+| Flag | Description |
+| ---- | ----------- |
+| `--forget` | Permanently removes the named spell from rift's memory |
 
 **Examples**
 
@@ -235,12 +255,17 @@ rift spell build
 
 rift spell test
 # runs: go test ./...
+
+# Remove a spell
+rift spell build --forget
+# rift: spell "build" forgotten
 ```
 
 **Notes**
 - The spell must have been saved with `rift learn` before it can be cast.
 - The command runs in the directory you are in when you invoke `rift spell` — it does not change your working directory.
 - The exit code of the bound command is not propagated; rift is a launcher, not a validator of the command's outcome.
+- `--forget` is permanent — the spell cannot be recovered after removal.
 
 ---
 

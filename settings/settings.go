@@ -36,7 +36,11 @@ var RiftDefaultConfigSettings = RiftSettings{
 
 // ----------------------------------
 //
-//	InitOrReadSettings loads existing config, ensures schema correctness, or creates default.
+//	Loads the settings file from disk into RIFTSETTINGS and initializes the i18n
+//	mapping. If the file does not exist, a default settings file is written first.
+//	If the file is unreadable or unparseable, a default settings file is written
+//	and used instead. Any fields that are zero-valued or invalid are repaired and
+//	persisted before the settings object is stored in RIFTSETTINGS.
 //
 // ----------------------------------
 func InitOrReadSettings() {
@@ -124,7 +128,8 @@ func ensureConfigIntegrity(cfg *RiftSettings, def *RiftSettings) bool {
 
 // ----------------------------------
 //
-//	Update and persist the last update check time to current UTC time
+//	Sets LastUpdateCheckTime to the current UTC time and persists the change
+//	to disk. Errors from the settings path lookup are silently ignored.
 //
 // ----------------------------------
 func UpdateLastFetchTime() {
@@ -137,7 +142,8 @@ func UpdateLastFetchTime() {
 
 // ----------------------------------
 //
-//	Persist the given config settings to disk as JSON
+//	Serializes settings to indented JSON and writes it to settingsPath,
+//	overwriting any existing file. Logs a user-visible error on failure.
 //
 // ----------------------------------
 func saveSettings(settingsPath string, settings RiftSettings) {
@@ -156,7 +162,7 @@ func saveSettings(settingsPath string, settings RiftSettings) {
 
 // ----------------------------------
 //
-//	Write the default config settings to disk
+//	Writes RiftDefaultConfigSettings to settingsPath via saveSettings.
 //
 // ----------------------------------
 func writeDefaultSettings(settingsPath string) {
@@ -165,7 +171,9 @@ func writeDefaultSettings(settingsPath string) {
 
 // ----------------------------------
 //
-//	Update and persist the language code setting
+//	Validates languageCode against the supported list, then persists it and
+//	reinitializes the i18n mapping. Logs an error if the code is unsupported
+//	or the settings path cannot be resolved.
 //
 // ----------------------------------
 func UpdateLanguageCode(languageCode string) {
@@ -191,7 +199,8 @@ func UpdateLanguageCode(languageCode string) {
 
 // ----------------------------------
 //
-//	Update version in settings record
+//	Updates the Version field in RIFTSETTINGS and persists the change to disk.
+//	Errors from the settings path lookup are silently ignored.
 //
 // ----------------------------------
 func UpdateVersion(version string) {
@@ -204,7 +213,8 @@ func UpdateVersion(version string) {
 
 // ----------------------------------
 //
-//	Update download pre release setting
+//	Updates the DownloadPreRelease field in RIFTSETTINGS, persists the change,
+//	and logs a confirmation. Logs an error if the settings path cannot be resolved.
 //
 // ----------------------------------
 func UpdateDownloadPreRelease(downloadPreRelease bool) {
@@ -222,7 +232,8 @@ func UpdateDownloadPreRelease(downloadPreRelease bool) {
 
 // ----------------------------------
 //
-//	Update autoUpdate setting
+//	Updates the AutoUpdate field in RIFTSETTINGS, persists the change, and
+//	logs a confirmation. Logs an error if the settings path cannot be resolved.
 //
 // ----------------------------------
 func UpdateAutoUpdate(autoUpdate bool) {

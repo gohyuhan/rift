@@ -15,8 +15,8 @@ import (
 
 // ----------------------------------
 //
-//	Persists a new spell (name → path) into the spell bucket.
-//	learn on existing spell name will overwrite the command, reset the cast count, and update the added timestamp to now.
+//	Persists a new spell (name → command) into the spell bucket.
+//	Learning an existing spell name overwrites the command, resets the cast count, and updates the added timestamp to now.
 //
 // ----------------------------------
 func saveSpell(bboltDb *bbolt.DB, spellName string, spellCommandArray []string) (bool, error) {
