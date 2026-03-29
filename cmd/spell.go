@@ -23,6 +23,7 @@ var spellCmd = &cobra.Command{
 //
 // ----------------------------------
 func init() {
+	spellCmd.Flags().Bool("forget", false, "")
 	rootCmd.AddCommand(spellCmd)
 }
 
@@ -33,4 +34,5 @@ func init() {
 // ----------------------------------
 func initSpellI18n() {
 	spellCmd.Short = i18n.LANGUAGEMAPPING.RiftSpellDescription
+	spellCmd.Flags().Lookup("forget").Usage = i18n.LANGUAGEMAPPING.RiftFlagSpellForgetDescription
 }

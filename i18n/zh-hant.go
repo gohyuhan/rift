@@ -69,6 +69,7 @@ var zH_HANT = LanguageMapping{
 	RiftFlagAutoUpdateDescription:         "設定 rift 是否自動檢查更新（使用 --autoupdate 設為啟用，--autoupdate=false 設為停用）",
 	RiftFlagDownloadPreReleaseDescription: "設定 rift 是否也下載預發布版本，或僅限穩定版本（使用 --download-pre-release 設為啟用，--download-pre-release=false 設為停用）",
 	RiftFlagWaypointDestroyDescription:    "依名稱移除一個航點",
+	RiftFlagSpellForgetDescription:        "依名稱移除一個已儲存的咒語",
 	RiftFlagWaypointRebindDescription:     "將現有航點重新綁定至新路徑；未提供路徑時預設使用目前工作目錄，提供有效絕對路徑時優先使用該路徑",
 	RiftFlagWaypointReforgeDescription:    "將現有航點重新命名為新名稱",
 	RiftFlagUpdateDescription:             "手動觸發檢查最新版本，如有可用更新則進行升級",
@@ -78,6 +79,8 @@ var zH_HANT = LanguageMapping{
 	// Spell operations
 	RiftSpellSaved:            "rift：已習得 %q -> %s",
 	RiftSpellUpdated:          "rift：咒語 %q 已更新 -> %s",
+	RiftSpellForgetSuccess:    "rift：咒語 %q 已被遺忘",
+	RiftSpellForgetError:      "rift：遺忘咒語 %q 失敗，[ERROR: %s]",
 	RiftSpellDoNotExistsError: "rift：咒語 %q 不存在",
 	RiftSpellUpdateError:      "rift：更新咒語 %q 失敗，[ERROR: %s]",
 	ForbiddenCDSpellCommand:   "rift：會更改工作路徑的終端命令不能作為咒語使用",

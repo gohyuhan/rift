@@ -17,25 +17,32 @@ import (
 // ----------------------------------
 //
 //	Cobra handler for the spell command.
-//	Looks up the named spell in the DB, executes its bound terminal command,
-//	then increments the spell's cast count.
+//	Dispatches to ForgetSpell when --forget is passed, otherwise resolves
+//	the current working directory and casts the named spell via
+//	RetrieveAndCastSpell.
 //
 // ----------------------------------
 var RiftSpellFunc = func(cmd *cobra.Command, args []string) error {
 	spellName := strings.TrimSpace(args[0])
+	// --forget and casting are mutually exclusive; check which path to take
+	forgetFlagCalled := cmd.Flags().Changed("forget")
 
-	// open DB for reading spell data
+	// open DB — shared across both the forget and cast paths
 	bboltDB, bboltDBErr := db.OpenDB()
 	if bboltDBErr != nil {
 		return bboltDBErr
 	}
 	defer db.CloseDB(bboltDB)
 
-	executionPath, executionPathErr := utils.GetCWD()
-	if executionPathErr != nil {
-		return executionPathErr
+	if forgetFlagCalled {
+		return ForgetSpell(bboltDB, spellName, true)
+	} else {
+		executionPath, executionPathErr := utils.GetCWD()
+		if executionPathErr != nil {
+			return executionPathErr
+		}
+		return RetrieveAndCastSpell(bboltDB, spellName, executionPath)
 	}
-	return RetrieveAndCastSpell(bboltDB, spellName, executionPath)
 }
 
 // ----------------------------------

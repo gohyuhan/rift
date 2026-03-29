@@ -69,6 +69,7 @@ var jA = LanguageMapping{
 	RiftFlagAutoUpdateDescription:         "rift が自動的にアップデートを確認するかどうかを設定します（有効にするには --autoupdate、無効にするには --autoupdate=false）",
 	RiftFlagDownloadPreReleaseDescription: "rift がプレリリース版もダウンロードするか、安定版のみにするかを設定します（有効にするには --download-pre-release、無効にするには --download-pre-release=false）",
 	RiftFlagWaypointDestroyDescription:    "名前を指定してウェイポイントを削除します",
+	RiftFlagSpellForgetDescription:        "名前を指定して保存済みスペルを削除します",
 	RiftFlagWaypointRebindDescription:     "既存のウェイポイントを新しいパスに再割り当てします。パスが指定されない場合は現在の作業ディレクトリを使用し、有効な絶対パスが指定された場合はそのパスを優先します",
 	RiftFlagWaypointReforgeDescription:    "既存のウェイポイントを新しい名前に変更します",
 	RiftFlagUpdateDescription:             "最新バージョンの確認を手動でトリガーし、利用可能な場合はアップデートします",
@@ -78,6 +79,8 @@ var jA = LanguageMapping{
 	// Spell operations
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
 	RiftSpellUpdated:          "rift：スペル %q を更新しました -> %s",
+	RiftSpellForgetSuccess:    "rift：スペル %q を忘却しました",
+	RiftSpellForgetError:      "rift：スペル %q の忘却に失敗しました、[ERROR: %s]",
 	RiftSpellDoNotExistsError: "rift：スペル %q は存在しません",
 	RiftSpellUpdateError:      "rift：スペル %q の更新に失敗しました、[ERROR: %s]",
 	ForbiddenCDSpellCommand:   "rift：作業パスを変更するターミナルコマンドはスペルとして使用できません",
