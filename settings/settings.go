@@ -36,7 +36,7 @@ var RiftDefaultConfigSettings = RiftSettings{
 
 // ----------------------------------
 //
-//	InitOrReadConfig loads existing config, ensures schema correctness, or creates default.
+//	InitOrReadSettings loads existing config, ensures schema correctness, or creates default.
 //
 // ----------------------------------
 func InitOrReadSettings() {

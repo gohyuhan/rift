@@ -12,6 +12,7 @@ Everything you need to wield rift from the terminal.
   - [discover](#discover)
   - [travel](#travel)
   - [waypoint](#waypoint)
+  - [learn](#learn)
 - [Settings Flags](#settings-flags)
   - [--language](#--language)
   - [--autoupdate](#--autoupdate)
@@ -72,7 +73,7 @@ rift discover ui
 
 **Notes**
 - Waypoint names are unique. Attempting to discover a name that already exists will return an error.
-- Reserved keywords (`rift`, `awaken`, `discover`) cannot be used as waypoint names.
+- Reserved keywords (`rift`, `awaken`, `discover`, `waypoint`, `learn`, `spell`, and others) cannot be used as waypoint names.
 
 ---
 
@@ -156,6 +157,64 @@ rift waypoint api --reforge backend-api
 - `--rebind` resets the waypoint's sealed state, sealed reason, and travelled count, and updates its discovered timestamp.
 - `--reforge` preserves all waypoint data (path, sealed state, travelled count, timestamps) — only the name changes.
 - `--reforge` requires a non-empty new name and will refuse to overwrite an existing waypoint.
+
+#### Interactive TUI
+
+Running `rift waypoint` with no arguments launches an interactive browser for all saved waypoints.
+
+**Key bindings**
+
+| Key | Action |
+| --- | ------ |
+| `j` / `↓` | Move cursor down |
+| `k` / `↑` | Move cursor up |
+| `enter` | Travel to selected waypoint |
+| `r` | Open rebind path input |
+| `R` | Open reforge name input |
+| `u` / `U` | Unseal selected waypoint |
+| `y` | Copy waypoint name to clipboard |
+| `Y` | Copy waypoint path to clipboard |
+| `backspace` | Destroy selected waypoint |
+| `?` | Open help popup |
+
+In rebind/reforge input popups:
+
+| Key | Action |
+| --- | ------ |
+| `ctrl+y` | Copy input field text |
+| `ctrl+p` | Paste from clipboard |
+
+---
+
+### learn
+
+Binds a terminal command to a spell name and saves it for quick recall. If the spell name already exists, its command is overwritten and its cast count is reset.
+
+```sh
+rift learn <spell name> <command>
+```
+
+Multi-word commands must be wrapped in quotes.
+
+**Examples**
+
+```sh
+rift learn build "docker compose up --build"
+# rift: learned "build" -> docker compose up --build
+
+rift learn test "go test ./..."
+# rift: learned "test" -> go test ./...
+
+# Override an existing spell
+rift learn build "make build"
+# rift: spell "build" updated -> make build
+```
+
+**Notes**
+- Spell names are subject to the same reserved keyword restrictions as waypoint names.
+- Spell names cannot contain whitespace.
+- The spell command cannot contain `cd` — use `discover` + `rift <name>` for navigation instead.
+- Overriding an existing spell resets its cast count to 0.
 
 ---
 

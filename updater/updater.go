@@ -170,7 +170,7 @@ func ShouldCheckForUpdate() bool {
 
 // ----------------------------------
 //
-//	LoadUpdateInfo reads the last fetch time from the settings file
+//	LoadLastFetchTime reads the last fetch time from the settings file
 //
 // ----------------------------------
 func LoadLastFetchTime() time.Time {

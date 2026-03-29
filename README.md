@@ -33,6 +33,7 @@ A tool forged for those who refuse to waste their power on traversal. Memorize a
 | **Discover** | `rift discover <name>`                   | Inscribe your current location as a waypoint             |
 | **Awaken**   | `rift awaken`                            | Repair shell integration or database if something breaks |
 | **Waypoint** | `rift waypoint [name] [--destroy\|--rebind\|--reforge]` | Inspect, rename, rebind, or destroy waypoints |
+| **Learn**    | `rift learn <spell name> <command>`           | Bind a terminal command to a spell name for quick recall |
 
 > Full usage, examples, and settings flags → **[usage.md](usage.md)**
 
