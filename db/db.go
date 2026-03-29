@@ -15,6 +15,8 @@ import (
 var (
 	WaypointBucket                    = []byte("rift-waypoint")
 	WaypointDataCorruptedBucketRecord = []byte("rift-waypoint-data-corrupted")
+	SpellBucket                       = []byte("rift-spell")
+	SpellDataCorruptedBucketRecord    = []byte("rift-spell-data-corrupted")
 )
 
 // ----------------------------------
@@ -59,6 +61,12 @@ func SetupBuckets(db *bbolt.DB) error {
 			return err
 		}
 		if _, err := tx.CreateBucketIfNotExists(WaypointDataCorruptedBucketRecord); err != nil {
+			return err
+		}
+		if _, err := tx.CreateBucketIfNotExists(SpellBucket); err != nil {
+			return err
+		}
+		if _, err := tx.CreateBucketIfNotExists(SpellDataCorruptedBucketRecord); err != nil {
 			return err
 		}
 		return nil

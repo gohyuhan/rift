@@ -26,6 +26,8 @@ var jA = LanguageMapping{
 	DBOpenError:                 "データベースのオープンに失敗しました — 以前のセッションが正常に終了せずロックが残っているか、別の rift プロセスがすでに起動中の可能性があります。rift がクラッシュまたは強制終了された場合は、`lsof | grep rift.db` を実行してプロセスを特定・終了してから再試行してください。初めてのインストールの場合は `rift awaken` を実行してください",
 	WaypointBucketNotFoundError: "データベースにウェイポイントバケットが見つかりません。`rift awaken` を再実行してください",
 	WaypointDataCorruptedError:  "ウェイポイント [%s] のデータが破損しており、読み込めません",
+	SpellBucketNotFoundError:    "データベースにスペルバケットが見つかりません。`rift awaken` を再実行してください",
+	SpellDataCorruptedError:     "スペル [%s] のデータが破損しており、読み込めません",
 
 	// Updater
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
@@ -60,7 +62,8 @@ var jA = LanguageMapping{
 	RiftDescription:                       "事前に定義したチェックポイント名でパスを簡単に移動できます",
 	RiftAwakenDescription:                 "シェル内で rift を起動します【初回使用時のセットアップと初期化を行います】",
 	RiftDiscoverDescription:               "現在の作業ディレクトリにウェイポイント名を割り当てます",
-	RiftWaypointDescription:               "すべてのウェイポイントを一覧表示するか、特定のウェイポイントの情報を表示します",
+	RiftWaypointDescription:               "ウェイポイントのインタラクティブUIを起動するか、特定のウェイポイントの情報を表示します",
+	RiftLearnDescription:                  "コマンドに名前を付けて rift に新しいスペルを教えます。複数単語のコマンドは引用符で囲んでください（例：rift learn build \"docker compose up --build\"）",
 	RiftFlagLanguageDescription:           "rift の言語を設定します（対応言語：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "rift が自動的にアップデートを確認するかどうかを設定します（有効にするには --autoupdate、無効にするには --autoupdate=false）",
 	RiftFlagDownloadPreReleaseDescription: "rift がプレリリース版もダウンロードするか、安定版のみにするかを設定します（有効にするには --download-pre-release、無効にするには --download-pre-release=false）",
@@ -71,11 +74,18 @@ var jA = LanguageMapping{
 	RiftFlagVersionDescription:            "rift の現在のバージョンを表示します",
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 
+	// Spell operations
+	RiftSpellSaved:            "rift：%q -> %s を習得しました",
+	RiftSpellUpdated:          "rift：スペル %q を更新しました -> %s",
+	RiftSpellDoNotExistsError: "rift：スペル %q は存在しません",
+	RiftSpellUpdateError:      "rift：スペル %q の更新に失敗しました、[ERROR: %s]",
+	ForbiddenCDSpellCommand:   "rift：作業パスを変更するターミナルコマンドはスペルとして使用できません",
+
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",
 	RiftWaypointAlreadyExistsError:        "ウェイポイント %q は既に存在し、%s を指しています",
 	RiftWaypointDoNotExistsError:          "rift：ウェイポイント %q は存在しません",
-	RiftWaypointUpdateError:               "rift：ウェイポイント %q の更新に失敗しました",
+	RiftWaypointUpdateError:               "rift：ウェイポイント %q の更新に失敗しました、[ERROR: %s]",
 	RiftWaypointSealedError:               "rift：ウェイポイント %q は封印されており、移動できません。理由：%q",
 	RiftWaypointSealedLabel:               "(封印済み)",
 	RiftWaypointRetrieveAllError:          "rift：ウェイポイントの取得に失敗しました",

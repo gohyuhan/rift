@@ -78,7 +78,7 @@ func GetWaypointForUpdate(tx *bbolt.Tx, waypointName string) (*bbolt.Bucket, *pb
 func PutWaypoint(bucket *bbolt.Bucket, waypointName string, waypoint *pb.Waypoint) error {
 	data, err := proto.Marshal(waypoint)
 	if err != nil {
-		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointUpdateError, waypointName), style.ColorError, false))
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointUpdateError, waypointName, err.Error()), style.ColorError, false))
 	}
 	return bucket.Put([]byte(waypointName), data)
 }
