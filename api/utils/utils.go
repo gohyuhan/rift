@@ -12,6 +12,7 @@ import (
 	"slices"
 	"strings"
 	"unicode"
+	"unicode/utf8"
 
 	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/db"
@@ -210,7 +211,7 @@ func GetFlagString(cmd *cobra.Command, flagName string) (string, error) {
 //
 // ----------------------------------
 func IsNickNameValid(nickname string) error {
-	if strings.IndexFunc(nickname, unicode.IsSpace) != -1 {
+	if strings.IndexFunc(nickname, unicode.IsSpace) != -1 || utf8.RuneCountInString(nickname) < 1 {
 		return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.InvalidValueProvided, style.ColorError, false))
 	}
 
