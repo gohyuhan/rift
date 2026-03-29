@@ -52,7 +52,8 @@ func SetupDB() error {
 
 // ----------------------------------
 //
-//	Creates the settings and waypoint buckets if they do not already exist.
+//	Creates the waypoint and spell buckets (and their corrupted-record
+//	counterparts) if they do not already exist.
 //
 // ----------------------------------
 func SetupBuckets(db *bbolt.DB) error {

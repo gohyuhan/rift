@@ -27,6 +27,13 @@ func saveSpell(bboltDb *bbolt.DB, spellName string, spellCommandArray []string) 
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellBucketNotFoundError, style.ColorError, false))
 		}
 
+		// check if the command is not empty
+		if len(spellCommandArray) < 1 {
+			errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellCommandEmpty, style.ColorError, false)
+			return fmt.Errorf("%s", errMessage)
+		}
+
+		// check if the command is not for path navigation
 		if slices.Contains(spellCommandArray, "cd") {
 			errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ForbiddenCDSpellCommand, style.ColorError, false)
 			return fmt.Errorf("%s", errMessage)

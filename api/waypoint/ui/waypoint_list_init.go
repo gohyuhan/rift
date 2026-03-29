@@ -90,6 +90,9 @@ func getAllWaypointsInfo(bboltDb *bbolt.DB) ([]waypointInfo, error) {
 		return nil
 	})
 
+	// best-effort: persist each seal to the DB; failures are silently ignored —
+	// the in-memory waypointInfo records already carry WaypointIsSealed=true
+	// so the UI reflects the correct sealed state regardless
 	for _, s := range toSeal {
 		apiUtils.UpdateWaypointIsSeal(bboltDb, s.name, true, s.reason)
 	}

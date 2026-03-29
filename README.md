@@ -34,6 +34,7 @@ A tool forged for those who refuse to waste their power on traversal. Memorize a
 | **Awaken**   | `rift awaken`                            | Repair shell integration or database if something breaks |
 | **Waypoint** | `rift waypoint [name] [--destroy\|--rebind\|--reforge]` | Inspect, rename, rebind, or destroy waypoints |
 | **Learn**    | `rift learn <spell name> <command>`           | Bind a terminal command to a spell name for quick recall |
+| **Spell**    | `rift spell <name>`                           | Cast a learned spell — runs its bound terminal command in the current directory |
 
 > Full usage, examples, and settings flags → **[usage.md](usage.md)**
 

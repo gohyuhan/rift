@@ -19,7 +19,7 @@ import (
 //	Fetches a single named waypoint and builds a detail display list.
 //	Uses a read-only View transaction; corruption recording is deferred to a
 //	separate Update transaction after View completes (same pattern as
-//	retrieveAllWaypointInfo).
+//	getAllWaypointsInfo).
 //	The returned slice has one labelled row per field; the sealed-reason row is
 //	only included when WaypointIsSealed is true.
 //	Labels are padded to uniform width via style.PadAndRenderLabels so values

@@ -13,6 +13,7 @@ Everything you need to wield rift from the terminal.
   - [travel](#travel)
   - [waypoint](#waypoint)
   - [learn](#learn)
+  - [spell](#spell)
 - [Settings Flags](#settings-flags)
   - [--language](#--language)
   - [--autoupdate](#--autoupdate)
@@ -215,6 +216,31 @@ rift learn build "make build"
 - Spell names cannot contain whitespace.
 - The spell command cannot contain `cd` — use `discover` + `rift <name>` for navigation instead.
 - Overriding an existing spell resets its cast count to 0.
+
+---
+
+### spell
+
+Casts a learned spell by name — runs its bound terminal command in the current working directory.
+
+```sh
+rift spell <name>
+```
+
+**Examples**
+
+```sh
+rift spell build
+# runs: docker compose up --build
+
+rift spell test
+# runs: go test ./...
+```
+
+**Notes**
+- The spell must have been saved with `rift learn` before it can be cast.
+- The command runs in the directory you are in when you invoke `rift spell` — it does not change your working directory.
+- The exit code of the bound command is not propagated; rift is a launcher, not a validator of the command's outcome.
 
 ---
 

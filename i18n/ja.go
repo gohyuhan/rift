@@ -64,6 +64,7 @@ var jA = LanguageMapping{
 	RiftDiscoverDescription:               "現在の作業ディレクトリにウェイポイント名を割り当てます",
 	RiftWaypointDescription:               "ウェイポイントのインタラクティブUIを起動するか、特定のウェイポイントの情報を表示します",
 	RiftLearnDescription:                  "コマンドに名前を付けて rift に新しいスペルを教えます。複数単語のコマンドは引用符で囲んでください（例：rift learn build \"docker compose up --build\"）",
+	RiftSpellDescription:                  "スペル名を指定してキャストし、紐付けられたターミナルコマンドを実行します",
 	RiftFlagLanguageDescription:           "rift の言語を設定します（対応言語：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "rift が自動的にアップデートを確認するかどうかを設定します（有効にするには --autoupdate、無効にするには --autoupdate=false）",
 	RiftFlagDownloadPreReleaseDescription: "rift がプレリリース版もダウンロードするか、安定版のみにするかを設定します（有効にするには --download-pre-release、無効にするには --download-pre-release=false）",
@@ -80,6 +81,8 @@ var jA = LanguageMapping{
 	RiftSpellDoNotExistsError: "rift：スペル %q は存在しません",
 	RiftSpellUpdateError:      "rift：スペル %q の更新に失敗しました、[ERROR: %s]",
 	ForbiddenCDSpellCommand:   "rift：作業パスを変更するターミナルコマンドはスペルとして使用できません",
+	SpellCommandEmpty:         "rift：スペルコマンドは空にできません",
+	InvalidSpellCommandError:  "rift：スペルコマンド [%s] が無効のため実行できませんでした",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",
