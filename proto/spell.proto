@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/gohyuhan/rift/proto";
+
+// spell represent metadata for a terminal command with a user defined spell name and other metadata that will be used by rift
+message Spell {
+  string spell_name = 1; // name for the spell
+  repeated string spell_command = 2; // the terminal command split into an array of arguments
+  string spell_added_at = 3; // when was this spell added
+  int64 spell_cast_count = 4; // represent how many times user have cast this spell
+}
