@@ -29,6 +29,16 @@ func ReforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string, l
 		return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RiftWaypointReforgeEmptyError, style.ColorError, false))
 	}
 
+	// reject names that clash with rift's own subcommands
+	if err := apiUtils.CheckIfKeywordIsReservedForRift(reforgeTo); err != nil {
+		return err
+	}
+
+	// reject names that contain spaces
+	if err := apiUtils.IsNickNameValid(reforgeTo); err != nil {
+		return err
+	}
+
 	reforgeErr := bboltDb.Update(func(tx *bbolt.Tx) error {
 		// fetch the current waypoint record and its bucket in a single helper call
 		waypointBucket, waypoint, retrieveErr := apiUtils.GetWaypointForUpdate(tx, waypointName)

@@ -8,6 +8,7 @@ var zH_HANT = LanguageMapping{
 	CWDIsNotDirError:         "目前工作目錄不是一個有效的目錄",
 	PathNotAbsoluteError:     "路徑必須為絕對路徑，收到: %s",
 	NotFileOrDirError:        "指定路徑不存在（非檔案或目錄）",
+	InvalidValueProvided:     "提供的值無效，不允許包含空格",
 
 	// Settings
 	SettingsPathError:                 "無法存取設定目錄，[ERROR: %s]",

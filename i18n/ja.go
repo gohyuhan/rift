@@ -8,6 +8,7 @@ var jA = LanguageMapping{
 	CWDIsNotDirError:         "現在の作業ディレクトリは有効なディレクトリではありません",
 	PathNotAbsoluteError:     "パスは絶対パスである必要があります。指定されたパス: %s",
 	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
+	InvalidValueProvided:     "無効な値が指定されました。スペースは使用できません",
 
 	// Settings
 	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
