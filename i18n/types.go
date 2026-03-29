@@ -80,6 +80,7 @@ type LanguageMapping struct {
 	RiftFlagWaypointReforgeDescription    string
 	RiftFlagUpdateDescription             string
 	RiftFlagVersionDescription            string
+	RiftFlagCastDescription               string
 	RiftFlagRetrieveError                 string
 
 	// Spell operations

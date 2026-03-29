@@ -24,11 +24,15 @@ func init() {
 	rootCmd.SetOut(os.Stderr)
 	rootCmd.SetErr(os.Stderr)
 
+	// settings related flag
 	rootCmd.Flags().String("language", "", "")
 	rootCmd.Flags().Bool("autoupdate", false, "")
 	rootCmd.Flags().Bool("download-pre-release", false, "")
 	rootCmd.Flags().Bool("update", false, "")
 	rootCmd.Flags().Bool("version", false, "")
+
+	// feature flag
+	rootCmd.Flags().String("cast", "", "")
 }
 
 // ----------------------------------
@@ -45,6 +49,7 @@ func InitCmdI18n() {
 	rootCmd.Flags().Lookup("download-pre-release").Usage = i18n.LANGUAGEMAPPING.RiftFlagDownloadPreReleaseDescription
 	rootCmd.Flags().Lookup("update").Usage = i18n.LANGUAGEMAPPING.RiftFlagUpdateDescription
 	rootCmd.Flags().Lookup("version").Usage = i18n.LANGUAGEMAPPING.RiftFlagVersionDescription
+	rootCmd.Flags().Lookup("cast").Usage = i18n.LANGUAGEMAPPING.RiftFlagCastDescription
 	initAwakenI18n()
 	initDiscoverI18n()
 	initWaypointI18n()
