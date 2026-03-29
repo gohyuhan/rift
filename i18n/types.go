@@ -75,6 +75,7 @@ type LanguageMapping struct {
 	RiftFlagAutoUpdateDescription         string
 	RiftFlagDownloadPreReleaseDescription string
 	RiftFlagWaypointDestroyDescription    string
+	RiftFlagSpellForgetDescription        string
 	RiftFlagWaypointRebindDescription     string
 	RiftFlagWaypointReforgeDescription    string
 	RiftFlagUpdateDescription             string
@@ -84,6 +85,8 @@ type LanguageMapping struct {
 	// Spell operations
 	RiftSpellSaved            string
 	RiftSpellUpdated          string
+	RiftSpellForgetSuccess    string
+	RiftSpellForgetError      string
 	RiftSpellDoNotExistsError string
 	RiftSpellUpdateError      string
 	ForbiddenCDSpellCommand   string

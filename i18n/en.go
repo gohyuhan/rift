@@ -69,6 +69,7 @@ var eN = LanguageMapping{
 	RiftFlagAutoUpdateDescription:         "Set whether rift should automatically check for updates (use --autoupdate to set true, --autoupdate=false to set false)",
 	RiftFlagDownloadPreReleaseDescription: "Set whether rift should also download pre-release versions, or only stable releases (use --download-pre-release to set true, --download-pre-release=false to set false)",
 	RiftFlagWaypointDestroyDescription:    "Remove a waypoint by name",
+	RiftFlagSpellForgetDescription:        "Remove a saved spell by name",
 	RiftFlagWaypointRebindDescription:     "Reassign an existing waypoint to a new path; defaults to the current working directory if no path is provided, or uses the given absolute path if valid",
 	RiftFlagWaypointReforgeDescription:    "Rename an existing waypoint to a new name",
 	RiftFlagUpdateDescription:             "Manually trigger a check for the latest version and update if available",
@@ -78,6 +79,8 @@ var eN = LanguageMapping{
 	// Spell operations
 	RiftSpellSaved:            "rift: learned %q -> %s",
 	RiftSpellUpdated:          "rift: spell %q updated -> %s",
+	RiftSpellForgetSuccess:    "rift: spell %q has been forgotten",
+	RiftSpellForgetError:      "rift: failed to forget spell %q, [ERROR: %s]",
 	RiftSpellDoNotExistsError: "rift: spell %q does not exist",
 	RiftSpellUpdateError:      "rift: failed to update spell %q, [ERROR: %s]",
 	ForbiddenCDSpellCommand:   "rift: terminal commands that change the working path are not allowed as a spell",
