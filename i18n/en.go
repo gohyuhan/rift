@@ -8,7 +8,7 @@ var eN = LanguageMapping{
 	CWDIsNotDirError:         "Current working directory is not a valid directory",
 	PathNotAbsoluteError:     "Path must be absolute, got: %s",
 	NotFileOrDirError:        "Path does not exist as a file or directory",
-	InvalidValueProvided:     "Invalid value provided, no whitespace allowed",
+	InvalidValueProvided:     "Invalid value provided, no whitespace allowed and cannot be empty",
 
 	// Settings
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",
