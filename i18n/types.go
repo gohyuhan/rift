@@ -70,6 +70,7 @@ type LanguageMapping struct {
 	RiftDiscoverDescription               string
 	RiftWaypointDescription               string
 	RiftLearnDescription                  string
+	RiftSpellDescription                  string
 	RiftFlagLanguageDescription           string
 	RiftFlagAutoUpdateDescription         string
 	RiftFlagDownloadPreReleaseDescription string
@@ -86,6 +87,8 @@ type LanguageMapping struct {
 	RiftSpellDoNotExistsError string
 	RiftSpellUpdateError      string
 	ForbiddenCDSpellCommand   string
+	SpellCommandEmpty         string
+	InvalidSpellCommandError  string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string

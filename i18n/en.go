@@ -64,6 +64,7 @@ var eN = LanguageMapping{
 	RiftDiscoverDescription:               "Assign a waypoint name to the current working directory",
 	RiftWaypointDescription:               "Start interactive UI for waypoints or display info for a specific waypoint",
 	RiftLearnDescription:                  "Teach rift a new spell by assigning a name to a command; wrap multi-word commands in quotes (e.g. rift learn build \"docker compose up --build\")",
+	RiftSpellDescription:                  "Cast a spell by name to execute its bound terminal command",
 	RiftFlagLanguageDescription:           "Set the language for rift (supported: EN, JA, ZH-HANS, ZH-HANT)",
 	RiftFlagAutoUpdateDescription:         "Set whether rift should automatically check for updates (use --autoupdate to set true, --autoupdate=false to set false)",
 	RiftFlagDownloadPreReleaseDescription: "Set whether rift should also download pre-release versions, or only stable releases (use --download-pre-release to set true, --download-pre-release=false to set false)",
@@ -80,6 +81,8 @@ var eN = LanguageMapping{
 	RiftSpellDoNotExistsError: "rift: spell %q does not exist",
 	RiftSpellUpdateError:      "rift: failed to update spell %q, [ERROR: %s]",
 	ForbiddenCDSpellCommand:   "rift: terminal commands that change the working path are not allowed as a spell",
+	SpellCommandEmpty:         "rift: spell command cannot be empty",
+	InvalidSpellCommandError:  "rift: spell command [%s] is invalid and could not be executed",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift: saved %q -> %s",

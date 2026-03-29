@@ -39,7 +39,7 @@ var RiftLearnFunc = func(command *cobra.Command, args []string) error {
 		return err
 	}
 
-	// open DB and persist the new waypoint
+	// open DB and persist the new spell
 	bboltDB, bboltDBErr := db.OpenDB()
 	if bboltDBErr != nil {
 		return bboltDBErr

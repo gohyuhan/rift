@@ -64,6 +64,7 @@ var zH_HANT = LanguageMapping{
 	RiftDiscoverDescription:               "為目前工作目錄指定一個航點名稱",
 	RiftWaypointDescription:               "啟動航點互動介面或顯示指定航點的詳細資訊",
 	RiftLearnDescription:                  "透過為指令指定名稱來教 rift 一個新咒語；多詞指令請用引號括起（例：rift learn build \"docker compose up --build\"）",
+	RiftSpellDescription:                  "透過咒語名稱施咒，執行其綁定的終端命令",
 	RiftFlagLanguageDescription:           "設定 rift 的語言（支援：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "設定 rift 是否自動檢查更新（使用 --autoupdate 設為啟用，--autoupdate=false 設為停用）",
 	RiftFlagDownloadPreReleaseDescription: "設定 rift 是否也下載預發布版本，或僅限穩定版本（使用 --download-pre-release 設為啟用，--download-pre-release=false 設為停用）",
@@ -80,6 +81,8 @@ var zH_HANT = LanguageMapping{
 	RiftSpellDoNotExistsError: "rift：咒語 %q 不存在",
 	RiftSpellUpdateError:      "rift：更新咒語 %q 失敗，[ERROR: %s]",
 	ForbiddenCDSpellCommand:   "rift：會更改工作路徑的終端命令不能作為咒語使用",
+	SpellCommandEmpty:         "rift：咒語命令不能為空",
+	InvalidSpellCommandError:  "rift：咒語命令 [%s] 無效，無法執行",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：已儲存 %q -> %s",
