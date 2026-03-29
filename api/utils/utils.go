@@ -204,7 +204,7 @@ func GetFlagString(cmd *cobra.Command, flagName string) (string, error) {
 // ----------------------------------
 //
 //	Returns an error if the given nickname contains whitespace. Nicknames must
-//	be a single token with no embedded spaces so they can be used as shell
+//	be a single token with no embedded whitespace so they can be used as shell
 //	identifiers without quoting.
 //
 // ----------------------------------
