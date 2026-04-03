@@ -63,12 +63,16 @@ func RetrieveAndCastSpell(bboltDB *bbolt.DB, spellName string, executionPath str
 		errMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.InvalidSpellCommandError, strings.Join(retrievedSpellCmd, " ")), style.ColorError, false)
 		return fmt.Errorf("%s", errMessage)
 	}
-	// Run the user's command; the exit code is intentionally not propagated —
-	// rift is a launcher, not a validator of the command's outcome
-	spellCmdExecutor.Run()
 
 	// best-effort: increment cast count; failure is silently ignored
 	apiUtils.UpdateSpellCastedCount(bboltDB, spellName)
+
+	// early close of db so that it will not hang the rift program when a long running command is running
+	db.CloseDB(bboltDB)
+
+	// Run the user's command; the exit code is intentionally not propagated —
+	// rift is a launcher, not a validator of the command's outcome
+	spellCmdExecutor.Run()
 
 	return nil
 }
