@@ -67,7 +67,8 @@ func RetrieveAndCastSpell(bboltDB *bbolt.DB, spellName string, executionPath str
 	// best-effort: increment cast count; failure is silently ignored
 	apiUtils.UpdateSpellCastedCount(bboltDB, spellName)
 
-	// early close of db so that it will not hang the rift program when a long running command is running
+	// Release the database lock early so that other rift instances are not blocked
+	// while the potentially long-running command is executing.
 	db.CloseDB(bboltDB)
 
 	// Run the user's command; the exit code is intentionally not propagated —
