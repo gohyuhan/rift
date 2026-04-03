@@ -274,6 +274,23 @@ kill <PID>
 
 ## Changelog
 
+### v0.2.0
+
+Core
+
+- Interactive UI — waypoint list with interactive navigation interface
+
+Spell
+
+- Learn — bind a shell command to a waypoint as a spell
+- Spell — cast a named spell at the current working directory
+
+Spell Flag
+- --forget — remove a bound spell from a waypoint
+
+Navigate Flag
+- --cast \<spell name\> — cast a named spell at a waypoint's path without navigating there
+
 ### v0.1.0
 
 Core
