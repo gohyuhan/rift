@@ -27,8 +27,8 @@ import (
 //
 // ----------------------------------
 func RetrieveSpellInfoDetail(bboltDb *bbolt.DB, spellName string) ([]string, error) {
-	var waypointDetailInfo []string
-	waypointCorrupted := false
+	var spellDetailInfo []string
+	spellCorrupted := false
 
 	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
 		// ensure the spell bucket exists before looking up the key
@@ -49,7 +49,7 @@ func RetrieveSpellInfoDetail(bboltDb *bbolt.DB, spellName string) ([]string, err
 		existingSpell := &pb.Spell{}
 		protoErr := proto.Unmarshal(existing, existingSpell)
 		if protoErr != nil {
-			waypointCorrupted = true
+			spellCorrupted = true
 			return nil
 		}
 
@@ -62,13 +62,13 @@ func RetrieveSpellInfoDetail(bboltDb *bbolt.DB, spellName string) ([]string, err
 		}
 		paddedLabels := style.PadAndRenderLabels(rawLabels, style.ColorBlueGrayMuted, true)
 
-		// --- spell name (highlight in cyan; muted colors are reserved for sealed waypoints) ---
+		// --- spell name (highlight in cyan; muted colors are reserved for sealed spells) ---
 		nameValue := style.RenderStringWithColor(spellName, style.ColorCyanSoft, false)
-		waypointDetailInfo = append(waypointDetailInfo, paddedLabels[0]+"  "+nameValue)
+		spellDetailInfo = append(spellDetailInfo, paddedLabels[0]+"  "+nameValue)
 
 		// --- spell cmd ---
 		cmdValue := style.RenderStringWithColor(strings.Join(existingSpell.SpellCommand, " "), style.ColorBlueMuted, false)
-		waypointDetailInfo = append(waypointDetailInfo, paddedLabels[1]+"  "+cmdValue)
+		spellDetailInfo = append(spellDetailInfo, paddedLabels[1]+"  "+cmdValue)
 
 		// --- spell added at (stored as RFC3339 UTC, displayed in local time) ---
 		addAtDisplay := existingSpell.SpellAddedAt
@@ -76,19 +76,19 @@ func RetrieveSpellInfoDetail(bboltDb *bbolt.DB, spellName string) ([]string, err
 			addAtDisplay = parsed.Local().Format("2006-01-02 15:04:05")
 		}
 		addAtValue := style.RenderStringWithColor(addAtDisplay, style.ColorBlueMuted, false)
-		waypointDetailInfo = append(waypointDetailInfo, paddedLabels[2]+"  "+addAtValue)
+		spellDetailInfo = append(spellDetailInfo, paddedLabels[2]+"  "+addAtValue)
 
 		// --- spell cast count ---
 		castValue := style.RenderStringWithColor(strconv.FormatInt(existingSpell.SpellCastCount, 10), style.ColorBlueMuted, false)
-		waypointDetailInfo = append(waypointDetailInfo, paddedLabels[3]+"  "+castValue)
+		spellDetailInfo = append(spellDetailInfo, paddedLabels[3]+"  "+castValue)
 
 		return nil
 	})
 
 	// View is complete — safe to open a separate Update for the corruption write
-	if waypointCorrupted {
+	if spellCorrupted {
 		viewErr = apiUtils.RecordCorruptedSpellInfo(bboltDb, []string{spellName})
 	}
 
-	return waypointDetailInfo, viewErr
+	return spellDetailInfo, viewErr
 }
