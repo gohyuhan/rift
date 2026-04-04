@@ -105,7 +105,7 @@ func RunSpellbookInteractive(bboltDb *bbolt.DB) (string, string, error) {
 	}
 
 	// if user quit without selecting a spell, return empty values
-	if final.SpellCastPath == "" {
+	if final.SelectedSpellName == "" {
 		return "", "", nil
 	}
 
