@@ -109,7 +109,7 @@ func RunSpellbookInteractive(bboltDb *bbolt.DB) (string, string, error) {
 		return "", "", nil
 	}
 
-	// if user selected a spell but the cast path is empty, default to the current working directory;z
+	// if user selected a spell but the cast path is empty, default to the current working directory
 	if final.SpellCastPath == "" && final.SelectedSpellName != "" {
 		path, err := utils.GetCWD()
 		if err != nil {

@@ -45,7 +45,7 @@ func (i spellInfoItem) FilterValue() string {
 // ----------------------------------
 //
 //	Height and Spacing define the row layout for the bubbles list delegate;
-//	each spell occupies 2 lines (name + command ) with no
+//	each spell occupies 3 lines (name + command + blank separator) with no
 //	extra spacing; Update is a no-op as item-level updates are handled by
 //	the parent model
 //
@@ -56,11 +56,11 @@ func (d spellInfoDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil
 
 // ----------------------------------
 //
-//	renders a single spell row as two lines: the spell name on the
-//	first line and the command (indented) on the second; sealed spells are
-//	rendered in a muted colour with a sealed label appended to the name,
-//	while active spells use the vibrant purple palette; the selected
-//	row is prefixed with a ❯ cursor, all others with two spaces
+//	renders a single spell row as three lines: the spell name on the
+//	first line, the command (indented) on the second, and a blank line
+//	as a separator; the name is coloured with the vibrant purple palette
+//	and the command with the soft purple palette; the selected row is
+//	prefixed with a ❯ cursor, all others with two spaces
 //
 // ----------------------------------
 func (d spellInfoDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {

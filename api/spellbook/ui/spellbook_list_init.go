@@ -83,8 +83,8 @@ func getAllSpellInfo(bboltDb *bbolt.DB) ([]spellInfo, error) {
 //	builds or rebuilds the bubbles list model on the SpellbookInteractiveModel;
 //	preserves the previously selected spell by name when re-initialising,
 //	and falls back to the stored cursor position when no match is found;
-//	called once after the first WindowSizeMsg so that layout dimensions
-//	are valid before the list is rendered
+//	called after the first WindowSizeMsg (so valid dimensions are available)
+//	and again whenever the spell list changes structurally (e.g. after a forget)
 //
 // ----------------------------------
 func initSpellInfoListModel(m *SpellbookInteractiveModel) error {
