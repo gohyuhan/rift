@@ -156,6 +156,27 @@ var zH_HANS = LanguageMapping{
 	WaypointClosePopUp:                            "关闭弹窗",
 	WaypointClosePopUpDescription:                 "关闭当前弹窗而不保存",
 
+	// Spell interactive UI
+	SpellInfoListTitle:            "法术书",
+	SpellbookInteractiveError:     "rift：法术书交互界面启动失败，[ERROR: %s]",
+	RiftSpellRetrieveAllError:     "rift：获取法术失败",
+	SpellUIUpKeyHelp:              "上移",
+	SpellUIUpKeyHelpDescription:   "将光标移至上一个法术",
+	SpellUIDownKeyHelp:            "下移",
+	SpellUIDownKeyHelpDescription: "将光标移至下一个法术",
+	SpellUIQuitKeyHelp:            "退出",
+	SpellUIQuitKeyHelpDescription: "退出法术书交互界面",
+	SpellUIHelpKeyHelp:            "帮助",
+	SpellUIHelpKeyHelpDescription: "显示或隐藏完整的快捷键列表",
+	SpellCastKeyHelp:              "施放",
+	SpellCastKeyHelpDescription:   "在当前工作目录施放法术，或施放至已发现的航点",
+	SpellLearnKeyHelp:             "习得",
+	SpellLearnKeyHelpDescription:  "习得一个新法术",
+	SpellForgetKey:                "遗忘",
+	SpellForgetKeyDescription:     "永久遗忘所选法术",
+	SpellClosePopUp:               "关闭弹窗",
+	SpellClosePopUpDescription:    "关闭当前弹窗而不保存",
+
 	// Setup
 	CheckAndRunSetupError:  "rift：设置失败，[ERROR: %s]",
 	RiftAutoSetupTriggered: "rift：设置与配置已自动触发",

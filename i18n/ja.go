@@ -156,6 +156,27 @@ var jA = LanguageMapping{
 	WaypointClosePopUp:                            "ポップアップを閉じる",
 	WaypointClosePopUpDescription:                 "保存せずに現在のポップアップを閉じる",
 
+	// Spell interactive UI
+	SpellInfoListTitle:            "魔法書",
+	SpellbookInteractiveError:     "rift：スペルブックインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
+	RiftSpellRetrieveAllError:     "rift：スペルの取得に失敗しました",
+	SpellUIUpKeyHelp:              "上へ",
+	SpellUIUpKeyHelpDescription:   "前のスペルにカーソルを移動する",
+	SpellUIDownKeyHelp:            "下へ",
+	SpellUIDownKeyHelpDescription: "次のスペルにカーソルを移動する",
+	SpellUIQuitKeyHelp:            "終了",
+	SpellUIQuitKeyHelpDescription: "スペルブックインタラクティブUIを終了する",
+	SpellUIHelpKeyHelp:            "ヘルプ",
+	SpellUIHelpKeyHelpDescription: "キーバインド一覧の表示・非表示を切り替える",
+	SpellCastKeyHelp:              "キャスト",
+	SpellCastKeyHelpDescription:   "現在の作業ディレクトリでスペルをキャストする、またはウェイポイントへキャストする",
+	SpellLearnKeyHelp:             "習得",
+	SpellLearnKeyHelpDescription:  "新しいスペルを習得する",
+	SpellForgetKey:                "忘却",
+	SpellForgetKeyDescription:     "選択したスペルを完全に忘却する",
+	SpellClosePopUp:               "ポップアップを閉じる",
+	SpellClosePopUpDescription:    "保存せずに現在のポップアップを閉じる",
+
 	// Setup
 	CheckAndRunSetupError:  "rift：セットアップに失敗しました、[ERROR: %s]",
 	RiftAutoSetupTriggered: "rift：設定とコンフィグのセットアップが自動的にトリガーされました",
