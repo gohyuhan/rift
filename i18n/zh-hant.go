@@ -65,6 +65,7 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointDescription:               "啟動航點互動介面或顯示指定航點的詳細資訊",
 	RiftLearnDescription:                  "透過為指令指定名稱來教 rift 一個新咒語；多詞指令請用引號括起（例：rift learn build \"docker compose up --build\"）",
 	RiftSpellDescription:                  "透過咒語名稱施咒，執行其綁定的終端命令",
+	RiftSpellbookDescription:              "啟動咒語互動介面或顯示指定咒語的詳細資訊",
 	RiftFlagLanguageDescription:           "設定 rift 的語言（支援：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "設定 rift 是否自動檢查更新（使用 --autoupdate 設為啟用，--autoupdate=false 設為停用）",
 	RiftFlagDownloadPreReleaseDescription: "設定 rift 是否也下載預發布版本，或僅限穩定版本（使用 --download-pre-release 設為啟用，--download-pre-release=false 設為停用）",
@@ -104,6 +105,12 @@ var zH_HANT = LanguageMapping{
 	RiftWaypointReforgeAlreadyExistsError: "rift：航點 %q 已存在，無法重鑄為已有名稱",
 	RiftWaypointReforgeError:              "rift：重鑄航點 %q 失敗，[ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift：航點 %q 已重鑄為 %q",
+
+	// Spell detail view
+	RiftSpellDetailName:      "咒語名稱：",
+	RiftSpellDetailCommand:   "咒語命令：",
+	RiftSpellDetailAddedAt:   "咒語新增時間：",
+	RiftSpellDetailCastCount: "咒語施放次數：",
 
 	// Waypoint detail view
 	RiftWaypointDetailName:           "航點名稱：",

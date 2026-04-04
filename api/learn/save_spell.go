@@ -19,7 +19,7 @@ import (
 //	Learning an existing spell name overwrites the command, resets the cast count, and updates the added timestamp to now.
 //
 // ----------------------------------
-func saveSpell(bboltDb *bbolt.DB, spellName string, spellCommandArray []string) (bool, error) {
+func SaveSpell(bboltDb *bbolt.DB, spellName string, spellCommandArray []string) (bool, error) {
 	hasExisting := false
 	dbErr := bboltDb.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.SpellBucket)

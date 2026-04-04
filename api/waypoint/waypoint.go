@@ -32,7 +32,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 	}
 	defer db.CloseDB(bboltDB)
 
-	// no args — list all waypoints
+	// no args — list all start waypoint interactive UI
 	if len(args) < 1 {
 		pathToNavigate, waypointName, interactiveErr := waypointUI.RunWaypointInteractive(bboltDB)
 		if interactiveErr != nil {

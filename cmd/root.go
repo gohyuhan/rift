@@ -55,6 +55,7 @@ func InitCmdI18n() {
 	initWaypointI18n()
 	initLearnI18n()
 	initSpellI18n()
+	initSpellbookI18n()
 }
 
 // ----------------------------------

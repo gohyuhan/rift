@@ -71,6 +71,7 @@ type LanguageMapping struct {
 	RiftWaypointDescription               string
 	RiftLearnDescription                  string
 	RiftSpellDescription                  string
+	RiftSpellbookDescription              string
 	RiftFlagLanguageDescription           string
 	RiftFlagAutoUpdateDescription         string
 	RiftFlagDownloadPreReleaseDescription string
@@ -110,6 +111,12 @@ type LanguageMapping struct {
 	RiftWaypointReforgeAlreadyExistsError string
 	RiftWaypointReforgeError              string
 	RiftWaypointReforgeSuccess            string
+
+	// Spell detail view
+	RiftSpellDetailName      string
+	RiftSpellDetailCommand   string
+	RiftSpellDetailAddedAt   string
+	RiftSpellDetailCastCount string
 
 	// Waypoint detail view
 	RiftWaypointDetailName           string
