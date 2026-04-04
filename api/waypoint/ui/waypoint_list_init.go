@@ -236,6 +236,12 @@ func initShortWaypointInfoListKeyMap(popUpType string, isSealed bool) func() []k
 				key.NewBinding(key.WithKeys("q", "ctrl+c"), key.WithHelp("q/ctrl+c", i18n.LANGUAGEMAPPING.WaypointUIQuitKeyHelp)),
 			}
 		}
+	case HelpPopUp:
+		return func() []key.Binding {
+			return []key.Binding{
+				key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", i18n.LANGUAGEMAPPING.WaypointClosePopUp)),
+			}
+		}
 	}
 
 	return func() []key.Binding { return []key.Binding{} }

@@ -162,6 +162,27 @@ type LanguageMapping struct {
 	WaypointClosePopUp                            string
 	WaypointClosePopUpDescription                 string
 
+	// Spell interactive UI
+	SpellInfoListTitle            string
+	SpellbookInteractiveError     string
+	RiftSpellRetrieveAllError     string
+	SpellUIUpKeyHelp              string
+	SpellUIUpKeyHelpDescription   string
+	SpellUIDownKeyHelp            string
+	SpellUIDownKeyHelpDescription string
+	SpellUIQuitKeyHelp            string
+	SpellUIQuitKeyHelpDescription string
+	SpellUIHelpKeyHelp            string
+	SpellUIHelpKeyHelpDescription string
+	SpellCastKeyHelp              string
+	SpellCastKeyHelpDescription   string
+	SpellLearnKeyHelp             string
+	SpellLearnKeyHelpDescription  string
+	SpellForgetKey                string
+	SpellForgetKeyDescription     string
+	SpellClosePopUp               string
+	SpellClosePopUpDescription    string
+
 	// Setup
 	CheckAndRunSetupError  string
 	RiftAutoSetupTriggered string

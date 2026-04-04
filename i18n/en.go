@@ -156,6 +156,27 @@ var eN = LanguageMapping{
 	WaypointClosePopUp:                            "close popup",
 	WaypointClosePopUpDescription:                 "close the active popup without saving",
 
+	// Spell interactive UI
+	SpellInfoListTitle:            "Spellbook",
+	SpellbookInteractiveError:     "rift: spellbook interactive session failed, [ERROR: %s]",
+	RiftSpellRetrieveAllError:     "rift: failed to retrieve spells",
+	SpellUIUpKeyHelp:              "up",
+	SpellUIUpKeyHelpDescription:   "move the cursor to the previous spell",
+	SpellUIDownKeyHelp:            "down",
+	SpellUIDownKeyHelpDescription: "move the cursor to the next spell",
+	SpellUIQuitKeyHelp:            "quit",
+	SpellUIQuitKeyHelpDescription: "exit spellbook interactive UI",
+	SpellUIHelpKeyHelp:            "help",
+	SpellUIHelpKeyHelpDescription: "show or hide the full key binding list",
+	SpellCastKeyHelp:              "cast",
+	SpellCastKeyHelpDescription:   "cast the spell in the current working directory, or cast to a discovered waypoint",
+	SpellLearnKeyHelp:             "learn",
+	SpellLearnKeyHelpDescription:  "learn a new spell",
+	SpellForgetKey:                "forget",
+	SpellForgetKeyDescription:     "permanently forget the selected spell",
+	SpellClosePopUp:               "close popup",
+	SpellClosePopUpDescription:    "close the active popup without saving",
+
 	// Setup
 	CheckAndRunSetupError:  "rift: setup failed, [ERROR: %s]",
 	RiftAutoSetupTriggered: "rift: settings and config setup triggered automatically",
