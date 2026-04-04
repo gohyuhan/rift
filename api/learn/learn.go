@@ -46,7 +46,7 @@ var RiftLearnFunc = func(command *cobra.Command, args []string) error {
 	}
 	defer db.CloseDB(bboltDB)
 
-	spellExist, saveSpellErr := saveSpell(bboltDB, spellName, spellCmdArray)
+	spellExist, saveSpellErr := SaveSpell(bboltDB, spellName, spellCmdArray)
 
 	if saveSpellErr != nil {
 		return saveSpellErr

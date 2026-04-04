@@ -65,6 +65,7 @@ var eN = LanguageMapping{
 	RiftWaypointDescription:               "Start interactive UI for waypoints or display info for a specific waypoint",
 	RiftLearnDescription:                  "Teach rift a new spell by assigning a name to a command; wrap multi-word commands in quotes (e.g. rift learn build \"docker compose up --build\")",
 	RiftSpellDescription:                  "Cast a spell by name to execute its bound terminal command",
+	RiftSpellbookDescription:              "Start interactive UI for spells or display info for a specific spell",
 	RiftFlagLanguageDescription:           "Set the language for rift (supported: EN, JA, ZH-HANS, ZH-HANT)",
 	RiftFlagAutoUpdateDescription:         "Set whether rift should automatically check for updates (use --autoupdate to set true, --autoupdate=false to set false)",
 	RiftFlagDownloadPreReleaseDescription: "Set whether rift should also download pre-release versions, or only stable releases (use --download-pre-release to set true, --download-pre-release=false to set false)",
@@ -104,6 +105,12 @@ var eN = LanguageMapping{
 	RiftWaypointReforgeAlreadyExistsError: "rift: waypoint %q already exists, cannot reforge to an existing name",
 	RiftWaypointReforgeError:              "rift: failed to reforge waypoint %q, [ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift: waypoint %q reforged to %q",
+
+	// Spell detail view
+	RiftSpellDetailName:      "Spell Name:",
+	RiftSpellDetailCommand:   "Spell Command:",
+	RiftSpellDetailAddedAt:   "Spell Added At:",
+	RiftSpellDetailCastCount: "Spell Cast Count:",
 
 	// Waypoint detail view
 	RiftWaypointDetailName:           "Waypoint Name:",
