@@ -39,19 +39,6 @@ type WaypointInteractiveModel struct {
 
 // ----------------------------------
 //
-//	raw data record for a single waypoint as read from the database;
-//	mirrors the proto fields relevant to the list UI
-//
-// ----------------------------------
-type waypointInfo struct {
-	WaypointName         string
-	WaypointPath         string
-	WaypointIsSealed     bool
-	WaypointSealedReason string
-}
-
-// ----------------------------------
-//
 //	allocates a WaypointInteractiveModel with safe zero-value defaults;
 //	list setup is deferred to the first WindowSizeMsg so that correct
 //	terminal dimensions are available when building item layouts

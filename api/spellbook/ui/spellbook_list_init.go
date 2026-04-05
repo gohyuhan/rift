@@ -194,6 +194,21 @@ func initShortSpellInfoListKeyMap(popUpType string) func() []key.Binding {
 				key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.SpellUILearnKeyHelp)),
 				key.NewBinding(key.WithKeys("tab"), key.WithHelp("tab", i18n.LANGUAGEMAPPING.SpellUINextInputKeyHelp)),
 				key.NewBinding(key.WithKeys("shift+tab"), key.WithHelp("shift+tab", i18n.LANGUAGEMAPPING.SpellUIPreviousInputKeyHelp)),
+				key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", i18n.LANGUAGEMAPPING.SpellClosePopUp)),
+			}
+		}
+	case CastLocationOptionPopUp:
+		return func() []key.Binding {
+			return []key.Binding{
+				key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.SpellUIChooseCastLocationKeyHelp)),
+				key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", i18n.LANGUAGEMAPPING.SpellClosePopUp)),
+			}
+		}
+	case CastWaypointLocationOptionPopUp:
+		return func() []key.Binding {
+			return []key.Binding{
+				key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.SpellUIChooseWaypointCastLocationKeyHelp)),
+				key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", i18n.LANGUAGEMAPPING.SpellClosePopUp)),
 			}
 		}
 	}

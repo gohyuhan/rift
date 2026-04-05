@@ -14,9 +14,23 @@ import (
 	"github.com/gohyuhan/rift/i18n"
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/utils"
 	"go.etcd.io/bbolt"
 	"google.golang.org/protobuf/proto"
 )
+
+// ----------------------------------
+//
+//	raw data record for a single waypoint as read from the database;
+//	mirrors the proto fields relevant to the list UI
+//
+// ----------------------------------
+type WaypointInfo struct {
+	WaypointName         string
+	WaypointPath         string
+	WaypointIsSealed     bool
+	WaypointSealedReason string
+}
 
 // ----------------------------------
 //
@@ -140,4 +154,91 @@ func UpdateWaypointTravelledCount(bboltDb *bbolt.DB, waypointName string) error 
 		waypoint.WaypointTravelledCount += 1
 		return PutWaypoint(bucket, waypointName, waypoint)
 	})
+}
+
+// ----------------------------------
+//
+//	reads every entry in the waypoint bucket and returns a slice of
+//	waypointInfo records; uses a read-only View transaction so any
+//	corruption writes are deferred to a separate Update after View
+//	completes; corrupted proto entries are collected and recorded via
+//	RecordCorruptedWaypointInfo before the error is returned to the caller
+//
+// ----------------------------------
+func GetAllWaypointsInfo(bboltDb *bbolt.DB) ([]WaypointInfo, error) {
+	var waypointsInfo []WaypointInfo
+	var corruptedWaypointName []string
+	waypointCorrupted := false
+
+	// seal updates are collected during the read-only View and applied afterwards;
+	// calling a write transaction (Update) inside a View callback deadlocks bbolt
+	type pendingSeal struct {
+		name   string
+		reason string
+	}
+	var toSeal []pendingSeal
+
+	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
+		// ensure the waypoint bucket exists before iterating
+		waypointBucket := tx.Bucket(db.WaypointBucket)
+		if waypointBucket == nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+		}
+
+		// walk every key-value pair in the bucket
+		retrieveError := waypointBucket.ForEach(func(k, v []byte) error {
+			// deserialize the stored proto; capture the name, set the flag, and
+			// return a sentinel error to stop ForEach — recording is deferred to
+			// a separate Update after the View transaction completes
+			existingWaypoint := &pb.Waypoint{}
+			protoErr := proto.Unmarshal(v, existingWaypoint)
+
+			// skip corrupted data
+			if protoErr != nil {
+				waypointCorrupted = true
+				corruptedWaypointName = append(corruptedWaypointName, string(k))
+				return nil
+			}
+
+			// verify the path still exists on disk; if not, mark for sealing after View closes
+			isPathExist, isPathExistErr := utils.CheckIsPathExist(existingWaypoint.WaypointPath)
+			if !isPathExist {
+				existingWaypoint.WaypointIsSealed = true
+				existingWaypoint.WaypointSealedReason = isPathExistErr.Error()
+				toSeal = append(toSeal, pendingSeal{name: string(k), reason: existingWaypoint.WaypointSealedReason})
+			}
+
+			// construct the waypoint info type
+			info := WaypointInfo{
+				WaypointName:         string(k),
+				WaypointPath:         existingWaypoint.WaypointPath,
+				WaypointIsSealed:     existingWaypoint.WaypointIsSealed,
+				WaypointSealedReason: existingWaypoint.WaypointSealedReason,
+			}
+
+			waypointsInfo = append(waypointsInfo, info)
+
+			return nil
+		})
+
+		// wrap ForEach failure into a user-facing message
+		if retrieveError != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RiftWaypointRetrieveAllError, style.ColorError, false))
+		}
+
+		return nil
+	})
+
+	// best-effort: persist each seal to the DB; failures are silently ignored —
+	// the in-memory waypointInfo records already carry WaypointIsSealed=true
+	// so the UI reflects the correct sealed state regardless
+	for _, s := range toSeal {
+		UpdateWaypointIsSeal(bboltDb, s.name, true, s.reason)
+	}
+
+	if waypointCorrupted {
+		viewErr = RecordCorruptedWaypointInfo(bboltDb, corruptedWaypointName)
+	}
+
+	return waypointsInfo, viewErr
 }

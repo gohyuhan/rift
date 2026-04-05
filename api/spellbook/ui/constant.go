@@ -12,7 +12,14 @@ const (
 // PopUpType sentinel values stored on SpellbookInteractiveModel.PopUpType to
 // indicate which popup (if any) is currently active.
 const (
-	NoPopUp    = "NoPopUp"
-	HelpPopUp  = "HelpPopUp"
-	LearnPopUp = "LearnPopUp"
+	NoPopUp                         = "NoPopUp"
+	HelpPopUp                       = "HelpPopUp"
+	LearnPopUp                      = "LearnPopUp"
+	CastLocationOptionPopUp         = "CastLocationOptionPopUp"
+	CastWaypointLocationOptionPopUp = "CastWaypointLocationOptionPopUp"
+)
+
+const (
+	CastCWD      = "CastCWD"
+	CastWaypoint = "CastWaypoint"
 )
