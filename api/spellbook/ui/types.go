@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/x/ansi"
+	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
 	"go.etcd.io/bbolt"
 
@@ -183,6 +184,109 @@ func (d castLocationOptionDelegate) Render(w io.Writer, m list.Model, index int,
 	optionDesc = style.RenderStringWithColor(optionDesc, style.ColorPurpleSoft, true)
 
 	str := fmt.Sprintf("%s\n%s\n", optionTitle, optionDesc)
+
+	// prefix the selected row with a cursor glyph; all others get padding
+	var fn func(...string) string
+	if index == m.Index() {
+		fn = func(s ...string) string {
+			return style.SelectedItemStyle.Render("❯ " + strings.Join(s, " "))
+		}
+	} else {
+		fn = func(s ...string) string {
+			return style.ItemStyle.Render("  " + strings.Join(s, " "))
+		}
+	}
+
+	fmt.Fprint(w, fn(str))
+}
+
+type CastWaypointLocationOptionPopUpModel struct {
+	CastWaypointLocationOptionList list.Model
+	SelectedSpellName              string
+}
+
+// ---------------------------------
+//
+//	list item and delegate types for the cast-to-waypoint location popup
+//
+// ---------------------------------
+type (
+	castWaypointLocationDelegate   struct{}
+	castWaypointLocationOptionItem struct {
+		WaypointName         string
+		WaypointPath         string
+		WaypointIsSealed     bool
+		WaypointSealedReason string
+	}
+)
+
+// ----------------------------------
+//
+//	returns the value used when the list filters items; cast-to-waypoint
+//	options are matched by waypoint name
+//
+// ----------------------------------
+func (i castWaypointLocationOptionItem) FilterValue() string {
+	return i.WaypointName
+}
+
+// ----------------------------------
+//
+//	Height and Spacing define the row layout for the bubbles list delegate;
+//	each waypoint option occupies 3 lines (name + path + sealed reason) with
+//	no extra spacing; the sealed-reason line is blank for unsealed waypoints;
+//	Update is a no-op as item-level updates are handled by the parent model
+//
+// ----------------------------------
+func (d castWaypointLocationDelegate) Height() int                             { return 3 }
+func (d castWaypointLocationDelegate) Spacing() int                            { return 0 }
+func (d castWaypointLocationDelegate) Update(_ tea.Msg, _ *list.Model) tea.Cmd { return nil }
+
+// ----------------------------------
+//
+//	renders a single cast-to-waypoint option as three lines: the waypoint
+//	name on the first line, the path (indented) on the second, and the sealed
+//	reason (indented) on the third; sealed waypoints are rendered in a muted
+//	colour with a sealed label appended to the name, while active waypoints
+//	use the vibrant purple palette; the selected row is prefixed with a ❯
+//	cursor, all others with two spaces
+//
+// ----------------------------------
+func (d castWaypointLocationDelegate) Render(w io.Writer, m list.Model, index int, listItem list.Item) {
+	i, ok := listItem.(castWaypointLocationOptionItem)
+	if !ok {
+		return
+	}
+
+	componentWidth := m.Width() - ListItemOrTitleWidthPad
+
+	// append sealed label when the waypoint cannot be cast to
+	waypointName := fmt.Sprintf(" %s", i.WaypointName)
+	if i.WaypointIsSealed {
+		waypointName = fmt.Sprintf(" %s %s", i.WaypointName, i18n.LANGUAGEMAPPING.RiftWaypointSealedLabel)
+	}
+	waypointName = ansi.Truncate(waypointName, componentWidth, "…")
+
+	// path is indented with an extra space relative to the name
+	waypointPath := fmt.Sprintf("   %s", i.WaypointPath)
+	waypointPath = ansi.Truncate(waypointPath, componentWidth, "…")
+
+	var waypointSealedReason string
+
+	// apply colour based on sealed state
+	if i.WaypointIsSealed {
+		waypointName = style.RenderStringWithColor(waypointName, style.ColorSealedMuted, true)
+		waypointPath = style.RenderStringWithColor(waypointPath, style.ColorSealedMuted, true)
+
+		waypointSealedReason = fmt.Sprintf("   %s %s", i18n.LANGUAGEMAPPING.RiftWaypointDetailSealedReason, i.WaypointSealedReason)
+		waypointSealedReason = ansi.Truncate(waypointSealedReason, componentWidth, "...")
+		waypointSealedReason = style.RenderStringWithColor(waypointSealedReason, style.ColorSealedMuted, true)
+	} else {
+		waypointName = style.RenderStringWithColor(waypointName, style.ColorPurpleVibrant, false)
+		waypointPath = style.RenderStringWithColor(waypointPath, style.ColorPurpleSoft, true)
+	}
+
+	str := fmt.Sprintf("%s\n%s\n%s", waypointName, waypointPath, waypointSealedReason)
 
 	// prefix the selected row with a cursor glyph; all others get padding
 	var fn func(...string) string

@@ -31,6 +31,11 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 				if ok {
 					popUp.CastLocationOptionList, cmd = popUp.CastLocationOptionList.Update(msg)
 				}
+			case CastWaypointLocationOptionPopUp:
+				popUp, ok := m.SpellPopUpModel.(*CastWaypointLocationOptionPopUpModel)
+				if ok {
+					popUp.CastWaypointLocationOptionList, cmd = popUp.CastWaypointLocationOptionList.Update(msg)
+				}
 			}
 			return m, cmd
 		}
@@ -46,6 +51,11 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 				popUp, ok := m.SpellPopUpModel.(*CastLocationOptionPopUpModel)
 				if ok {
 					popUp.CastLocationOptionList, cmd = popUp.CastLocationOptionList.Update(msg)
+				}
+			case CastWaypointLocationOptionPopUp:
+				popUp, ok := m.SpellPopUpModel.(*CastWaypointLocationOptionPopUpModel)
+				if ok {
+					popUp.CastWaypointLocationOptionList, cmd = popUp.CastWaypointLocationOptionList.Update(msg)
 				}
 			}
 			return m, cmd
@@ -82,7 +92,21 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 						return m, tea.Quit
 					case CastWaypoint:
 						// TODO: implement cast to waypoint functionality
+						m.PopUpType = CastWaypointLocationOptionPopUp
+						m.ShowPopUp.Store(true)
+						initCastWaypointLocationOptionPopUpModel(m, popUp.SelectedSpellName)
+						return m, nil
 					}
+				}
+			case CastWaypointLocationOptionPopUp:
+				popUp, ok := m.SpellPopUpModel.(*CastWaypointLocationOptionPopUpModel)
+				if ok {
+					selectedOption := popUp.CastWaypointLocationOptionList.SelectedItem()
+					parsedSelectedWaypointOption := selectedOption.(castWaypointLocationOptionItem)
+					m.SelectedSpellName = popUp.SelectedSpellName
+					m.SpellCastPath = parsedSelectedWaypointOption.WaypointPath
+					m.IsQuit = true
+					return m, tea.Quit
 				}
 			}
 		} else {

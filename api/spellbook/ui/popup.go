@@ -20,6 +20,8 @@ func renderPopUpComponent(m *SpellbookInteractiveModel) string {
 		return renderLearnPopUp(m)
 	case CastLocationOptionPopUp:
 		return renderCastLocationOptionPopUp(m)
+	case CastWaypointLocationOptionPopUp:
+		return renderCastWaypointLocationOptionPopUp(m)
 	}
 	return ""
 }
@@ -97,6 +99,21 @@ func renderCastLocationOptionPopUp(m *SpellbookInteractiveModel) string {
 			MaxWidth(maxWidth).
 			MaxHeight(maxHeight).
 			Render(popUp.CastLocationOptionList.View())
+	}
+	return ""
+}
+
+func renderCastWaypointLocationOptionPopUp(m *SpellbookInteractiveModel) string {
+	popUp, ok := m.SpellPopUpModel.(*CastWaypointLocationOptionPopUpModel)
+	if ok {
+		maxWidth := int(float64(m.Width) * 0.8)
+		maxHeight := int(float64(m.Height) * 0.7)
+		popUp.CastWaypointLocationOptionList.SetWidth(maxWidth - ListItemOrTitleWidthPad)
+		popUp.CastWaypointLocationOptionList.SetHeight(maxHeight - ListItemOrTitleWidthPad)
+		return style.BorderStyle.
+			MaxWidth(maxWidth).
+			MaxHeight(maxHeight).
+			Render(popUp.CastWaypointLocationOptionList.View())
 	}
 	return ""
 }

@@ -204,6 +204,13 @@ func initShortSpellInfoListKeyMap(popUpType string) func() []key.Binding {
 				key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", i18n.LANGUAGEMAPPING.SpellClosePopUp)),
 			}
 		}
+	case CastWaypointLocationOptionPopUp:
+		return func() []key.Binding {
+			return []key.Binding{
+				key.NewBinding(key.WithKeys("enter"), key.WithHelp("enter", i18n.LANGUAGEMAPPING.SpellUIChooseWaypointCastLocationKeyHelp)),
+				key.NewBinding(key.WithKeys("esc"), key.WithHelp("esc", i18n.LANGUAGEMAPPING.SpellClosePopUp)),
+			}
+		}
 	}
 
 	return func() []key.Binding { return []key.Binding{} }
