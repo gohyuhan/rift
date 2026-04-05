@@ -22,7 +22,15 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 	case "j", "down":
 		if m.ShowPopUp.Load() {
 			var cmd tea.Cmd
-			m.SpellHelpViewport, cmd = m.SpellHelpViewport.Update(msg)
+			switch m.PopUpType {
+			case HelpPopUp:
+				m.SpellHelpViewport, cmd = m.SpellHelpViewport.Update(msg)
+			case CastLocationOptionPopUp:
+				popUp, ok := m.SpellPopUpModel.(*CastLocationOptionPopUpModel)
+				if ok {
+					popUp.CastLocationOptionList, cmd = popUp.CastLocationOptionList.Update(msg)
+				}
+			}
 			return m, cmd
 		}
 		m.SpellInfoList.CursorDown()
@@ -30,7 +38,15 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 	case "k", "up":
 		if m.ShowPopUp.Load() {
 			var cmd tea.Cmd
-			m.SpellHelpViewport, cmd = m.SpellHelpViewport.Update(msg)
+			switch m.PopUpType {
+			case HelpPopUp:
+				m.SpellHelpViewport, cmd = m.SpellHelpViewport.Update(msg)
+			case CastLocationOptionPopUp:
+				popUp, ok := m.SpellPopUpModel.(*CastLocationOptionPopUpModel)
+				if ok {
+					popUp.CastLocationOptionList, cmd = popUp.CastLocationOptionList.Update(msg)
+				}
+			}
 			return m, cmd
 		}
 		m.SpellInfoList.CursorUp()
@@ -46,7 +62,11 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 		m.ShowPopUp.Store(true)
 		m.PopUpType = HelpPopUp
 	case "enter":
-		if _, ok := m.SpellInfoList.SelectedItem().(spellInfoItem); ok {
+		if spell, ok := m.SpellInfoList.SelectedItem().(spellInfoItem); ok {
+			m.SelectedSpellName = spell.SpellName
+			m.PopUpType = CastLocationOptionPopUp
+			m.ShowPopUp.Store(true)
+			initCastLocationOptionPopUpModel(m)
 			return m, nil
 		}
 	case "backspace":

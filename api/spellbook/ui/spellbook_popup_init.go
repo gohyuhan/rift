@@ -1,9 +1,12 @@
 package ui
 
 import (
+	"charm.land/bubbles/v2/list"
 	"charm.land/bubbles/v2/textinput"
+	"github.com/charmbracelet/x/ansi"
 	"github.com/gohyuhan/rift/api/learn"
 	"github.com/gohyuhan/rift/i18n"
+	"github.com/gohyuhan/rift/style"
 )
 
 // ----------------------------------
@@ -34,6 +37,42 @@ func initLearnPopUpModel(m *SpellbookInteractiveModel) {
 		CurrentFocusInputIndex: 0,
 		Error:                  nil,
 		OnInputFuncTrigger:     learn.SaveSpell,
+	}
+
+	m.SpellPopUpModel = popUpModel
+}
+
+func initCastLocationOptionPopUpModel(m *SpellbookInteractiveModel) {
+	castLocationOptionListArray := []list.Item{
+		castLocationOptionItem{
+			Title:       i18n.LANGUAGEMAPPING.CastLocationOptionCurrent,
+			Description: i18n.LANGUAGEMAPPING.CastLocationOptionCurrentDescription,
+			OptionType:  CastCWD,
+		},
+		castLocationOptionItem{
+			Title:       i18n.LANGUAGEMAPPING.CastLocationOptionWaypoint,
+			Description: i18n.LANGUAGEMAPPING.CastLocationOptionWaypointDescription,
+			OptionType:  CastWaypoint,
+		},
+	}
+
+	titleWidthLimit := m.Width - ListItemOrTitleWidthPad - ListTitleHorizontalPadding
+
+	castLocationOptionList := list.New(castLocationOptionListArray, castLocationOptionDelegate{}, m.Width, m.Height)
+	castLocationOptionList.SetShowPagination(false)
+	castLocationOptionList.SetShowStatusBar(false)
+	castLocationOptionList.SetFilteringEnabled(false)
+	castLocationOptionList.SetShowFilter(false)
+	castLocationOptionList.SetShowHelp(false)
+
+	// truncate the title to prevent overflow when the terminal is narrow
+	castLocationOptionList.Title = ansi.Truncate(i18n.LANGUAGEMAPPING.CastLocationOptionTitle, titleWidthLimit, "...")
+	castLocationOptionList.Styles.Title = style.NewStyle.Bold(true)
+	castLocationOptionList.Styles.PaginationStyle = style.NewStyle
+	castLocationOptionList.Styles.TitleBar = style.NewStyle
+
+	popUpModel := &CastLocationOptionPopUpModel{
+		CastLocationOptionList: castLocationOptionList,
 	}
 
 	m.SpellPopUpModel = popUpModel

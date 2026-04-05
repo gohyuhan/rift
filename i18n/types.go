@@ -163,32 +163,40 @@ type LanguageMapping struct {
 	WaypointClosePopUpDescription                 string
 
 	// Spell interactive UI
-	SpellInfoListTitle            string
-	SpellbookInteractiveError     string
-	RiftSpellRetrieveAllError     string
-	SpellUIUpKeyHelp              string
-	SpellUIUpKeyHelpDescription   string
-	SpellUIDownKeyHelp            string
-	SpellUIDownKeyHelpDescription string
-	SpellUIQuitKeyHelp            string
-	SpellUIQuitKeyHelpDescription string
-	SpellUIHelpKeyHelp            string
-	SpellUIHelpKeyHelpDescription string
-	SpellCastKeyHelp              string
-	SpellCastKeyHelpDescription   string
-	SpellLearnKeyHelp             string
-	SpellLearnKeyHelpDescription  string
-	SpellForgetKey                string
-	SpellForgetKeyDescription     string
-	SpellClosePopUp               string
-	SpellClosePopUpDescription    string
-	SpellUILearnKeyHelp           string
-	SpellUINextInputKeyHelp       string
-	SpellUIPreviousInputKeyHelp   string
-	SpellNameInputPlaceHolder     string
-	SpellCommandInputPlaceHolder  string
-	SpellNameInputTitle           string
-	SpellCommandInputTitle        string
+	SpellInfoListTitle               string
+	SpellbookInteractiveError        string
+	RiftSpellRetrieveAllError        string
+	SpellUIUpKeyHelp                 string
+	SpellUIUpKeyHelpDescription      string
+	SpellUIDownKeyHelp               string
+	SpellUIDownKeyHelpDescription    string
+	SpellUIQuitKeyHelp               string
+	SpellUIQuitKeyHelpDescription    string
+	SpellUIHelpKeyHelp               string
+	SpellUIHelpKeyHelpDescription    string
+	SpellCastKeyHelp                 string
+	SpellCastKeyHelpDescription      string
+	SpellLearnKeyHelp                string
+	SpellLearnKeyHelpDescription     string
+	SpellForgetKey                   string
+	SpellForgetKeyDescription        string
+	SpellClosePopUp                  string
+	SpellClosePopUpDescription       string
+	SpellUILearnKeyHelp              string
+	SpellUINextInputKeyHelp          string
+	SpellUIPreviousInputKeyHelp      string
+	SpellNameInputPlaceHolder        string
+	SpellCommandInputPlaceHolder     string
+	SpellNameInputTitle              string
+	SpellCommandInputTitle           string
+	SpellUIChooseCastLocationKeyHelp string
+
+	// Cast location option popup
+	CastLocationOptionTitle               string
+	CastLocationOptionCurrent             string
+	CastLocationOptionCurrentDescription  string
+	CastLocationOptionWaypoint            string
+	CastLocationOptionWaypointDescription string
 
 	// Setup
 	CheckAndRunSetupError  string
