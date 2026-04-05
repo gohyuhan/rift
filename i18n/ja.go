@@ -176,6 +176,13 @@ var jA = LanguageMapping{
 	SpellForgetKeyDescription:     "選択したスペルを完全に忘却する",
 	SpellClosePopUp:               "ポップアップを閉じる",
 	SpellClosePopUpDescription:    "保存せずに現在のポップアップを閉じる",
+	SpellUILearnKeyHelp:           "確定",
+	SpellUINextInputKeyHelp:       "次の入力",
+	SpellUIPreviousInputKeyHelp:   "前の入力",
+	SpellNameInputPlaceHolder:     "スペルの名前を入力してください",
+	SpellCommandInputPlaceHolder:  "スペルのコマンドを入力してください",
+	SpellNameInputTitle:           "スペル名：",
+	SpellCommandInputTitle:        "スペルコマンド：",
 
 	// Setup
 	CheckAndRunSetupError:  "rift：セットアップに失敗しました、[ERROR: %s]",

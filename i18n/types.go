@@ -182,6 +182,13 @@ type LanguageMapping struct {
 	SpellForgetKeyDescription     string
 	SpellClosePopUp               string
 	SpellClosePopUpDescription    string
+	SpellUILearnKeyHelp           string
+	SpellUINextInputKeyHelp       string
+	SpellUIPreviousInputKeyHelp   string
+	SpellNameInputPlaceHolder     string
+	SpellCommandInputPlaceHolder  string
+	SpellNameInputTitle           string
+	SpellCommandInputTitle        string
 
 	// Setup
 	CheckAndRunSetupError  string

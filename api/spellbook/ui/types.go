@@ -7,8 +7,10 @@ import (
 
 	"github.com/charmbracelet/x/ansi"
 	"github.com/gohyuhan/rift/style"
+	"go.etcd.io/bbolt"
 
 	"charm.land/bubbles/v2/list"
+	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
 )
 
@@ -96,4 +98,18 @@ func (d spellInfoDelegate) Render(w io.Writer, m list.Model, index int, listItem
 	}
 
 	fmt.Fprint(w, fn(str))
+}
+
+// ----------------------------------
+//
+//	LearnPopUpModel holds the state for the learn new spell popup
+//
+// ----------------------------------
+type LearnPopUpModel struct {
+	SpellNameInput         textinput.Model
+	SpellCommandInput      textinput.Model
+	TotalInputField        int
+	CurrentFocusInputIndex int
+	Error                  error
+	OnInputFuncTrigger     func(bboltDb *bbolt.DB, spellName string, spellCommand string) (bool, error)
 }

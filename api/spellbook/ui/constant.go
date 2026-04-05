@@ -12,6 +12,7 @@ const (
 // PopUpType sentinel values stored on SpellbookInteractiveModel.PopUpType to
 // indicate which popup (if any) is currently active.
 const (
-	NoPopUp   = "NoPopUp"
-	HelpPopUp = "HelpPopUp"
+	NoPopUp    = "NoPopUp"
+	HelpPopUp  = "HelpPopUp"
+	LearnPopUp = "LearnPopUp"
 )
