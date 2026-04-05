@@ -42,7 +42,7 @@ func initLearnPopUpModel(m *SpellbookInteractiveModel) {
 	m.SpellPopUpModel = popUpModel
 }
 
-func initCastLocationOptionPopUpModel(m *SpellbookInteractiveModel) {
+func initCastLocationOptionPopUpModel(m *SpellbookInteractiveModel, spellName string) {
 	castLocationOptionListArray := []list.Item{
 		castLocationOptionItem{
 			Title:       i18n.LANGUAGEMAPPING.CastLocationOptionCurrent,
@@ -73,6 +73,7 @@ func initCastLocationOptionPopUpModel(m *SpellbookInteractiveModel) {
 
 	popUpModel := &CastLocationOptionPopUpModel{
 		CastLocationOptionList: castLocationOptionList,
+		SelectedSpellName:      spellName,
 	}
 
 	m.SpellPopUpModel = popUpModel

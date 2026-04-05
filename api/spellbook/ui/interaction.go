@@ -6,6 +6,7 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"github.com/atotto/clipboard"
 	"github.com/gohyuhan/rift/api/spell"
+	"github.com/gohyuhan/rift/utils"
 )
 
 // ----------------------------------
@@ -62,12 +63,35 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 		m.ShowPopUp.Store(true)
 		m.PopUpType = HelpPopUp
 	case "enter":
-		if spell, ok := m.SpellInfoList.SelectedItem().(spellInfoItem); ok {
-			m.SelectedSpellName = spell.SpellName
-			m.PopUpType = CastLocationOptionPopUp
-			m.ShowPopUp.Store(true)
-			initCastLocationOptionPopUpModel(m)
-			return m, nil
+		if m.ShowPopUp.Load() {
+			switch m.PopUpType {
+			case CastLocationOptionPopUp:
+				popUp, ok := m.SpellPopUpModel.(*CastLocationOptionPopUpModel)
+				if ok {
+					selectedOption := popUp.CastLocationOptionList.SelectedItem()
+					parsedSelectedOption := selectedOption.(castLocationOptionItem)
+					switch parsedSelectedOption.OptionType {
+					case CastCWD:
+						executionPath, executionPathErr := utils.GetCWD()
+						if executionPathErr != nil {
+							executionPath = ""
+						}
+						m.SelectedSpellName = popUp.SelectedSpellName
+						m.SpellCastPath = executionPath
+						m.IsQuit = true
+						return m, tea.Quit
+					case CastWaypoint:
+						// TODO: implement cast to waypoint functionality
+					}
+				}
+			}
+		} else {
+			if spell, ok := m.SpellInfoList.SelectedItem().(spellInfoItem); ok {
+				m.PopUpType = CastLocationOptionPopUp
+				m.ShowPopUp.Store(true)
+				initCastLocationOptionPopUpModel(m, spell.SpellName)
+				return m, nil
+			}
 		}
 	case "backspace":
 		if i, ok := m.SpellInfoList.SelectedItem().(spellInfoItem); ok {

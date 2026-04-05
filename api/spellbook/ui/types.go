@@ -116,6 +116,7 @@ type LearnPopUpModel struct {
 
 type CastLocationOptionPopUpModel struct {
 	CastLocationOptionList list.Model
+	SelectedSpellName      string
 }
 
 // ---------------------------------
