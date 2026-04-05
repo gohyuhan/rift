@@ -176,6 +176,13 @@ var zH_HANT = LanguageMapping{
 	SpellForgetKeyDescription:     "永久遺忘所選法術",
 	SpellClosePopUp:               "關閉彈窗",
 	SpellClosePopUpDescription:    "關閉目前彈窗而不儲存",
+	SpellUILearnKeyHelp:           "確認",
+	SpellUINextInputKeyHelp:       "下一個輸入",
+	SpellUIPreviousInputKeyHelp:   "上一個輸入",
+	SpellNameInputPlaceHolder:     "輸入咒語的名稱",
+	SpellCommandInputPlaceHolder:  "輸入咒語的命令",
+	SpellNameInputTitle:           "咒語名稱：",
+	SpellCommandInputTitle:        "咒語命令：",
 
 	// Setup
 	CheckAndRunSetupError:  "rift：設定失敗，[ERROR: %s]",

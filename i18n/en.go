@@ -176,6 +176,13 @@ var eN = LanguageMapping{
 	SpellForgetKeyDescription:     "permanently forget the selected spell",
 	SpellClosePopUp:               "close popup",
 	SpellClosePopUpDescription:    "close the active popup without saving",
+	SpellUILearnKeyHelp:           "confirm",
+	SpellUINextInputKeyHelp:       "next input",
+	SpellUIPreviousInputKeyHelp:   "previous input",
+	SpellNameInputPlaceHolder:     "Enter a name for the spell",
+	SpellCommandInputPlaceHolder:  "Enter the command for the spell",
+	SpellNameInputTitle:           "Spell Name:",
+	SpellCommandInputTitle:        "Spell Command:",
 
 	// Setup
 	CheckAndRunSetupError:  "rift: setup failed, [ERROR: %s]",
