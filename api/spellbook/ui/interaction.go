@@ -110,10 +110,10 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 				}
 			}
 		} else {
-			if spell, ok := m.SpellInfoList.SelectedItem().(spellInfoItem); ok {
+			if spellItem, ok := m.SpellInfoList.SelectedItem().(spellInfoItem); ok {
 				m.PopUpType = CastLocationOptionPopUp
 				m.ShowPopUp.Store(true)
-				initCastLocationOptionPopUpModel(m, spell.SpellName)
+				initCastLocationOptionPopUpModel(m, spellItem.SpellName)
 				return m, nil
 			}
 		}
