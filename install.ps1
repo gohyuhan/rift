@@ -3,7 +3,7 @@
 $ErrorActionPreference = "Stop"
 
 # Version to install
-$Version = "v0.2.0"
+$Version = "v0.3.0-pr.1"
 
 Write-Host "Installing rift version: $Version" -ForegroundColor Cyan
 
