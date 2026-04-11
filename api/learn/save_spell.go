@@ -25,7 +25,7 @@ import (
 //	existing spell was overwritten
 //
 // ----------------------------------
-func SaveSpell(bboltDb *bbolt.DB, spellName string, spellCmd string) (bool, error) {
+func SaveSpell(spellName string, spellCmd string) (bool, error) {
 	hasExisting := false
 
 	spellCommandArray, spellCommandArrayErr := shell.Fields(spellCmd, nil)
@@ -43,7 +43,13 @@ func SaveSpell(bboltDb *bbolt.DB, spellName string, spellCmd string) (bool, erro
 		return hasExisting, err
 	}
 
-	dbErr := bboltDb.Update(func(tx *bbolt.Tx) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return hasExisting, bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	bboltWriteDbErr = bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.SpellBucket)
 		if bucket == nil {
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellBucketNotFoundError, style.ColorError, false))
@@ -82,5 +88,5 @@ func SaveSpell(bboltDb *bbolt.DB, spellName string, spellCmd string) (bool, erro
 		return bucket.Put([]byte(spellName), data)
 	})
 
-	return hasExisting, dbErr
+	return hasExisting, bboltWriteDbErr
 }

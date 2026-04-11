@@ -25,12 +25,12 @@ import (
 //	RecordCorruptedSpellInfo before the error is returned to the caller
 //
 // ----------------------------------
-func getAllSpellInfo(bboltDb *bbolt.DB) ([]spellInfo, error) {
+func getAllSpellInfo(bboltReadDb *bbolt.DB) ([]spellInfo, error) {
 	var spellsInfo []spellInfo
 	var corruptedSpellName []string
 	spellCorrupted := false
 
-	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
+	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		// ensure the spell bucket exists before iterating
 		spellBucket := tx.Bucket(db.SpellBucket)
 		if spellBucket == nil {
@@ -72,7 +72,7 @@ func getAllSpellInfo(bboltDb *bbolt.DB) ([]spellInfo, error) {
 	})
 
 	if spellCorrupted {
-		viewErr = apiUtils.RecordCorruptedSpellInfo(bboltDb, corruptedSpellName)
+		viewErr = apiUtils.RecordCorruptedSpellInfo(corruptedSpellName)
 	}
 
 	return spellsInfo, viewErr
@@ -95,7 +95,7 @@ func initSpellInfoListModel(m *SpellbookInteractiveModel) error {
 
 	titleWidthLimit := m.Width - ListItemOrTitleWidthPad - ListTitleHorizontalPadding
 
-	allSpellsInfo, err := getAllSpellInfo(m.BboltDb)
+	allSpellsInfo, err := getAllSpellInfo(m.BboltReadDb)
 	if err != nil {
 		return err
 	}

@@ -33,7 +33,7 @@ type WaypointInteractiveModel struct {
 	WaypointPopUpModel             interface{}
 	Width                          int
 	Height                         int
-	BboltDb                        *bbolt.DB
+	BboltReadDb                    *bbolt.DB
 	IsRenderInit                   atomic.Bool
 }
 
@@ -44,7 +44,7 @@ type WaypointInteractiveModel struct {
 //	terminal dimensions are available when building item layouts
 //
 // ----------------------------------
-func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
+func initWaypointInteractiveModel(bboltReadDb *bbolt.DB) *WaypointInteractiveModel {
 	vp := viewport.New()
 	vp.SoftWrap = false
 	vp.MouseWheelEnabled = false
@@ -56,7 +56,7 @@ func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
 		PopUpType:                      NoPopUp,
 		WaypointInfoListCursorPosition: 0,
 		WaypointHelpViewport:           vp,
-		BboltDb:                        bboltDb,
+		BboltReadDb:                    bboltReadDb,
 	}
 	waypointInteractiveModel.ShowPopUp.Store(false)
 	waypointInteractiveModel.IsTypingMode.Store(false)
@@ -75,8 +75,8 @@ func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
 //	not a full TUI application
 //
 // ----------------------------------
-func RunWaypointInteractive(bboltDb *bbolt.DB) (string, string, error) {
-	waypointInteractiveModel := initWaypointInteractiveModel(bboltDb)
+func RunWaypointInteractive(bboltReadDb *bbolt.DB) (string, string, error) {
+	waypointInteractiveModel := initWaypointInteractiveModel(bboltReadDb)
 	// route program output to stderr so stdout stays clean for callers
 	p := tea.NewProgram(waypointInteractiveModel, tea.WithOutput(os.Stderr))
 	result, err := p.Run()

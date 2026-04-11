@@ -26,11 +26,11 @@ import (
 //	align in a clean column regardless of the active language.
 //
 // ----------------------------------
-func RetrieveSpellInfoDetail(bboltDb *bbolt.DB, spellName string) ([]string, error) {
+func RetrieveSpellInfoDetail(bboltReadDb *bbolt.DB, spellName string) ([]string, error) {
 	var spellDetailInfo []string
 	spellCorrupted := false
 
-	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
+	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		// ensure the spell bucket exists before looking up the key
 		spellBucket := tx.Bucket(db.SpellBucket)
 		if spellBucket == nil {
@@ -87,7 +87,7 @@ func RetrieveSpellInfoDetail(bboltDb *bbolt.DB, spellName string) ([]string, err
 
 	// View is complete — safe to open a separate Update for the corruption write
 	if spellCorrupted {
-		viewErr = apiUtils.RecordCorruptedSpellInfo(bboltDb, []string{spellName})
+		viewErr = apiUtils.RecordCorruptedSpellInfo([]string{spellName})
 	}
 
 	return spellDetailInfo, viewErr

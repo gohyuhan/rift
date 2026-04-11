@@ -83,7 +83,7 @@ func initCastLocationOptionPopUpModel(m *SpellbookInteractiveModel, spellName st
 func initCastWaypointLocationOptionPopUpModel(m *SpellbookInteractiveModel, spellName string) {
 	titleWidthLimit := m.Width - ListItemOrTitleWidthPad - ListTitleHorizontalPadding
 
-	allWaypointsInfo, _ := apiUtils.GetAllWaypointsInfo(m.BboltDb)
+	allWaypointsInfo, _ := apiUtils.GetAllWaypointsInfo(m.BboltReadDb)
 	castWaypointLocationOptionListArray := []list.Item{}
 	for _, waypoint := range allWaypointsInfo {
 		castWaypointLocationOptionListArray = append(castWaypointLocationOptionListArray, castWaypointLocationOptionItem(waypoint))

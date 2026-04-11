@@ -19,8 +19,14 @@ import (
 //	logToTerminal is true.
 //
 // ----------------------------------
-func ForgetSpell(bboltDb *bbolt.DB, spellName string, logToTerminal bool) error {
-	return bboltDb.Update(func(tx *bbolt.Tx) error {
+func ForgetSpell(spellName string, logToTerminal bool) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		// ensure the spell bucket exists before attempting the delete
 		spellBucket := tx.Bucket(db.SpellBucket)
 		if spellBucket == nil {

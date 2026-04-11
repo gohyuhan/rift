@@ -86,14 +86,14 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 	castFlagCalled := cmd.Flags().Changed("cast")
 
 	// open DB for reading waypoint data
-	bboltDB, bboltDBErr := db.OpenDB()
-	if bboltDBErr != nil {
-		return bboltDBErr
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return bboltReadDbErr
 	}
-	defer db.CloseDB(bboltDB)
+	defer db.CloseDB(bboltReadDb)
 
 	// look up the waypoint path; errors here are user-visible (sealed, missing, corrupted)
-	retrievedPath, retrieveErr := retrieveWaypointInfoForNavigate(bboltDB, waypointName)
+	retrievedPath, retrieveErr := retrieveWaypointInfoForNavigate(bboltReadDb, waypointName)
 	if retrieveErr != nil {
 		return retrieveErr
 	}
@@ -105,13 +105,13 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "cast", castArgErr.Error()), style.ColorError, false))
 		}
 
-		return spell.RetrieveAndCastSpell(bboltDB, castArg, retrievedPath)
+		return spell.RetrieveAndCastSpell(bboltReadDb, castArg, retrievedPath)
 	} else {
 		// Only this line goes to stdout — the shell wrapper evals it.
 		fmt.Printf("cd %q", retrievedPath)
 
 		// best-effort: increment travel count; failure is silently ignored
-		apiUtils.UpdateWaypointTravelledCount(bboltDB, waypointName)
+		apiUtils.UpdateWaypointTravelledCount(waypointName)
 	}
 
 	return nil

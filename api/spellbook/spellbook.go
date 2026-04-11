@@ -20,22 +20,22 @@ import (
 // ----------------------------------
 var RiftSpellbookFunc = func(cmd *cobra.Command, args []string) error {
 	// open DB so we can read spell records
-	bboltDB, bboltDBErr := db.OpenDB()
-	if bboltDBErr != nil {
-		return bboltDBErr
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return bboltReadDbErr
 	}
-	defer db.CloseDB(bboltDB)
+	defer db.CloseDB(bboltReadDb)
 
 	// no args — start spellbook Interactive UI
 	if len(args) < 1 {
-		spellName, spellCastPath, interactiveErr := spellbookUI.RunSpellbookInteractive(bboltDB)
+		spellName, spellCastPath, interactiveErr := spellbookUI.RunSpellbookInteractive(bboltReadDb)
 		if interactiveErr != nil {
 			return interactiveErr
 		}
 
 		if spellName != "" && spellCastPath != "" {
 			// best-effort: increment spell cast count; failure is silently ignored
-			spell.RetrieveAndCastSpell(bboltDB, spellName, spellCastPath)
+			spell.RetrieveAndCastSpell(bboltReadDb, spellName, spellCastPath)
 		}
 
 		return nil
@@ -45,7 +45,7 @@ var RiftSpellbookFunc = func(cmd *cobra.Command, args []string) error {
 	// extract and normalize the spell name from the first argument
 	spellName := strings.TrimSpace(args[0])
 
-	retrieveSpellInfoDetail, retrieveSpellInfoDetailErr := features.RetrieveSpellInfoDetail(bboltDB, spellName)
+	retrieveSpellInfoDetail, retrieveSpellInfoDetailErr := features.RetrieveSpellInfoDetail(bboltReadDb, spellName)
 
 	if retrieveSpellInfoDetailErr != nil {
 		return retrieveSpellInfoDetailErr

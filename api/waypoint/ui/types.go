@@ -8,7 +8,6 @@ import (
 	"github.com/charmbracelet/x/ansi"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
-	"go.etcd.io/bbolt"
 
 	"charm.land/bubbles/v2/list"
 	"charm.land/bubbles/v2/textinput"
@@ -124,7 +123,7 @@ type RebindPopUpModel struct {
 	RebindPathInput    textinput.Model
 	WaypointName       string
 	Error              error
-	OnInputFuncTrigger func(bboltDb *bbolt.DB, waypointName string, rebindTo string, logToTerminal bool) error
+	OnInputFuncTrigger func(waypointName string, rebindTo string, logToTerminal bool) error
 }
 
 // ReforgePopUpModel holds the state for the reforge name input popup.
@@ -132,5 +131,5 @@ type ReforgePopUpModel struct {
 	ReforgeWaypointNameInput textinput.Model
 	WaypointName             string
 	Error                    error
-	OnInputFuncTrigger       func(bboltDb *bbolt.DB, waypointName string, reforgeTo string, logToTerminal bool) error
+	OnInputFuncTrigger       func(waypointName string, reforgeTo string, logToTerminal bool) error
 }

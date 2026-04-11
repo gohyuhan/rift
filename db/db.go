@@ -36,13 +36,7 @@ func SetupDB() error {
 		return fmt.Errorf("%s", errorMessage)
 	}
 
-	bboltDB, bboltDBErr := OpenDB()
-	if bboltDBErr != nil {
-		return bboltDBErr
-	}
-	defer CloseDB(bboltDB)
-
-	bucketSetupErr := SetupBuckets(bboltDB)
+	bucketSetupErr := SetupBuckets()
 	if bucketSetupErr != nil {
 		errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.DBSetupError, bucketSetupErr.Error()), style.ColorError, false)
 		return fmt.Errorf("%s", errorMessage)
@@ -56,8 +50,13 @@ func SetupDB() error {
 //	counterparts) if they do not already exist.
 //
 // ----------------------------------
-func SetupBuckets(db *bbolt.DB) error {
-	return db.Update(func(tx *bbolt.Tx) error {
+func SetupBuckets() error {
+	bboltWriteDB, bboltWriteDBErr := OpenWriteDB()
+	if bboltWriteDBErr != nil {
+		return bboltWriteDBErr
+	}
+	defer CloseDB(bboltWriteDB)
+	return bboltWriteDB.Update(func(tx *bbolt.Tx) error {
 		if _, err := tx.CreateBucketIfNotExists(WaypointBucket); err != nil {
 			return err
 		}
@@ -76,16 +75,23 @@ func SetupBuckets(db *bbolt.DB) error {
 
 // ----------------------------------
 //
-//	Opens the bbolt database at the resolved DB file path with a 2-second
-//	timeout to avoid indefinite blocking if the file is already locked.
+//	Opens the bbolt database at the resolved DB file path with a 5-second
+//	timeout. Opens read-only when isWrite is false, read-write otherwise,
+//	to avoid indefinite blocking if the file is already locked.
 //
 // ----------------------------------
-func OpenDB() (*bbolt.DB, error) {
+func openDB(isWrite bool) (*bbolt.DB, error) {
 	dbPath, dbPathErr := utils.GetRiftDBFilePath()
 	if dbPathErr != nil {
 		return nil, dbPathErr
 	}
-	db, err := bbolt.Open(dbPath, 0o600, &bbolt.Options{Timeout: 2 * time.Second})
+
+	dbOption := &bbolt.Options{ReadOnly: true, Timeout: 5 * time.Second}
+	if isWrite {
+		dbOption = &bbolt.Options{Timeout: 5 * time.Second}
+	}
+
+	db, err := bbolt.Open(dbPath, 0o600, dbOption)
 	if err != nil {
 		errorMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.DBOpenError, style.ColorError, false)
 		return nil, fmt.Errorf("%s", errorMessage)
@@ -95,7 +101,25 @@ func OpenDB() (*bbolt.DB, error) {
 
 // ----------------------------------
 //
-//	Closes the bbolt database. Intended to be called via defer after OpenDB.
+//	Opens the bbolt database in read-only mode.
+//
+// ----------------------------------
+func OpenReadDB() (*bbolt.DB, error) {
+	return openDB(false)
+}
+
+// ----------------------------------
+//
+//	Opens the bbolt database in read-write mode.
+//
+// ----------------------------------
+func OpenWriteDB() (*bbolt.DB, error) {
+	return openDB(true)
+}
+
+// ----------------------------------
+//
+//	Closes the bbolt database. Intended to be called via defer after OpenReadDB or OpenWriteDB.
 //
 // ----------------------------------
 func CloseDB(db *bbolt.DB) {

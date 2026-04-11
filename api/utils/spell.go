@@ -27,9 +27,15 @@ import (
 //	best-effort; the corruption error is always returned to the caller.
 //
 // ----------------------------------
-func RecordCorruptedSpellInfo(bboltDB *bbolt.DB, corruptedSpellsName []string) error {
+func RecordCorruptedSpellInfo(corruptedSpellsName []string) error {
 	// best-effort write — ignore the Update error; the caller always gets the corruption message
-	bboltDB.Update(func(tx *bbolt.Tx) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		spellCorruptedBucket := tx.Bucket(db.SpellDataCorruptedBucketRecord)
 		if spellCorruptedBucket != nil {
 			for _, corruptedSpell := range corruptedSpellsName {
@@ -90,8 +96,14 @@ func PutSpell(bucket *bbolt.Bucket, spellName string, spell *pb.Spell) error {
 //	spell does not exist.
 //
 // ----------------------------------
-func UpdateSpellCastedCount(bboltDb *bbolt.DB, spellName string) error {
-	return bboltDb.Update(func(tx *bbolt.Tx) error {
+func UpdateSpellCastedCount(spellName string) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		bucket, spell, err := GetSpellForUpdate(tx, spellName)
 		if err != nil {
 			return err

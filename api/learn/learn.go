@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/style"
@@ -24,14 +23,7 @@ var RiftLearnFunc = func(command *cobra.Command, args []string) error {
 	spellName := strings.TrimSpace(args[0])
 	spellCmd := strings.TrimSpace(args[1])
 
-	// open DB and persist the new spell
-	bboltDB, bboltDBErr := db.OpenDB()
-	if bboltDBErr != nil {
-		return bboltDBErr
-	}
-	defer db.CloseDB(bboltDB)
-
-	spellExist, saveSpellErr := SaveSpell(bboltDB, spellName, spellCmd)
+	spellExist, saveSpellErr := SaveSpell(spellName, spellCmd)
 
 	if saveSpellErr != nil {
 		return saveSpellErr

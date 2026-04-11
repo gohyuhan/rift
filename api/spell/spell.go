@@ -28,20 +28,20 @@ var RiftSpellFunc = func(cmd *cobra.Command, args []string) error {
 	forgetFlagCalled := cmd.Flags().Changed("forget")
 
 	// open DB — shared across both the forget and cast paths
-	bboltDB, bboltDBErr := db.OpenDB()
-	if bboltDBErr != nil {
-		return bboltDBErr
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return bboltReadDbErr
 	}
-	defer db.CloseDB(bboltDB)
+	defer db.CloseDB(bboltReadDb)
 
 	if forgetFlagCalled {
-		return ForgetSpell(bboltDB, spellName, true)
+		return ForgetSpell(spellName, true)
 	} else {
 		executionPath, executionPathErr := utils.GetCWD()
 		if executionPathErr != nil {
 			return executionPathErr
 		}
-		return RetrieveAndCastSpell(bboltDB, spellName, executionPath)
+		return RetrieveAndCastSpell(bboltReadDb, spellName, executionPath)
 	}
 }
 
@@ -51,9 +51,9 @@ var RiftSpellFunc = func(cmd *cobra.Command, args []string) error {
 //	then increments the cast count (best-effort; failure is silently ignored).
 //
 // ----------------------------------
-func RetrieveAndCastSpell(bboltDB *bbolt.DB, spellName string, executionPath string) error {
+func RetrieveAndCastSpell(bboltReadDb *bbolt.DB, spellName string, executionPath string) error {
 	// look up the spell command; errors here are user-visible (missing, corrupted)
-	retrievedSpellCmd, retrieveErr := retrieveSpellInfoForCast(bboltDB, spellName)
+	retrievedSpellCmd, retrieveErr := retrieveSpellInfoForCast(bboltReadDb, spellName)
 	if retrieveErr != nil {
 		return retrieveErr
 	}
@@ -65,11 +65,7 @@ func RetrieveAndCastSpell(bboltDB *bbolt.DB, spellName string, executionPath str
 	}
 
 	// best-effort: increment cast count; failure is silently ignored
-	apiUtils.UpdateSpellCastedCount(bboltDB, spellName)
-
-	// Release the database lock early so that other rift instances are not blocked
-	// while the potentially long-running command is executing.
-	db.CloseDB(bboltDB)
+	apiUtils.UpdateSpellCastedCount(spellName)
 
 	// Run the user's command; the exit code is intentionally not propagated —
 	// rift is a launcher, not a validator of the command's outcome

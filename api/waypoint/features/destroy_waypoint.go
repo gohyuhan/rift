@@ -18,8 +18,14 @@ import (
 //	Fails only when the bucket itself is missing or bbolt returns a hard error.
 //
 // ----------------------------------
-func DestroyDiscoveredWaypoint(bboltDb *bbolt.DB, waypointName string, logToTerminal bool) error {
-	return bboltDb.Update(func(tx *bbolt.Tx) error {
+func DestroyDiscoveredWaypoint(waypointName string, logToTerminal bool) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before attempting the delete
 		waypointBucket := tx.Bucket(db.WaypointBucket)
 		if waypointBucket == nil {

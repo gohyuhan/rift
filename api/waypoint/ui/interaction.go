@@ -64,7 +64,7 @@ func handleNonTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg
 		if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
 			// perform an unseal of waypoint, but if the waypoint is still having invalid path,
 			// it will still be resealed when performing the list reinitialization
-			utils.UpdateWaypointUnSeal(m.BboltDb, i.WaypointName)
+			utils.UpdateWaypointUnSeal(i.WaypointName)
 			initWaypointInfoListModel(m)
 			return m, nil
 		}
@@ -97,7 +97,7 @@ func handleNonTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg
 	case "backspace":
 		if i, ok := m.WaypointInfoList.SelectedItem().(waypointInfoItem); ok {
 			// perform a destroy on the selected waypoint
-			destoryErr := features.DestroyDiscoveredWaypoint(m.BboltDb, i.WaypointName, false)
+			destoryErr := features.DestroyDiscoveredWaypoint(i.WaypointName, false)
 			if destoryErr != nil {
 				m.ErrMessage = destoryErr
 				m.IsQuit = true
@@ -167,7 +167,7 @@ func handleTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (
 			popUp, ok := m.WaypointPopUpModel.(*RebindPopUpModel)
 			if ok {
 				newWaypointPath := strings.TrimSpace(popUp.RebindPathInput.Value())
-				rebindErr := popUp.OnInputFuncTrigger(m.BboltDb, popUp.WaypointName, newWaypointPath, false)
+				rebindErr := popUp.OnInputFuncTrigger(popUp.WaypointName, newWaypointPath, false)
 				if rebindErr != nil {
 					// surface the error in the popup rather than quitting
 					popUp.Error = rebindErr
@@ -180,7 +180,7 @@ func handleTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg) (
 			popUp, ok := m.WaypointPopUpModel.(*ReforgePopUpModel)
 			if ok {
 				newWaypointName := strings.TrimSpace(popUp.ReforgeWaypointNameInput.Value())
-				reforgeErr := popUp.OnInputFuncTrigger(m.BboltDb, popUp.WaypointName, newWaypointName, false)
+				reforgeErr := popUp.OnInputFuncTrigger(popUp.WaypointName, newWaypointName, false)
 				if reforgeErr != nil {
 					// surface the error in the popup rather than quitting
 					popUp.Error = reforgeErr

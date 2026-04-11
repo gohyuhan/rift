@@ -34,7 +34,7 @@ type SpellbookInteractiveModel struct {
 	SpellPopUpModel             interface{}
 	Width                       int
 	Height                      int
-	BboltDb                     *bbolt.DB
+	BboltReadDb                 *bbolt.DB
 	IsRenderInit                atomic.Bool
 }
 
@@ -56,7 +56,7 @@ type spellInfo struct {
 //	terminal dimensions are available when building item layouts
 //
 // ----------------------------------
-func initSpellbookInteractiveModel(bboltDb *bbolt.DB) *SpellbookInteractiveModel {
+func initSpellbookInteractiveModel(bboltReadDb *bbolt.DB) *SpellbookInteractiveModel {
 	vp := viewport.New()
 	vp.SoftWrap = false
 	vp.MouseWheelEnabled = false
@@ -69,7 +69,7 @@ func initSpellbookInteractiveModel(bboltDb *bbolt.DB) *SpellbookInteractiveModel
 		PopUpType:                   NoPopUp,
 		SpellInfoListCursorPosition: 0,
 		SpellHelpViewport:           vp,
-		BboltDb:                     bboltDb,
+		BboltReadDb:                 bboltReadDb,
 	}
 	spellbookInteractiveModel.ShowPopUp.Store(false)
 	spellbookInteractiveModel.IsTypingMode.Store(false)
@@ -88,8 +88,8 @@ func initSpellbookInteractiveModel(bboltDb *bbolt.DB) *SpellbookInteractiveModel
 //	not a full TUI application
 //
 // ----------------------------------
-func RunSpellbookInteractive(bboltDb *bbolt.DB) (string, string, error) {
-	spellbookInteractiveModel := initSpellbookInteractiveModel(bboltDb)
+func RunSpellbookInteractive(bboltReadDb *bbolt.DB) (string, string, error) {
+	spellbookInteractiveModel := initSpellbookInteractiveModel(bboltReadDb)
 	// route program output to stderr so stdout stays clean for callers
 	p := tea.NewProgram(spellbookInteractiveModel, tea.WithOutput(os.Stderr))
 	result, err := p.Run()
