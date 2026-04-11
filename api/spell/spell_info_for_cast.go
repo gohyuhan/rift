@@ -24,11 +24,18 @@ import (
 //	  - the stored proto data is corrupted
 //
 // ----------------------------------
-func retrieveSpellInfoForCast(bboltDb *bbolt.DB, spellName string) ([]string, error) {
+func retrieveSpellInfoForCast(spellName string) ([]string, error) {
 	retrievedCmd := []string{}
 	spellCorrupted := false
 
-	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
+	// open DB for reading spell data
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return []string{}, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
+
+	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.SpellBucket)
 		if bucket == nil {
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellBucketNotFoundError, style.ColorError, false))
@@ -54,8 +61,11 @@ func retrieveSpellInfoForCast(bboltDb *bbolt.DB, spellName string) ([]string, er
 		return nil
 	})
 
+	// close early so it will not block write connection below
+	db.CloseDB(bboltReadDb)
+
 	if spellCorrupted {
-		viewErr = apiUtils.RecordCorruptedSpellInfo(bboltDb, []string{spellName})
+		viewErr = apiUtils.RecordCorruptedSpellInfo([]string{spellName})
 	}
 
 	return retrievedCmd, viewErr

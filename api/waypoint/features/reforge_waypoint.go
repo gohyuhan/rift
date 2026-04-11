@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
+	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/style"
@@ -22,7 +23,7 @@ import (
 //	sealed state, travelled count, timestamps) are preserved unchanged.
 //
 // ----------------------------------
-func ReforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string, logToTerminal bool) error {
+func ReforgeWaypoint(waypointName string, reforgeTo string, logToTerminal bool) error {
 	// validate that a non-empty new name was provided before opening the Update transaction;
 	// unlike rebind, there is no sensible default — an empty name is always an error
 	if reforgeTo == "" {
@@ -39,7 +40,13 @@ func ReforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string, l
 		return err
 	}
 
-	reforgeErr := bboltDb.Update(func(tx *bbolt.Tx) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		// fetch the current waypoint record and its bucket in a single helper call
 		waypointBucket, waypoint, retrieveErr := apiUtils.GetWaypointForUpdate(tx, waypointName)
 		if retrieveErr != nil {
@@ -72,6 +79,4 @@ func ReforgeWaypoint(bboltDb *bbolt.DB, waypointName string, reforgeTo string, l
 		}
 		return nil
 	})
-
-	return reforgeErr
 }

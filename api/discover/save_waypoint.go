@@ -19,8 +19,14 @@ import (
 //	whether healthy or corrupted.
 //
 // ----------------------------------
-func saveWaypoint(bboltDb *bbolt.DB, waypointName string, path string) error {
-	return bboltDb.Update(func(tx *bbolt.Tx) error {
+func saveWaypoint(waypointName string, path string) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.WaypointBucket)
 		if bucket == nil {
 			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))

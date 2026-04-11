@@ -120,7 +120,7 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 	case "backspace":
 		if i, ok := m.SpellInfoList.SelectedItem().(spellInfoItem); ok {
 			// perform a forget on the selected spell
-			forgetErr := spell.ForgetSpell(m.BboltDb, i.SpellName, false)
+			forgetErr := spell.ForgetSpell(i.SpellName, false)
 			if forgetErr != nil {
 				m.ErrMessage = forgetErr
 				m.IsQuit = true
@@ -194,7 +194,7 @@ func handleTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMsg) 
 			if ok {
 				spellName := strings.TrimSpace(popUp.SpellNameInput.Value())
 				spellCmd := strings.TrimSpace(popUp.SpellCommandInput.Value())
-				_, learnErr := popUp.OnInputFuncTrigger(m.BboltDb, spellName, spellCmd)
+				_, learnErr := popUp.OnInputFuncTrigger(spellName, spellCmd)
 				if learnErr != nil {
 					// surface the error in the popup rather than quitting
 					popUp.Error = learnErr

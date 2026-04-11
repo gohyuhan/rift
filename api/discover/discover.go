@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
-	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/style"
@@ -49,14 +48,7 @@ var RiftDiscoverFunc = func(command *cobra.Command, args []string) error {
 		return err
 	}
 
-	// open DB and persist the new waypoint
-	bboltDB, bboltDBErr := db.OpenDB()
-	if bboltDBErr != nil {
-		return bboltDBErr
-	}
-	defer db.CloseDB(bboltDB)
-
-	saveWaypointErr := saveWaypoint(bboltDB, waypointName, cwd)
+	saveWaypointErr := saveWaypoint(waypointName, cwd)
 
 	if saveWaypointErr != nil {
 		return saveWaypointErr

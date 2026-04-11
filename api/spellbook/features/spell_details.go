@@ -26,11 +26,18 @@ import (
 //	align in a clean column regardless of the active language.
 //
 // ----------------------------------
-func RetrieveSpellInfoDetail(bboltDb *bbolt.DB, spellName string) ([]string, error) {
+func RetrieveSpellInfoDetail(spellName string) ([]string, error) {
 	var spellDetailInfo []string
 	spellCorrupted := false
 
-	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
+	// open DB so we can read spell records
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return []string{}, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
+
+	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		// ensure the spell bucket exists before looking up the key
 		spellBucket := tx.Bucket(db.SpellBucket)
 		if spellBucket == nil {
@@ -85,9 +92,12 @@ func RetrieveSpellInfoDetail(bboltDb *bbolt.DB, spellName string) ([]string, err
 		return nil
 	})
 
+	// close early so it will not block write connection below
+	db.CloseDB(bboltReadDb)
+
 	// View is complete — safe to open a separate Update for the corruption write
 	if spellCorrupted {
-		viewErr = apiUtils.RecordCorruptedSpellInfo(bboltDb, []string{spellName})
+		viewErr = apiUtils.RecordCorruptedSpellInfo([]string{spellName})
 	}
 
 	return spellDetailInfo, viewErr

@@ -5,6 +5,7 @@ import (
 	"time"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
+	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/style"
@@ -21,7 +22,7 @@ import (
 //	and updates the discovered timestamp to now (UTC).
 //
 // ----------------------------------
-func RebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string, logToTerminal bool) error {
+func RebindWaypoint(waypointName string, rebindTo string, logToTerminal bool) error {
 	// validate if the rebindTo is valid or not before opening the Update transaction;
 	// this avoids unnecessary DB writes if the path is invalid
 	// and also prevent holding the DB lock during potentially slow filesystem operations
@@ -40,7 +41,13 @@ func RebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string, log
 		rebindTo = cwd
 	}
 
-	rebindErr := bboltDb.Update(func(tx *bbolt.Tx) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		// fetch the current waypoint record and its bucket in a single helper call
 		waypointBucket, waypoint, retrieveErr := apiUtils.GetWaypointForUpdate(tx, waypointName)
 		if retrieveErr != nil {
@@ -67,6 +74,4 @@ func RebindWaypoint(bboltDb *bbolt.DB, waypointName string, rebindTo string, log
 		}
 		return nil
 	})
-
-	return rebindErr
 }

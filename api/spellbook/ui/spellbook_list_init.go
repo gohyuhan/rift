@@ -18,19 +18,26 @@ import (
 
 // ----------------------------------
 //
-//	reads every entry in the spell bucket and returns a slice of
-//	spellInfo records; uses a read-only View transaction so any
-//	corruption writes are deferred to a separate Update after View
-//	completes; corrupted proto entries are collected and recorded via
-//	RecordCorruptedSpellInfo before the error is returned to the caller
+//	Reads every entry in the spell bucket and returns a slice of spellInfo
+//	records. Uses a read-only View transaction; the read connection is closed
+//	immediately after View completes so it does not block any concurrent write
+//	connection. Corrupted proto entries are collected during the View and
+//	recorded via RecordCorruptedSpellInfo in a follow-up Update transaction.
 //
 // ----------------------------------
-func getAllSpellInfo(bboltDb *bbolt.DB) ([]spellInfo, error) {
+func getAllSpellInfo() ([]spellInfo, error) {
 	var spellsInfo []spellInfo
 	var corruptedSpellName []string
 	spellCorrupted := false
 
-	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
+	// open DB so we can read spell records
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return spellsInfo, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
+
+	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		// ensure the spell bucket exists before iterating
 		spellBucket := tx.Bucket(db.SpellBucket)
 		if spellBucket == nil {
@@ -71,8 +78,11 @@ func getAllSpellInfo(bboltDb *bbolt.DB) ([]spellInfo, error) {
 		return nil
 	})
 
+	// close early so it will not block write connection below
+	db.CloseDB(bboltReadDb)
+
 	if spellCorrupted {
-		viewErr = apiUtils.RecordCorruptedSpellInfo(bboltDb, corruptedSpellName)
+		viewErr = apiUtils.RecordCorruptedSpellInfo(corruptedSpellName)
 	}
 
 	return spellsInfo, viewErr
@@ -95,7 +105,7 @@ func initSpellInfoListModel(m *SpellbookInteractiveModel) error {
 
 	titleWidthLimit := m.Width - ListItemOrTitleWidthPad - ListTitleHorizontalPadding
 
-	allSpellsInfo, err := getAllSpellInfo(m.BboltDb)
+	allSpellsInfo, err := getAllSpellInfo()
 	if err != nil {
 		return err
 	}

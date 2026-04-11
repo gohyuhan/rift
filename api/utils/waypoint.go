@@ -41,9 +41,15 @@ type WaypointInfo struct {
 //	best-effort; the corruption error is always returned to the caller.
 //
 // ----------------------------------
-func RecordCorruptedWaypointInfo(bboltDB *bbolt.DB, corruptedWaypointsName []string) error {
+func RecordCorruptedWaypointInfo(corruptedWaypointsName []string) error {
 	// best-effort write — ignore the Update error; the caller always gets the corruption message
-	bboltDB.Update(func(tx *bbolt.Tx) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		waypointCorruptedBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
 		if waypointCorruptedBucket != nil {
 			for _, corruptedWaypoint := range corruptedWaypointsName {
@@ -105,8 +111,14 @@ func PutWaypoint(bucket *bbolt.Bucket, waypointName string, waypoint *pb.Waypoin
 //	check fails.
 //
 // ----------------------------------
-func UpdateWaypointIsSeal(bboltDb *bbolt.DB, waypointName string, sealed bool, reason string) error {
-	return bboltDb.Update(func(tx *bbolt.Tx) error {
+func UpdateWaypointIsSeal(waypointName string, sealed bool, reason string) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
 		if err != nil {
 			return err
@@ -126,8 +138,14 @@ func UpdateWaypointIsSeal(bboltDb *bbolt.DB, waypointName string, sealed bool, r
 //	or the waypoint does not exist.
 //
 // ----------------------------------
-func UpdateWaypointUnSeal(bboltDb *bbolt.DB, waypointName string) error {
-	return bboltDb.Update(func(tx *bbolt.Tx) error {
+func UpdateWaypointUnSeal(waypointName string) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
 		if err != nil {
 			return err
@@ -145,8 +163,13 @@ func UpdateWaypointUnSeal(bboltDb *bbolt.DB, waypointName string) error {
 //	waypoint does not exist.
 //
 // ----------------------------------
-func UpdateWaypointTravelledCount(bboltDb *bbolt.DB, waypointName string) error {
-	return bboltDb.Update(func(tx *bbolt.Tx) error {
+func UpdateWaypointTravelledCount(waypointName string) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
 		if err != nil {
 			return err
@@ -158,14 +181,16 @@ func UpdateWaypointTravelledCount(bboltDb *bbolt.DB, waypointName string) error 
 
 // ----------------------------------
 //
-//	reads every entry in the waypoint bucket and returns a slice of
-//	waypointInfo records; uses a read-only View transaction so any
-//	corruption writes are deferred to a separate Update after View
-//	completes; corrupted proto entries are collected and recorded via
-//	RecordCorruptedWaypointInfo before the error is returned to the caller
+//	Reads every entry in the waypoint bucket and returns a slice of
+//	WaypointInfo records. Uses a read-only View transaction; path existence is
+//	checked for each entry inside the View and any waypoints whose paths are
+//	gone are queued for sealing. The read connection is closed immediately
+//	after View completes so it does not block any concurrent write connection.
+//	Pending seals and corrupted-proto entries are each persisted in their own
+//	follow-up Update transactions after the View closes.
 //
 // ----------------------------------
-func GetAllWaypointsInfo(bboltDb *bbolt.DB) ([]WaypointInfo, error) {
+func GetAllWaypointsInfo() ([]WaypointInfo, error) {
 	var waypointsInfo []WaypointInfo
 	var corruptedWaypointName []string
 	waypointCorrupted := false
@@ -178,7 +203,14 @@ func GetAllWaypointsInfo(bboltDb *bbolt.DB) ([]WaypointInfo, error) {
 	}
 	var toSeal []pendingSeal
 
-	viewErr := bboltDb.View(func(tx *bbolt.Tx) error {
+	// open DB so we can read waypoints data
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return waypointsInfo, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
+
+	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before iterating
 		waypointBucket := tx.Bucket(db.WaypointBucket)
 		if waypointBucket == nil {
@@ -229,15 +261,18 @@ func GetAllWaypointsInfo(bboltDb *bbolt.DB) ([]WaypointInfo, error) {
 		return nil
 	})
 
+	// close early so it will not block write connection below
+	db.CloseDB(bboltReadDb)
+
 	// best-effort: persist each seal to the DB; failures are silently ignored —
 	// the in-memory waypointInfo records already carry WaypointIsSealed=true
 	// so the UI reflects the correct sealed state regardless
 	for _, s := range toSeal {
-		UpdateWaypointIsSeal(bboltDb, s.name, true, s.reason)
+		UpdateWaypointIsSeal(s.name, true, s.reason)
 	}
 
 	if waypointCorrupted {
-		viewErr = RecordCorruptedWaypointInfo(bboltDb, corruptedWaypointName)
+		viewErr = RecordCorruptedWaypointInfo(corruptedWaypointName)
 	}
 
 	return waypointsInfo, viewErr

@@ -29,7 +29,7 @@ func initWaypointInfoListModel(m *WaypointInteractiveModel) error {
 
 	titleWidthLimit := m.Width - ListItemOrTitleWidthPad - ListTitleHorizontalPadding
 
-	allWaypointsInfo, err := apiUtils.GetAllWaypointsInfo(m.BboltDb)
+	allWaypointsInfo, err := apiUtils.GetAllWaypointsInfo()
 	if err != nil {
 		return err
 	}

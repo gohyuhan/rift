@@ -10,7 +10,6 @@ import (
 	tea "charm.land/bubbletea/v2"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
-	"go.etcd.io/bbolt"
 )
 
 // ----------------------------------
@@ -33,7 +32,6 @@ type WaypointInteractiveModel struct {
 	WaypointPopUpModel             interface{}
 	Width                          int
 	Height                         int
-	BboltDb                        *bbolt.DB
 	IsRenderInit                   atomic.Bool
 }
 
@@ -44,7 +42,7 @@ type WaypointInteractiveModel struct {
 //	terminal dimensions are available when building item layouts
 //
 // ----------------------------------
-func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
+func initWaypointInteractiveModel() *WaypointInteractiveModel {
 	vp := viewport.New()
 	vp.SoftWrap = false
 	vp.MouseWheelEnabled = false
@@ -56,7 +54,6 @@ func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
 		PopUpType:                      NoPopUp,
 		WaypointInfoListCursorPosition: 0,
 		WaypointHelpViewport:           vp,
-		BboltDb:                        bboltDb,
 	}
 	waypointInteractiveModel.ShowPopUp.Store(false)
 	waypointInteractiveModel.IsTypingMode.Store(false)
@@ -75,8 +72,8 @@ func initWaypointInteractiveModel(bboltDb *bbolt.DB) *WaypointInteractiveModel {
 //	not a full TUI application
 //
 // ----------------------------------
-func RunWaypointInteractive(bboltDb *bbolt.DB) (string, string, error) {
-	waypointInteractiveModel := initWaypointInteractiveModel(bboltDb)
+func RunWaypointInteractive() (string, string, error) {
+	waypointInteractiveModel := initWaypointInteractiveModel()
 	// route program output to stderr so stdout stays clean for callers
 	p := tea.NewProgram(waypointInteractiveModel, tea.WithOutput(os.Stderr))
 	result, err := p.Run()

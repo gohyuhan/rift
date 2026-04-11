@@ -8,7 +8,6 @@ import (
 	"github.com/charmbracelet/x/ansi"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
-	"go.etcd.io/bbolt"
 
 	"charm.land/bubbles/v2/list"
 	"charm.land/bubbles/v2/textinput"
@@ -112,7 +111,7 @@ type LearnPopUpModel struct {
 	TotalInputField        int
 	CurrentFocusInputIndex int
 	Error                  error
-	OnInputFuncTrigger     func(bboltDb *bbolt.DB, spellName string, spellCommand string) (bool, error)
+	OnInputFuncTrigger     func(spellName string, spellCommand string) (bool, error)
 }
 
 type CastLocationOptionPopUpModel struct {
