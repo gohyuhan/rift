@@ -14,6 +14,7 @@ Everything you need to wield rift from the terminal.
   - [waypoint](#waypoint)
   - [learn](#learn)
   - [spell](#spell)
+  - [spellbook](#spellbook) *(pre-release)*
 - [Settings Flags](#settings-flags)
   - [--language](#--language)
   - [--autoupdate](#--autoupdate)
@@ -266,6 +267,71 @@ rift spell build --forget
 - The command runs in the directory you are in when you invoke `rift spell` — it does not change your working directory.
 - The exit code of the bound command is not propagated; rift is a launcher, not a validator of the command's outcome.
 - `--forget` is permanent — the spell cannot be recovered after removal.
+
+---
+
+### spellbook
+
+> **Pre-release** — Available in v0.3.0 (pre-release). Not yet in a stable release.
+
+Browse and manage your learned spells through an interactive TUI. With a spell name, shows detailed info for that spell instead.
+
+```sh
+rift spellbook
+rift spellbook <spell-name>
+```
+
+**Examples**
+
+```sh
+# Launch the interactive spellbook
+rift spellbook
+
+# Show detail for a specific spell
+rift spellbook build
+```
+
+#### Interactive TUI
+
+Running `rift spellbook` with no arguments launches an interactive browser for all learned spells.
+
+**Key bindings**
+
+| Key | Action |
+| --- | ------ |
+| `j` / `↓` | Move cursor down |
+| `k` / `↑` | Move cursor up |
+| `enter` | Cast the selected spell (opens location chooser) |
+| `n` / `N` | Open learn popup to add a new spell |
+| `backspace` | Forget the selected spell |
+| `?` | Open help popup |
+| `esc` | Close active popup, or quit if no popup is open |
+| `q` / `ctrl+c` | Quit |
+
+In the cast location popup:
+
+| Key | Action |
+| --- | ------ |
+| `j` / `↓` | Move cursor down |
+| `k` / `↑` | Move cursor up |
+| `enter` | Confirm selected cast location |
+| `esc` | Close popup |
+
+In the learn spell popup:
+
+| Key | Action |
+| --- | ------ |
+| `tab` | Move to next input field |
+| `shift+tab` | Move to previous input field |
+| `enter` | Save the new spell |
+| `ctrl+y` | Copy current input field value |
+| `ctrl+p` | Paste into current input field |
+| `esc` | Close popup without saving |
+
+**Notes**
+- Casting from the spellbook lets you choose between the current working directory or any discovered waypoint as the execution path.
+- Your working directory does not change when casting from the spellbook.
+- Forgetting a spell via `backspace` is permanent.
 
 ---
 
