@@ -17,12 +17,12 @@ import (
 
 // ----------------------------------
 //
-//	parses spellCmd into a shell-quoted field array, validates spellName against
+//	Parses spellCmd into a shell-quoted field array, validates spellName against
 //	reserved keywords and naming rules, and rejects empty commands and any
-//	command containing cd; persists the spell to the spell bucket in a single
+//	command containing cd. Persists the spell to the spell bucket in a single
 //	Update transaction, overwriting any existing entry with a fresh record
-//	(cast count reset to 0, added timestamp set to now); returns true when an
-//	existing spell was overwritten
+//	(cast count reset to 0, added-at timestamp set to now UTC).
+//	Returns true when an existing spell was overwritten.
 //
 // ----------------------------------
 func SaveSpell(spellName string, spellCmd string) (bool, error) {

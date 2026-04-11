@@ -181,14 +181,16 @@ func UpdateWaypointTravelledCount(waypointName string) error {
 
 // ----------------------------------
 //
-//	reads every entry in the waypoint bucket and returns a slice of
-//	waypointInfo records; uses a read-only View transaction so any
-//	corruption writes are deferred to a separate Update after View
-//	completes; corrupted proto entries are collected and recorded via
-//	RecordCorruptedWaypointInfo before the error is returned to the caller
+//	Reads every entry in the waypoint bucket and returns a slice of
+//	WaypointInfo records. Uses a read-only View transaction; path existence is
+//	checked for each entry inside the View and any waypoints whose paths are
+//	gone are queued for sealing. The read connection is closed immediately
+//	after View completes so it does not block any concurrent write connection.
+//	Pending seals and corrupted-proto entries are each persisted in their own
+//	follow-up Update transactions after the View closes.
 //
 // ----------------------------------
-func GetAllWaypointsInfo(bboltReadDb *bbolt.DB) ([]WaypointInfo, error) {
+func GetAllWaypointsInfo() ([]WaypointInfo, error) {
 	var waypointsInfo []WaypointInfo
 	var corruptedWaypointName []string
 	waypointCorrupted := false
@@ -200,6 +202,13 @@ func GetAllWaypointsInfo(bboltReadDb *bbolt.DB) ([]WaypointInfo, error) {
 		reason string
 	}
 	var toSeal []pendingSeal
+
+	// open DB so we can read waypoints data
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return waypointsInfo, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
 
 	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before iterating
@@ -251,6 +260,9 @@ func GetAllWaypointsInfo(bboltReadDb *bbolt.DB) ([]WaypointInfo, error) {
 
 		return nil
 	})
+
+	// close early so it will not block write connection below
+	db.CloseDB(bboltReadDb)
 
 	// best-effort: persist each seal to the DB; failures are silently ignored —
 	// the in-memory waypointInfo records already carry WaypointIsSealed=true

@@ -7,7 +7,6 @@ import (
 	"github.com/gohyuhan/rift/api/spell"
 	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/constant"
-	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/settings"
@@ -85,15 +84,8 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 	waypointName := strings.TrimSpace(args[0])
 	castFlagCalled := cmd.Flags().Changed("cast")
 
-	// open DB for reading waypoint data
-	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
-	if bboltReadDbErr != nil {
-		return bboltReadDbErr
-	}
-	defer db.CloseDB(bboltReadDb)
-
 	// look up the waypoint path; errors here are user-visible (sealed, missing, corrupted)
-	retrievedPath, retrieveErr := retrieveWaypointInfoForNavigate(bboltReadDb, waypointName)
+	retrievedPath, retrieveErr := retrieveWaypointInfoForNavigate(waypointName)
 	if retrieveErr != nil {
 		return retrieveErr
 	}
@@ -105,7 +97,7 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "cast", castArgErr.Error()), style.ColorError, false))
 		}
 
-		return spell.RetrieveAndCastSpell(bboltReadDb, castArg, retrievedPath)
+		return spell.RetrieveAndCastSpell(castArg, retrievedPath)
 	} else {
 		// Only this line goes to stdout — the shell wrapper evals it.
 		fmt.Printf("cd %q", retrievedPath)

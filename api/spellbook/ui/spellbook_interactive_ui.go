@@ -11,7 +11,6 @@ import (
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
 	"github.com/gohyuhan/rift/utils"
-	"go.etcd.io/bbolt"
 )
 
 // ----------------------------------
@@ -34,7 +33,6 @@ type SpellbookInteractiveModel struct {
 	SpellPopUpModel             interface{}
 	Width                       int
 	Height                      int
-	BboltReadDb                 *bbolt.DB
 	IsRenderInit                atomic.Bool
 }
 
@@ -56,7 +54,7 @@ type spellInfo struct {
 //	terminal dimensions are available when building item layouts
 //
 // ----------------------------------
-func initSpellbookInteractiveModel(bboltReadDb *bbolt.DB) *SpellbookInteractiveModel {
+func initSpellbookInteractiveModel() *SpellbookInteractiveModel {
 	vp := viewport.New()
 	vp.SoftWrap = false
 	vp.MouseWheelEnabled = false
@@ -69,7 +67,6 @@ func initSpellbookInteractiveModel(bboltReadDb *bbolt.DB) *SpellbookInteractiveM
 		PopUpType:                   NoPopUp,
 		SpellInfoListCursorPosition: 0,
 		SpellHelpViewport:           vp,
-		BboltReadDb:                 bboltReadDb,
 	}
 	spellbookInteractiveModel.ShowPopUp.Store(false)
 	spellbookInteractiveModel.IsTypingMode.Store(false)
@@ -88,8 +85,8 @@ func initSpellbookInteractiveModel(bboltReadDb *bbolt.DB) *SpellbookInteractiveM
 //	not a full TUI application
 //
 // ----------------------------------
-func RunSpellbookInteractive(bboltReadDb *bbolt.DB) (string, string, error) {
-	spellbookInteractiveModel := initSpellbookInteractiveModel(bboltReadDb)
+func RunSpellbookInteractive() (string, string, error) {
+	spellbookInteractiveModel := initSpellbookInteractiveModel()
 	// route program output to stderr so stdout stays clean for callers
 	p := tea.NewProgram(spellbookInteractiveModel, tea.WithOutput(os.Stderr))
 	result, err := p.Run()

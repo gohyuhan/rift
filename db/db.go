@@ -75,7 +75,7 @@ func SetupBuckets() error {
 
 // ----------------------------------
 //
-//	Opens the bbolt database at the resolved DB file path with a 5-second
+//	Opens the bbolt database at the resolved DB file path with a 8-second
 //	timeout. Opens read-only when isWrite is false, read-write otherwise,
 //	to avoid indefinite blocking if the file is already locked.
 //
@@ -86,9 +86,11 @@ func openDB(isWrite bool) (*bbolt.DB, error) {
 		return nil, dbPathErr
 	}
 
-	dbOption := &bbolt.Options{ReadOnly: true, Timeout: 5 * time.Second}
+	maxDBWaitSeconds := 8 * time.Second
+
+	dbOption := &bbolt.Options{ReadOnly: true, Timeout: maxDBWaitSeconds}
 	if isWrite {
-		dbOption = &bbolt.Options{Timeout: 5 * time.Second}
+		dbOption = &bbolt.Options{Timeout: maxDBWaitSeconds}
 	}
 
 	db, err := bbolt.Open(dbPath, 0o600, dbOption)

@@ -40,7 +40,7 @@ func ForgetSpell(spellName string, logToTerminal bool) error {
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSpellForgetError, spellName, forgetSpellErr.Error()), style.ColorError, false))
 		}
 
-		// when a spell was forgotten also destroy the corrupted data record for the spell (if available)
+		// also remove the corrupted-data record for this spell if one exists
 		corruptedSpellBucket := tx.Bucket(db.SpellDataCorruptedBucketRecord)
 		if corruptedSpellBucket != nil {
 			corruptedSpellBucket.Delete([]byte(spellName))

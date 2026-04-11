@@ -26,9 +26,16 @@ import (
 //	align in a clean column regardless of the active language.
 //
 // ----------------------------------
-func RetrieveWaypointInfoDetail(bboltReadDb *bbolt.DB, waypointName string) ([]string, error) {
+func RetrieveWaypointInfoDetail(waypointName string) ([]string, error) {
 	var waypointDetailInfo []string
 	waypointCorrupted := false
+
+	// open DB so we can read waypoint records
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return waypointDetailInfo, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
 
 	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before looking up the key
@@ -108,6 +115,9 @@ func RetrieveWaypointInfoDetail(bboltReadDb *bbolt.DB, waypointName string) ([]s
 
 		return nil
 	})
+
+	// close early so it will not block write connection below
+	db.CloseDB(bboltReadDb)
 
 	// View is complete — safe to open an Update for the corruption write
 	if waypointCorrupted {

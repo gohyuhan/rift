@@ -27,11 +27,18 @@ import (
 //	  - the waypoint path no longer exists on disk (seals it via a follow-up write tx)
 //
 // ----------------------------------
-func retrieveWaypointInfoForNavigate(bboltReadDb *bbolt.DB, waypointName string) (string, error) {
+func retrieveWaypointInfoForNavigate(waypointName string) (string, error) {
 	retrievedPath := ""
 	waypointCorrupted := false
 	needToSealWaypoint := false
 	needToSealReason := ""
+
+	// open DB for reading waypoint data
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return retrievedPath, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
 
 	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.WaypointBucket)
@@ -71,6 +78,9 @@ func retrieveWaypointInfoForNavigate(bboltReadDb *bbolt.DB, waypointName string)
 		retrievedPath = existingWaypoint.WaypointPath
 		return nil
 	})
+
+	// close early so it will not block write connection below
+	db.CloseDB(bboltReadDb)
 
 	if waypointCorrupted {
 		viewErr = apiUtils.RecordCorruptedWaypointInfo([]string{waypointName})

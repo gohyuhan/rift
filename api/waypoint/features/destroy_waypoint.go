@@ -12,10 +12,11 @@ import (
 
 // ----------------------------------
 //
-//	Permanently removes the named waypoint from the waypoint bucket.
-//	Uses a write Update transaction. The operation is idempotent: if the
-//	waypoint does not exist, it is treated as already destroyed (success).
-//	Fails only when the bucket itself is missing or bbolt returns a hard error.
+//	Permanently removes the named waypoint from the waypoint bucket and its
+//	corrupted-data record if one exists, within a single write transaction.
+//	The operation is idempotent: if the waypoint does not exist it is treated
+//	as already destroyed (success). Fails only when the waypoint bucket itself
+//	is missing or bbolt returns a hard error.
 //
 // ----------------------------------
 func DestroyDiscoveredWaypoint(waypointName string, logToTerminal bool) error {
@@ -39,7 +40,7 @@ func DestroyDiscoveredWaypoint(waypointName string, logToTerminal bool) error {
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroyError, waypointName, destroyWaypointErr.Error()), style.ColorError, false))
 		}
 
-		// when a waypoint was destroyed also destroy the corrupted data record for the waypoint (if available)
+		// also remove the corrupted-data record for this waypoint if one exists
 		corruptedWaypointBucket := tx.Bucket(db.WaypointDataCorruptedBucketRecord)
 		if corruptedWaypointBucket != nil {
 			corruptedWaypointBucket.Delete([]byte(waypointName))

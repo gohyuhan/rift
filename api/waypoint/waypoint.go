@@ -7,7 +7,6 @@ import (
 	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/api/waypoint/features"
 	waypointUI "github.com/gohyuhan/rift/api/waypoint/ui"
-	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/spf13/cobra"
 )
@@ -25,16 +24,9 @@ import (
 //
 // ----------------------------------
 var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
-	// open DB so we can read waypoint records
-	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
-	if bboltReadDbErr != nil {
-		return bboltReadDbErr
-	}
-	defer db.CloseDB(bboltReadDb)
-
 	// no args — list all start waypoint interactive UI
 	if len(args) < 1 {
-		pathToNavigate, waypointName, interactiveErr := waypointUI.RunWaypointInteractive(bboltReadDb)
+		pathToNavigate, waypointName, interactiveErr := waypointUI.RunWaypointInteractive()
 		if interactiveErr != nil {
 			return interactiveErr
 		}
@@ -88,7 +80,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 			return reforgeWaypointErr
 		}
 	} else {
-		retrieveWaypointInfoDetail, retrieveWaypointInfoDetailErr := features.RetrieveWaypointInfoDetail(bboltReadDb, waypointName)
+		retrieveWaypointInfoDetail, retrieveWaypointInfoDetailErr := features.RetrieveWaypointInfoDetail(waypointName)
 
 		if retrieveWaypointInfoDetailErr != nil {
 			return retrieveWaypointInfoDetailErr
