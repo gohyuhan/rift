@@ -77,6 +77,7 @@ var jA = LanguageMapping{
 	RiftFlagVersionDescription:            "rift の現在のバージョンを表示します",
 	RiftFlagCastDescription:               "ナビゲーションの代わりに、習得したスペルをウェイポイントのパスでキャストします。スペルコマンドは、ウェイポイントのパスを作業ディレクトリとして実行されます",
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
+	RiftRuneDescription:                   "ウェイポイントに移動時・離脱時のトリガーコマンドを設定します；rift でそのウェイポイントへ、またはそこから移動する際に自動的に実行されます",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
@@ -105,6 +106,10 @@ var jA = LanguageMapping{
 	RiftWaypointReforgeAlreadyExistsError: "rift：ウェイポイント %q は既に存在するため、既存の名前にリフォージすることはできません",
 	RiftWaypointReforgeError:              "rift：ウェイポイント %q のリフォージに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift：ウェイポイント %q を %q にリフォージしました",
+
+	// Rune operations
+	RiftRuneEngraveSuccessful: "rift：ルーンをウェイポイント %q に刻みました",
+	RiftRuneEngraveFail:       "rift：ウェイポイント %q へのルーン刻印に失敗しました",
 
 	// Spell detail view
 	RiftSpellDetailName:      "スペル名：",
@@ -185,6 +190,9 @@ var jA = LanguageMapping{
 	SpellCommandInputTitle:                   "スペルコマンド：",
 	SpellUIChooseCastLocationKeyHelp:         "詠唱場所を選択",
 	SpellUIChooseWaypointCastLocationKeyHelp: "スペルを詠唱するウェイポイントを選択",
+
+	// Rune interactive UI
+	RuneInteractiveError: "rift：ルーンインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "詠唱場所",

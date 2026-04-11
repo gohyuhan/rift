@@ -77,6 +77,7 @@ var eN = LanguageMapping{
 	RiftFlagVersionDescription:            "Print the current version of rift",
 	RiftFlagCastDescription:               "Instead of navigation, cast a learned spell on the waypoint's path; the spell command will be executed with the waypoint's path as the working directory",
 	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
+	RiftRuneDescription:                   "Attach on-enter and on-leave trigger commands to a waypoint; triggers fire automatically when rift navigates to or from that waypoint",
 
 	// Spell operations
 	RiftSpellSaved:            "rift: learned %q -> %s",
@@ -105,6 +106,10 @@ var eN = LanguageMapping{
 	RiftWaypointReforgeAlreadyExistsError: "rift: waypoint %q already exists, cannot reforge to an existing name",
 	RiftWaypointReforgeError:              "rift: failed to reforge waypoint %q, [ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift: waypoint %q reforged to %q",
+
+	// Rune operations
+	RiftRuneEngraveSuccessful: "rift: rune engraved on waypoint %q",
+	RiftRuneEngraveFail:       "rift: failed to engrave rune on waypoint %q",
 
 	// Spell detail view
 	RiftSpellDetailName:      "Spell Name:",
@@ -185,6 +190,9 @@ var eN = LanguageMapping{
 	SpellCommandInputTitle:                   "Spell Command:",
 	SpellUIChooseCastLocationKeyHelp:         "choose cast location",
 	SpellUIChooseWaypointCastLocationKeyHelp: "choose waypoint to cast spell to",
+
+	// Rune interactive UI
+	RuneInteractiveError: "rift: rune interactive session failed, [ERROR: %s]",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "Cast Location",

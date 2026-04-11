@@ -77,6 +77,7 @@ var zH_HANS = LanguageMapping{
 	RiftFlagVersionDescription:            "打印 rift 的当前版本",
 	RiftFlagCastDescription:               "代替导航，对航点的路径施放已习得的咒语；咒语命令将在航点的路径作为工作目录时执行",
 	RiftFlagRetrieveError:                 "rift：获取标志 %q 失败，[ERROR: %s]",
+	RiftRuneDescription:                   "为航点绑定进入和离开时的触发命令；当 rift 导航至或离开该航点时自动执行",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：已习得 %q -> %s",
@@ -105,6 +106,10 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointReforgeAlreadyExistsError: "rift：航点 %q 已存在，无法重铸为已有名称",
 	RiftWaypointReforgeError:              "rift：重铸航点 %q 失败，[ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift：航点 %q 已重铸为 %q",
+
+	// Rune operations
+	RiftRuneEngraveSuccessful: "rift：符文已刻印到航点 %q",
+	RiftRuneEngraveFail:       "rift：无法将符文刻印到航点 %q",
 
 	// Spell detail view
 	RiftSpellDetailName:      "咒语名称：",
@@ -185,6 +190,9 @@ var zH_HANS = LanguageMapping{
 	SpellCommandInputTitle:                   "咒语命令：",
 	SpellUIChooseCastLocationKeyHelp:         "选择施放位置",
 	SpellUIChooseWaypointCastLocationKeyHelp: "选择施放咒语的航点",
+
+	// Rune interactive UI
+	RuneInteractiveError: "rift：符文交互界面启动失败，[ERROR: %s]",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "施放位置",

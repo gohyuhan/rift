@@ -83,6 +83,7 @@ type LanguageMapping struct {
 	RiftFlagVersionDescription            string
 	RiftFlagCastDescription               string
 	RiftFlagRetrieveError                 string
+	RiftRuneDescription                   string
 
 	// Spell operations
 	RiftSpellSaved            string
@@ -94,6 +95,10 @@ type LanguageMapping struct {
 	ForbiddenCDSpellCommand   string
 	SpellCommandEmpty         string
 	InvalidSpellCommandError  string
+
+	// Rune operations
+	RiftRuneEngraveSuccessful string
+	RiftRuneEngraveFail       string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string
@@ -191,6 +196,9 @@ type LanguageMapping struct {
 	SpellCommandInputTitle                   string
 	SpellUIChooseCastLocationKeyHelp         string
 	SpellUIChooseWaypointCastLocationKeyHelp string
+
+	// Rune interactive UI
+	RuneInteractiveError string
 
 	// Cast location option popup
 	CastLocationOptionTitle               string
