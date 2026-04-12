@@ -109,7 +109,7 @@ var jA = LanguageMapping{
 
 	// Rune operations
 	RiftRuneEngraveSuccessful: "rift：ルーンをウェイポイント %q に刻みました",
-	RiftRuneEngraveFail:       "rift：ウェイポイント %q へのルーン刻印に失敗しました",
+	RiftRuneEngraveNone:       "rift：ウェイポイント %q にルーンは刻まれませんでした",
 
 	// Spell detail view
 	RiftSpellDetailName:      "スペル名：",
@@ -192,7 +192,21 @@ var jA = LanguageMapping{
 	SpellUIChooseWaypointCastLocationKeyHelp: "スペルを詠唱するウェイポイントを選択",
 
 	// Rune interactive UI
-	RuneInteractiveError: "rift：ルーンインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
+	RuneInteractiveError:              "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle:    "ルーンオプション",
+	EngraveRuneEnterTitle:             "移動時ルーンのコマンド：",
+	EngraveRuneLeaveTitle:             "離脱時ルーンのコマンド：",
+	EngraveRuneEngraveButton:          "刻む",
+	RuneCommandsPlaceHolder:           "コマンドを入力… （cd は効果がありません。パス変更には rift の使用を推薦します）",
+	RuneCommandsInvalidDueToCDCommand: "cd を使用しているルーンが1つ以上検出されました。rift ルーンでは cd は効果がありません。パスの変更には `rift` を使用してください。",
+	EngraveRuneEnterOptionName:        "移動時ルーンを刻む",
+	EngraveRuneEnterOptionDesc:        "このウェイポイントに移動した際に実行するコマンドを設定する",
+	EngraveRuneLeaveOptionName:        "離脱時ルーンを刻む",
+	EngraveRuneLeaveOptionDesc:        "このウェイポイントから離脱した際に実行するコマンドを設定する",
+	RemoveRuneEnterOptionName:         "移動時ルーンを削除する",
+	RemoveRuneEnterOptionDesc:         "このウェイポイントに移動した際に実行するコマンドを削除する",
+	RemoveRuneLeaveOptionName:         "離脱時ルーンを削除する",
+	RemoveRuneLeaveOptionDesc:         "このウェイポイントから離脱した際に実行するコマンドを削除する",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "詠唱場所",

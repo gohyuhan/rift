@@ -7,6 +7,7 @@ import (
 
 	tea "charm.land/bubbletea/v2"
 	"github.com/gohyuhan/rift/i18n"
+	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/style"
 )
 
@@ -28,19 +29,22 @@ type RuneInteractiveModel struct {
 	Width              int
 	Height             int
 	IsRenderInit       atomic.Bool
+	ExistingEnterRune  []*pb.Rune
+	ExistingLeaveRune  []*pb.Rune
 }
 
 // ----------------------------------
 //
 //	Allocates and initialises a RuneInteractiveModel for the given waypoint,
-//	opening the ChooseRuneEngraveTypePopUp immediately so the user can pick
+//	opening the ChooseRuneEngraveOptionPopUp immediately so the user can pick
 //	whether to engrave an on-enter or on-leave rune.
 //
 // ----------------------------------
 func initRuneInteractiveModel(waypointName string) *RuneInteractiveModel {
 	runeInteractiveModel := RuneInteractiveModel{
-		IsQuit:    false,
-		PopUpType: ChooseRuneEngraveTypePopUp,
+		IsQuit:             false,
+		PopUpType:          ChooseRuneEngraveOptionPopUp,
+		ChosenWaypointName: waypointName,
 	}
 	runeInteractiveModel.ShowPopUp.Store(true)
 	runeInteractiveModel.IsTypingMode.Store(false)
@@ -81,7 +85,8 @@ func RunRuneInteractive(waypointName string) (bool, error) {
 //
 // ----------------------------------
 func (m *RuneInteractiveModel) Init() tea.Cmd {
-	return nil
+	m.PopUpType = ChooseRuneEngraveOptionPopUp
+	return initChooseRuneEngraveOptionPopUpModel(m)
 }
 
 // ----------------------------------
@@ -106,17 +111,26 @@ func (m *RuneInteractiveModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case "esc":
 			switch m.PopUpType {
-			case ChooseRuneEngraveTypePopUp:
+			case ChooseRuneEngraveOptionPopUp:
 				m.RuneEngraved.Store(false)
 				m.IsQuit = true
 				return m, tea.Quit
-			case EnterRunePopUp:
-				m.PopUpType = ChooseRuneEngraveTypePopUp
-				return m, nil
+			case EngraveRuneCommandsPopUp:
+				m.IsTypingMode.Store(false)
+				m.PopUpType = ChooseRuneEngraveOptionPopUp
+				cmd = initChooseRuneEngraveOptionPopUpModel(m)
+				return m, cmd
 			}
 
 			return m, nil
 		}
+
+		if m.IsTypingMode.Load() {
+			m, cmd = handleTypingInteraction(m, msg)
+		} else {
+			m, cmd = handleNonTypingInteraction(m, msg)
+		}
+
 		cmds = append(cmds, cmd)
 
 		return m, tea.Batch(cmds...)
@@ -136,5 +150,5 @@ func (m *RuneInteractiveModel) View() tea.View {
 	if m.IsQuit {
 		return tea.NewView("")
 	}
-	return tea.NewView("")
+	return tea.NewView(renderRuneInteractiveUIView(m))
 }

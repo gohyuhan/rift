@@ -98,7 +98,7 @@ type LanguageMapping struct {
 
 	// Rune operations
 	RiftRuneEngraveSuccessful string
-	RiftRuneEngraveFail       string
+	RiftRuneEngraveNone       string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string
@@ -198,7 +198,21 @@ type LanguageMapping struct {
 	SpellUIChooseWaypointCastLocationKeyHelp string
 
 	// Rune interactive UI
-	RuneInteractiveError string
+	RuneInteractiveError              string
+	RuneEngraveTypeOptionListTitle    string
+	EngraveRuneEnterTitle             string
+	EngraveRuneLeaveTitle             string
+	EngraveRuneEngraveButton          string
+	RuneCommandsPlaceHolder           string
+	RuneCommandsInvalidDueToCDCommand string
+	EngraveRuneEnterOptionName        string
+	EngraveRuneEnterOptionDesc        string
+	EngraveRuneLeaveOptionName        string
+	EngraveRuneLeaveOptionDesc        string
+	RemoveRuneEnterOptionName         string
+	RemoveRuneEnterOptionDesc         string
+	RemoveRuneLeaveOptionName         string
+	RemoveRuneLeaveOptionDesc         string
 
 	// Cast location option popup
 	CastLocationOptionTitle               string

@@ -109,7 +109,7 @@ var eN = LanguageMapping{
 
 	// Rune operations
 	RiftRuneEngraveSuccessful: "rift: rune engraved on waypoint %q",
-	RiftRuneEngraveFail:       "rift: failed to engrave rune on waypoint %q",
+	RiftRuneEngraveNone:       "rift: no rune was engraved on waypoint %q",
 
 	// Spell detail view
 	RiftSpellDetailName:      "Spell Name:",
@@ -192,7 +192,21 @@ var eN = LanguageMapping{
 	SpellUIChooseWaypointCastLocationKeyHelp: "choose waypoint to cast spell to",
 
 	// Rune interactive UI
-	RuneInteractiveError: "rift: rune interactive session failed, [ERROR: %s]",
+	RuneInteractiveError:              "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle:    "Rune Options",
+	EngraveRuneEnterTitle:             "Commands for On Enter Rune:",
+	EngraveRuneLeaveTitle:             "Commands for On Leave Rune:",
+	EngraveRuneEngraveButton:          "Engrave",
+	RuneCommandsPlaceHolder:           "Enter commands... (cd has no effect, recommend using rift to change path)",
+	RuneCommandsInvalidDueToCDCommand: "Detected one or more runes use cd, which has no effect in rift rune. Use `rift` to change paths instead.",
+	EngraveRuneEnterOptionName:        "Engrave On-Enter Rune",
+	EngraveRuneEnterOptionDesc:        "Set commands to run when entering this waypoint",
+	EngraveRuneLeaveOptionName:        "Engrave On-Leave Rune",
+	EngraveRuneLeaveOptionDesc:        "Set commands to run when leaving this waypoint",
+	RemoveRuneEnterOptionName:         "Remove On-Enter Rune",
+	RemoveRuneEnterOptionDesc:         "Clear the commands that run when entering this waypoint",
+	RemoveRuneLeaveOptionName:         "Remove On-Leave Rune",
+	RemoveRuneLeaveOptionDesc:         "Clear the commands that run when leaving this waypoint",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "Cast Location",

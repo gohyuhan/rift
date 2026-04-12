@@ -109,7 +109,7 @@ var zH_HANS = LanguageMapping{
 
 	// Rune operations
 	RiftRuneEngraveSuccessful: "rift：符文已刻印到航点 %q",
-	RiftRuneEngraveFail:       "rift：无法将符文刻印到航点 %q",
+	RiftRuneEngraveNone:       "rift：未将符文刻印到航点 %q",
 
 	// Spell detail view
 	RiftSpellDetailName:      "咒语名称：",
@@ -192,7 +192,21 @@ var zH_HANS = LanguageMapping{
 	SpellUIChooseWaypointCastLocationKeyHelp: "选择施放咒语的航点",
 
 	// Rune interactive UI
-	RuneInteractiveError: "rift：符文交互界面启动失败，[ERROR: %s]",
+	RuneInteractiveError:              "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle:    "符文选项",
+	EngraveRuneEnterTitle:             "进入时符文的命令：",
+	EngraveRuneLeaveTitle:             "离开时符文的命令：",
+	EngraveRuneEngraveButton:          "刻印",
+	RuneCommandsPlaceHolder:           "输入命令…（cd 无效，推荐使用 rift 切换路径）",
+	RuneCommandsInvalidDueToCDCommand: "检测到一个或多个符文使用了 cd，cd 在 rift 符文中无效。请改用 `rift` 切换路径。",
+	EngraveRuneEnterOptionName:        "刻印进入时符文",
+	EngraveRuneEnterOptionDesc:        "设置进入此航点时执行的命令",
+	EngraveRuneLeaveOptionName:        "刻印离开时符文",
+	EngraveRuneLeaveOptionDesc:        "设置离开此航点时执行的命令",
+	RemoveRuneEnterOptionName:         "移除进入时符文",
+	RemoveRuneEnterOptionDesc:         "清除进入此航点时执行的命令",
+	RemoveRuneLeaveOptionName:         "移除离开时符文",
+	RemoveRuneLeaveOptionDesc:         "清除离开此航点时执行的命令",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "施放位置",

@@ -30,6 +30,8 @@ type WaypointInfo struct {
 	WaypointPath         string
 	WaypointIsSealed     bool
 	WaypointSealedReason string
+	WaypointEnterRune    []*pb.Rune
+	WaypointLeaveRune    []*pb.Rune
 }
 
 // ----------------------------------
@@ -246,6 +248,8 @@ func GetAllWaypointsInfo() ([]WaypointInfo, error) {
 				WaypointPath:         existingWaypoint.WaypointPath,
 				WaypointIsSealed:     existingWaypoint.WaypointIsSealed,
 				WaypointSealedReason: existingWaypoint.WaypointSealedReason,
+				WaypointEnterRune:    existingWaypoint.EnterRunes,
+				WaypointLeaveRune:    existingWaypoint.LeaveRunes,
 			}
 
 			waypointsInfo = append(waypointsInfo, info)
@@ -276,4 +280,130 @@ func GetAllWaypointsInfo() ([]WaypointInfo, error) {
 	}
 
 	return waypointsInfo, viewErr
+}
+
+// ----------------------------------
+//
+//	Clears the enter-rune slot for the named waypoint by setting EnterRunes to
+//	nil and persisting the record in a single Update transaction.
+//
+// ----------------------------------
+func RemoveWaypointEnterRunes(waypointName string) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
+		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
+		if err != nil {
+			return err
+		}
+		waypoint.EnterRunes = nil
+		return PutWaypoint(bucket, waypointName, waypoint)
+	})
+}
+
+// ----------------------------------
+//
+//	Clears the leave-rune slot for the named waypoint by setting LeaveRunes to
+//	nil and persisting the record in a single Update transaction.
+//
+// ----------------------------------
+func RemoveWaypointLeaveRunes(waypointName string) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
+		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
+		if err != nil {
+			return err
+		}
+		waypoint.LeaveRunes = nil
+		return PutWaypoint(bucket, waypointName, waypoint)
+	})
+}
+
+// ----------------------------------
+//
+//	Replaces the enter-rune slot for the named waypoint with EnterRunes and
+//	persists the record in a single Update transaction. Any previously engraved
+//	enter runes are overwritten.
+//
+// ----------------------------------
+func EngraveWaypointEnterRunes(waypointName string, EnterRunes []*pb.Rune) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
+		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
+		if err != nil {
+			return err
+		}
+		waypoint.EnterRunes = EnterRunes
+		return PutWaypoint(bucket, waypointName, waypoint)
+	})
+}
+
+// ----------------------------------
+//
+//	Replaces the leave-rune slot for the named waypoint with LeavesRunes and
+//	persists the record in a single Update transaction. Any previously engraved
+//	leave runes are overwritten.
+//
+// ----------------------------------
+func EngraveWaypointLeaveRunes(waypointName string, LeavesRunes []*pb.Rune) error {
+	bboltWriteDb, bboltWriteDbErr := db.OpenWriteDB()
+	if bboltWriteDbErr != nil {
+		return bboltWriteDbErr
+	}
+	defer db.CloseDB(bboltWriteDb)
+	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
+		bucket, waypoint, err := GetWaypointForUpdate(tx, waypointName)
+		if err != nil {
+			return err
+		}
+		waypoint.LeaveRunes = LeavesRunes
+		return PutWaypoint(bucket, waypointName, waypoint)
+	})
+}
+
+// ----------------------------------
+//
+//	Looks up a waypoint by name and returns the full deserialized *pb.Waypoint
+//	record using a read-only View transaction. Returns an error when the waypoint
+//	bucket is missing, the waypoint does not exist, or the stored proto is corrupted.
+//
+// ----------------------------------
+func RetrieveWaypointInfo(waypointName string) (*pb.Waypoint, error) {
+	waypoint := &pb.Waypoint{}
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return nil, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
+
+	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket(db.WaypointBucket)
+		if bucket == nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+		}
+
+		existing := bucket.Get([]byte(waypointName))
+		if existing == nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDoNotExistsError, waypointName), style.ColorError, false))
+		}
+
+		if err := proto.Unmarshal(existing, waypoint); err != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
+		}
+
+		return nil
+	})
+
+	return waypoint, viewErr
 }

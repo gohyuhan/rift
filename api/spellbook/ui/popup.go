@@ -60,23 +60,24 @@ func renderLearnPopUp(m *SpellbookInteractiveModel) string {
 		maxHeight := int(float64(m.Height) * 0.7)
 		popUp.SpellNameInput.SetWidth(maxWidth - TextInputWidthPad)
 		popUp.SpellCommandInput.SetWidth(maxWidth - TextInputWidthPad)
+		strStyle := lipgloss.NewStyle().Width(maxWidth - TextInputWidthPad)
 		var content string
 		if popUp.Error != nil {
-			errMessage := style.RenderStringWithColor(popUp.Error.Error(), style.ColorError, true)
+			errMessage := strStyle.Render(style.RenderStringWithColor(popUp.Error.Error(), style.ColorError, true))
 			content = lipgloss.JoinVertical(
 				lipgloss.Left,
-				i18n.LANGUAGEMAPPING.SpellNameInputTitle,
+				strStyle.Render(i18n.LANGUAGEMAPPING.SpellNameInputTitle),
 				popUp.SpellNameInput.View(),
-				i18n.LANGUAGEMAPPING.SpellCommandInputTitle,
+				strStyle.Render(i18n.LANGUAGEMAPPING.SpellCommandInputTitle),
 				popUp.SpellCommandInput.View(),
 				errMessage,
 			)
 		} else {
 			content = lipgloss.JoinVertical(
 				lipgloss.Left,
-				i18n.LANGUAGEMAPPING.SpellNameInputTitle,
+				strStyle.Render(i18n.LANGUAGEMAPPING.SpellNameInputTitle),
 				popUp.SpellNameInput.View(),
-				i18n.LANGUAGEMAPPING.SpellCommandInputTitle,
+				strStyle.Render(i18n.LANGUAGEMAPPING.SpellCommandInputTitle),
 				popUp.SpellCommandInput.View(),
 			)
 		}
@@ -88,6 +89,13 @@ func renderLearnPopUp(m *SpellbookInteractiveModel) string {
 	return ""
 }
 
+// ----------------------------------
+//
+//	renders the cast-location option popup: sizes the list to 80 % of the
+//	terminal width and a fixed 12-row height, then wraps it in a rounded border;
+//	returns an empty string if the popup model is the wrong type
+//
+// ----------------------------------
 func renderCastLocationOptionPopUp(m *SpellbookInteractiveModel) string {
 	popUp, ok := m.SpellPopUpModel.(*CastLocationOptionPopUpModel)
 	if ok {
@@ -103,6 +111,13 @@ func renderCastLocationOptionPopUp(m *SpellbookInteractiveModel) string {
 	return ""
 }
 
+// ----------------------------------
+//
+//	renders the cast-at-waypoint location option popup: sizes the list to
+//	80 % width / 70 % height of the terminal, then wraps it in a rounded border;
+//	returns an empty string if the popup model is the wrong type
+//
+// ----------------------------------
 func renderCastWaypointLocationOptionPopUp(m *SpellbookInteractiveModel) string {
 	popUp, ok := m.SpellPopUpModel.(*CastWaypointLocationOptionPopUpModel)
 	if ok {

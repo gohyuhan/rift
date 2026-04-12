@@ -30,7 +30,7 @@ var RiftRuneFunc = func(cmd *cobra.Command, args []string) error {
 	if success {
 		logger.LOGGER.LogToTerminal([]string{fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftRuneEngraveSuccessful, waypointName)})
 	} else {
-		logger.LOGGER.LogToTerminal([]string{fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftRuneEngraveFail, waypointName)})
+		logger.LOGGER.LogToTerminal([]string{fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftRuneEngraveNone, waypointName)})
 	}
 
 	return nil
