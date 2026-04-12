@@ -4,6 +4,10 @@ package proto;
 
 option go_package = "github.com/gohyuhan/rift/proto";
 
+message Rune {
+  repeated string commands = 1;
+}
+
 // waypoint represent metadata for a dir in user's system with a user defined waypoint name and other metadata that will be used by rift
 message Waypoint {
   string waypoint_name = 1; // waypoint name for waypoint
@@ -12,4 +16,6 @@ message Waypoint {
   int64 waypoint_travelled_count = 4; // represent how many time user have traveled to this waypoint
   bool waypoint_is_sealed = 5; // represent if this waypoint no longer exist in user's system
   string waypoint_sealed_reason = 6;
+  repeated Rune enter_runes = 7; // rune that will trigger when using rift to enter a dir
+  repeated Rune leave_runes = 8; // rune that will trigger when using rift to leave a dir
 }

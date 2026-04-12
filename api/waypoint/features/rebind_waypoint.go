@@ -54,12 +54,14 @@ func RebindWaypoint(waypointName string, rebindTo string, logToTerminal bool) er
 			return retrieveErr
 		}
 
-		// update all mutable fields; clear sealed state so the waypoint is immediately usable
+		// update all mutable fields, clear rune; clear sealed state so the waypoint is immediately usable
 		waypoint.WaypointPath = rebindTo
 		waypoint.WaypointIsSealed = false
 		waypoint.WaypointSealedReason = ""
 		waypoint.WaypointTravelledCount = 0
 		waypoint.WaypointAddedAt = time.Now().UTC().Format(time.RFC3339)
+		waypoint.EnterRunes = nil
+		waypoint.LeaveRunes = nil
 
 		// persist the updated record back under the same key
 		putWaypointErr := apiUtils.PutWaypoint(waypointBucket, waypointName, waypoint)
