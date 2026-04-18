@@ -107,20 +107,20 @@ func RetrieveRuneForTrigger(waypointPath string) (bool, *pb.Rune) {
 //	stored data cannot be unmarshalled.
 //
 // ----------------------------------
-func RetrieveRuneBasedOnWaypointPath(tx *bbolt.Tx, waypointName string) (*bbolt.Bucket, *pb.Rune, bool, error) {
+func RetrieveRuneBasedOnWaypointPath(tx *bbolt.Tx, waypointPath string) (*bbolt.Bucket, *pb.Rune, bool, error) {
 	bucket := tx.Bucket(db.RuneBucket)
 	if bucket == nil {
 		return nil, nil, false, fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RuneBucketNotFoundError, style.ColorError, false))
 	}
 
-	existing := bucket.Get([]byte(waypointName))
+	existing := bucket.Get([]byte(waypointPath))
 	if existing == nil {
 		return bucket, &pb.Rune{EnterRunes: nil, LeaveRunes: nil}, false, nil
 	}
 
 	rune := &pb.Rune{}
 	if err := proto.Unmarshal(existing, rune); err != nil {
-		return nil, &pb.Rune{EnterRunes: nil, LeaveRunes: nil}, true, fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RuneDataCorruptedError, waypointName), style.ColorError, false))
+		return nil, &pb.Rune{EnterRunes: nil, LeaveRunes: nil}, true, fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RuneDataCorruptedError, waypointPath), style.ColorError, false))
 	}
 
 	return bucket, rune, false, nil
