@@ -32,12 +32,17 @@ func ChangeDir(retrievedPath, waypointName string) {
 	if cwdErr == nil {
 		triggerWaypointRune(RUNE_ON_LEAVE, strings.TrimSpace(leavePath))
 	}
-	// Only this line goes to stdout — the shell wrapper evals it.
-	fmt.Printf("cd %q", retrievedPath)
 
 	// best-effort: increment travel count; failure is silently ignored
 	UpdateWaypointTravelledCount(waypointName)
 	triggerWaypointRune(RUNE_ON_ENTER, retrievedPath)
+
+	// Only this line goes to stdout — the shell wrapper evals it.
+	// Skip at depth>0: nested rift calls run inside executor subprocesses;
+	// their stdout is not eval'd by the shell wrapper.
+	if val, ok := os.LookupEnv("RIFT_RUNE_DEPTH"); !ok || val == "0" {
+		fmt.Printf("cd %q", retrievedPath)
+	}
 }
 
 // ----------------------------------
