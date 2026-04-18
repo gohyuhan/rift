@@ -61,6 +61,45 @@ func ParseRuneCommandsToString(runeCommands []*pb.RuneCmds) string {
 
 // ----------------------------------
 //
+//	Looks up the rune for waypointntPath for trigger during waypoint navigation.
+//	Returns true and the deserialized *pb.Rune if a rune record exists; returns
+//	false and an empty *pb.Rune on any error or if no rune is found. Never
+//	returns an error — all failures are silently ignored so that waypoint path
+//	changes are never blocked by rune retrieval issues.
+//
+// ----------------------------------
+func RetrieveRuneForTrigger(waypointntPath string) (bool, *pb.Rune) {
+	rune := &pb.Rune{}
+	hasRuneToTrigger := false
+
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	if bboltReadDbErr != nil {
+		return hasRuneToTrigger, rune
+	}
+	defer db.CloseDB(bboltReadDb)
+	_ = bboltReadDb.Update(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket(db.RuneBucket)
+		if bucket == nil {
+			return nil
+		}
+
+		existing := bucket.Get([]byte(waypointntPath))
+		if existing == nil {
+			return nil
+		}
+
+		if err := proto.Unmarshal(existing, rune); err != nil {
+			return nil
+		}
+		hasRuneToTrigger = true
+		return nil
+	})
+
+	return hasRuneToTrigger, rune
+}
+
+// ----------------------------------
+//
 //	Looks up the rune associated with the given waypoint path within an open
 //	bbolt transaction. Returns the rune bucket and the deserialized *pb.Rune,
 //	or an error if the bucket is missing, no rune exists for the path, or the

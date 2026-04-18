@@ -26,7 +26,7 @@ func CmdExecutor() *cmdExecutor {
 //	Returns nil when args is empty.
 //
 // ----------------------------------
-func (c *cmdExecutor) RunCmd(args []string, executionPath string) *exec.Cmd {
+func (c *cmdExecutor) RunCmd(args []string, executionPath string, envs []string) *exec.Cmd {
 	var argName string
 	var argsArray []string
 	if len(args) > 1 {
@@ -40,6 +40,7 @@ func (c *cmdExecutor) RunCmd(args []string, executionPath string) *exec.Cmd {
 
 	cmd := exec.Command(argName, argsArray...)
 	cmd.Dir = executionPath
+	cmd.Env = append(cmd.Env, envs...)
 	// stdout is reserved for the rift shell eval (cd command only);
 	// route all command output through stderr so it reaches the terminal directly.
 	cmd.Stdout = os.Stderr
@@ -53,7 +54,7 @@ func (c *cmdExecutor) RunCmd(args []string, executionPath string) *exec.Cmd {
 //	When the context is cancelled, the command will be terminated automatically.
 //
 // ----------------------------------
-func (c *cmdExecutor) RunCmdWithContext(ctx context.Context, args []string, executionPath string) *exec.Cmd {
+func (c *cmdExecutor) RunCmdWithContext(ctx context.Context, args []string, executionPath string, envs []string) *exec.Cmd {
 	var argName string
 	var argsArray []string
 	if len(args) > 1 {
@@ -67,6 +68,7 @@ func (c *cmdExecutor) RunCmdWithContext(ctx context.Context, args []string, exec
 
 	cmd := exec.CommandContext(ctx, argName, argsArray...)
 	cmd.Dir = executionPath
+	cmd.Env = append(cmd.Env, envs...)
 	// stdout is reserved for the rift shell eval (cd command only);
 	// route all command output through stderr so it reaches the terminal directly.
 	cmd.Stdout = os.Stderr

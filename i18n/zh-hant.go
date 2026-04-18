@@ -9,6 +9,7 @@ var zH_HANT = LanguageMapping{
 	PathNotAbsoluteError:     "路徑必須為絕對路徑，收到: %s",
 	NotFileOrDirError:        "指定路徑不存在（非檔案或目錄）",
 	InvalidValueProvided:     "提供的值無效，不允許包含空格 且不能为空",
+	SkippingDueToCwdErr:      "rift：無法取得目前工作目錄，符文命令已略過",
 
 	// Settings
 	SettingsPathError:                 "無法存取設定目錄，[ERROR: %s]",

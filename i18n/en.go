@@ -9,6 +9,7 @@ var eN = LanguageMapping{
 	PathNotAbsoluteError:     "Path must be absolute, got: %s",
 	NotFileOrDirError:        "Path does not exist as a file or directory",
 	InvalidValueProvided:     "Invalid value provided, no whitespace allowed and cannot be empty",
+	SkippingDueToCwdErr:      "rift: rune commands skipped — failed to retrieve current working directory",
 
 	// Settings
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",
