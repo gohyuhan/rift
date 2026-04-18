@@ -55,6 +55,7 @@ func ParseRuneCommandsToString(runeCommands []*pb.RuneCmds) string {
 	var parsedString strings.Builder
 	for _, rune := range runeCommands {
 		parsedString.WriteString(strings.Join(rune.Commands, " "))
+		parsedString.WriteRune('\n')
 	}
 	return parsedString.String()
 }
@@ -68,7 +69,7 @@ func ParseRuneCommandsToString(runeCommands []*pb.RuneCmds) string {
 //	changes are never blocked by rune retrieval issues.
 //
 // ----------------------------------
-func RetrieveRuneForTrigger(waypointntPath string) (bool, *pb.Rune) {
+func RetrieveRuneForTrigger(waypointPath string) (bool, *pb.Rune) {
 	rune := &pb.Rune{}
 	hasRuneToTrigger := false
 
@@ -77,13 +78,13 @@ func RetrieveRuneForTrigger(waypointntPath string) (bool, *pb.Rune) {
 		return hasRuneToTrigger, rune
 	}
 	defer db.CloseDB(bboltReadDb)
-	_ = bboltReadDb.Update(func(tx *bbolt.Tx) error {
+	_ = bboltReadDb.View(func(tx *bbolt.Tx) error {
 		bucket := tx.Bucket(db.RuneBucket)
 		if bucket == nil {
 			return nil
 		}
 
-		existing := bucket.Get([]byte(waypointntPath))
+		existing := bucket.Get([]byte(waypointPath))
 		if existing == nil {
 			return nil
 		}

@@ -28,31 +28,28 @@ const (
 //
 // ----------------------------------
 func ChangeDir(retrievedPath, waypointName string) {
-	triggerWaypointRune(RUNE_ON_LEAVE)
+	leavePath, cwdErr := utils.GetCWD()
+	if cwdErr == nil {
+		triggerWaypointRune(RUNE_ON_LEAVE, strings.TrimSpace(leavePath))
+	}
 	// Only this line goes to stdout — the shell wrapper evals it.
 	fmt.Printf("cd %q", retrievedPath)
 
 	// best-effort: increment travel count; failure is silently ignored
 	UpdateWaypointTravelledCount(waypointName)
-	triggerWaypointRune(RUNE_ON_ENTER)
+	triggerWaypointRune(RUNE_ON_ENTER, retrievedPath)
 }
 
 // ----------------------------------
 //
-//	Looks up and executes the rune commands for the current working directory.
-//	runeType selects RUNE_ON_ENTER or RUNE_ON_LEAVE commands. Silently returns
-//	if CWD cannot be retrieved, or if no rune is registered for the path.
-//	Each command is logged before execution; if CWD retrieval fails mid-loop,
-//	an error is logged and the command is skipped.
+//	Looks up and executes the rune commands for path. runeType selects
+//	RUNE_ON_ENTER or RUNE_ON_LEAVE commands. Silently returns if no rune is
+//	registered for path. Each command runs with path as its working directory
+//	so that nested rift calls inherit the correct CWD for their own triggers.
 //
 // ----------------------------------
-func triggerWaypointRune(runeType string) {
-	cwd, err := utils.GetCWD()
-	if err != nil {
-		return
-	}
-
-	hasRune, rune := RetrieveRuneForTrigger(strings.TrimSpace(cwd))
+func triggerWaypointRune(runeType string, path string) {
+	hasRune, rune := RetrieveRuneForTrigger(path)
 
 	if !hasRune {
 		return
@@ -73,16 +70,22 @@ func triggerWaypointRune(runeType string) {
 		}
 	}
 
+	// at depth>0, no real chdir has occurred — outer call already fired LEAVE
+	if runeType == RUNE_ON_LEAVE && runeDepth > 0 {
+		return
+	}
+
 	padding := strings.Repeat("  ", runeDepth)
 	runeCmdsCount := len(runeCmds)
 	for index, cmd := range runeCmds {
-		cwd, cwdErr := utils.GetCWD()
-		msg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, strings.Join(cmd.Commands, " ")), style.ColorPurpleVibrant, false)
-		if cwdErr != nil {
-			msg = padding + style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SkippingDueToCwdErr, style.ColorError, false)
+		runeExecutor := executor.CmdExecutor().RunCmd(cmd.Commands, path, []string{fmt.Sprintf("RIFT_RUNE_DEPTH=%v", runeDepth+1)})
+		if runeExecutor != nil {
+			msg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, strings.Join(cmd.Commands, " ")), style.ColorPurpleVibrant, false)
+			logger.LOGGER.LogToTerminal([]string{msg})
+			runeExecutor.Run()
+		} else {
+			errMsg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, i18n.LANGUAGEMAPPING.SkippingDueToExecutorErr), style.ColorError, false)
+			logger.LOGGER.LogToTerminal([]string{errMsg})
 		}
-		logger.LOGGER.LogToTerminal([]string{msg})
-		executor.CmdExecutor().RunCmd(cmd.Commands, cwd, []string{fmt.Sprintf("RIFT_RUNE_DEPTH=%v", runeDepth+1)})
-
 	}
 }

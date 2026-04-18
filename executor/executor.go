@@ -40,7 +40,7 @@ func (c *cmdExecutor) RunCmd(args []string, executionPath string, envs []string)
 
 	cmd := exec.Command(argName, argsArray...)
 	cmd.Dir = executionPath
-	cmd.Env = append(cmd.Env, envs...)
+	cmd.Env = append(os.Environ(), envs...)
 	// stdout is reserved for the rift shell eval (cd command only);
 	// route all command output through stderr so it reaches the terminal directly.
 	cmd.Stdout = os.Stderr
@@ -68,7 +68,7 @@ func (c *cmdExecutor) RunCmdWithContext(ctx context.Context, args []string, exec
 
 	cmd := exec.CommandContext(ctx, argName, argsArray...)
 	cmd.Dir = executionPath
-	cmd.Env = append(cmd.Env, envs...)
+	cmd.Env = append(os.Environ(), envs...)
 	// stdout is reserved for the rift shell eval (cd command only);
 	// route all command output through stderr so it reaches the terminal directly.
 	cmd.Stdout = os.Stderr

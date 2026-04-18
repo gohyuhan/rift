@@ -10,6 +10,7 @@ var eN = LanguageMapping{
 	NotFileOrDirError:        "Path does not exist as a file or directory",
 	InvalidValueProvided:     "Invalid value provided, no whitespace allowed and cannot be empty",
 	SkippingDueToCwdErr:      "rift: rune commands skipped — failed to retrieve current working directory",
+	SkippingDueToExecutorErr: "rift: rune command skipped — failed to start executor",
 
 	// Settings
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",

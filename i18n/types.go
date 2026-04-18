@@ -16,6 +16,7 @@ type LanguageMapping struct {
 	NotFileOrDirError        string
 	InvalidValueProvided     string
 	SkippingDueToCwdErr      string
+	SkippingDueToExecutorErr string
 
 	// Settings
 	SettingsPathError                 string

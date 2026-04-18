@@ -10,6 +10,7 @@ var jA = LanguageMapping{
 	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
 	InvalidValueProvided:     "無効な値が指定されました。スペースは使用できません。また、空にすることもできません",
 	SkippingDueToCwdErr:      "rift：カレントディレクトリの取得に失敗したため、ルーンコマンドをスキップします",
+	SkippingDueToExecutorErr: "rift：エグゼキューターの起動に失敗したため、ルーンコマンドをスキップします",
 
 	// Settings
 	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
