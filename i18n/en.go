@@ -9,6 +9,8 @@ var eN = LanguageMapping{
 	PathNotAbsoluteError:     "Path must be absolute, got: %s",
 	NotFileOrDirError:        "Path does not exist as a file or directory",
 	InvalidValueProvided:     "Invalid value provided, no whitespace allowed and cannot be empty",
+	SkippingDueToCwdErr:      "rift: rune commands skipped — failed to retrieve current working directory",
+	SkippingDueToExecutorErr: "rift: rune command skipped — failed to start executor",
 
 	// Settings
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",
@@ -28,6 +30,8 @@ var eN = LanguageMapping{
 	WaypointDataCorruptedError:  "Waypoint data for [%s] is corrupted and could not be read",
 	SpellBucketNotFoundError:    "Spell bucket not found in database, perhaps rerun `rift awaken`",
 	SpellDataCorruptedError:     "Spell data for [%s] is corrupted and could not be read",
+	RuneBucketNotFoundError:     "Rune bucket not found in database, perhaps rerun `rift awaken`",
+	RuneDataCorruptedError:      "Rune data for path [%s] is corrupted and could not be read",
 
 	// Updater
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
@@ -77,6 +81,7 @@ var eN = LanguageMapping{
 	RiftFlagVersionDescription:            "Print the current version of rift",
 	RiftFlagCastDescription:               "Instead of navigation, cast a learned spell on the waypoint's path; the spell command will be executed with the waypoint's path as the working directory",
 	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
+	RiftRuneDescription:                   "Attach on-enter and on-leave trigger commands to a waypoint; triggers fire automatically when rift navigates to or from that waypoint",
 
 	// Spell operations
 	RiftSpellSaved:            "rift: learned %q -> %s",
@@ -96,7 +101,7 @@ var eN = LanguageMapping{
 	RiftWaypointUpdateError:               "rift: failed to update waypoint %q, [ERROR: %s]",
 	RiftWaypointSealedError:               "rift: waypoint %q is sealed and cannot be travelled to due to %q",
 	RiftWaypointSealedLabel:               "(SEALED)",
-	RiftWaypointRetrieveAllError:          "rift: failed to retrieve waypoints",
+	RiftWaypointRetrieveAllError:          "rift: failed to retrieve waypoints: %s",
 	RiftWaypointDestroySuccess:            "rift: waypoint %q has been destroyed",
 	RiftWaypointDestroyError:              "rift: failed to destroy waypoint %q, [ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift: rebind path %q is not a directory",
@@ -105,6 +110,11 @@ var eN = LanguageMapping{
 	RiftWaypointReforgeAlreadyExistsError: "rift: waypoint %q already exists, cannot reforge to an existing name",
 	RiftWaypointReforgeError:              "rift: failed to reforge waypoint %q, [ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift: waypoint %q reforged to %q",
+
+	// Rune operations
+	RiftRuneEngraveSuccessful: "rift: rune engraved on waypoint %q",
+	RiftRuneEngraveNone:       "rift: no rune was engraved on waypoint %q",
+	RiftRuneUpdateError:       "rift: failed to update rune for path %q, [ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "Spell Name:",
@@ -185,6 +195,23 @@ var eN = LanguageMapping{
 	SpellCommandInputTitle:                   "Spell Command:",
 	SpellUIChooseCastLocationKeyHelp:         "choose cast location",
 	SpellUIChooseWaypointCastLocationKeyHelp: "choose waypoint to cast spell to",
+
+	// Rune interactive UI
+	RuneInteractiveError:              "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle:    "Rune Options",
+	EngraveRuneEnterTitle:             "Commands for On Enter Rune:",
+	EngraveRuneLeaveTitle:             "Commands for On Leave Rune:",
+	EngraveRuneEngraveButton:          "Engrave",
+	RuneCommandsPlaceHolder:           "Enter commands... (cd has no effect, recommend using rift to change path)",
+	RuneCommandsInvalidDueToCDCommand: "Detected one or more runes use cd, which has no effect in rift rune. Use `rift` to change paths instead.",
+	EngraveRuneEnterOptionName:        "Engrave On-Enter Rune",
+	EngraveRuneEnterOptionDesc:        "Set commands to run when entering this waypoint",
+	EngraveRuneLeaveOptionName:        "Engrave On-Leave Rune",
+	EngraveRuneLeaveOptionDesc:        "Set commands to run when leaving this waypoint",
+	RemoveRuneEnterOptionName:         "Remove On-Enter Rune",
+	RemoveRuneEnterOptionDesc:         "Clear the commands that run when entering this waypoint",
+	RemoveRuneLeaveOptionName:         "Remove On-Leave Rune",
+	RemoveRuneLeaveOptionDesc:         "Clear the commands that run when leaving this waypoint",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "Cast Location",

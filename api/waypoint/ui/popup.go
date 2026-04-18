@@ -55,19 +55,20 @@ func renderRebindPopUp(m *WaypointInteractiveModel) string {
 		maxWidth := int(float64(m.Width) * 0.8)
 		maxHeight := int(float64(m.Height) * 0.7)
 		popUp.RebindPathInput.SetWidth(maxWidth - TextInputWidthPad)
+		strStyle := lipgloss.NewStyle().Width(maxWidth - TextInputWidthPad)
 		var content string
 		if popUp.Error != nil {
-			errMessage := style.RenderStringWithColor(popUp.Error.Error(), style.ColorError, true)
+			errMessage := strStyle.Render(style.RenderStringWithColor(popUp.Error.Error(), style.ColorError, true))
 			content = lipgloss.JoinVertical(
 				lipgloss.Left,
-				i18n.LANGUAGEMAPPING.WaypointRebindTitle,
+				strStyle.Render(i18n.LANGUAGEMAPPING.WaypointRebindTitle),
 				popUp.RebindPathInput.View(),
 				errMessage,
 			)
 		} else {
 			content = lipgloss.JoinVertical(
 				lipgloss.Left,
-				i18n.LANGUAGEMAPPING.WaypointRebindTitle,
+				strStyle.Render(i18n.LANGUAGEMAPPING.WaypointRebindTitle),
 				popUp.RebindPathInput.View(),
 			)
 		}
@@ -93,19 +94,20 @@ func renderReforgePopUp(m *WaypointInteractiveModel) string {
 		maxWidth := int(float64(m.Width) * 0.8)
 		maxHeight := int(float64(m.Height) * 0.7)
 		popUp.ReforgeWaypointNameInput.SetWidth(maxWidth - TextInputWidthPad)
+		strStyle := lipgloss.NewStyle().Width(maxWidth - TextInputWidthPad)
 		var content string
 		if popUp.Error != nil {
-			errMessage := style.RenderStringWithColor(popUp.Error.Error(), style.ColorError, true)
+			errMessage := strStyle.Render(style.RenderStringWithColor(popUp.Error.Error(), style.ColorError, true))
 			content = lipgloss.JoinVertical(
 				lipgloss.Left,
-				i18n.LANGUAGEMAPPING.WaypointReforgeTitle,
+				strStyle.Render(i18n.LANGUAGEMAPPING.WaypointReforgeTitle),
 				popUp.ReforgeWaypointNameInput.View(),
 				errMessage,
 			)
 		} else {
 			content = lipgloss.JoinVertical(
 				lipgloss.Left,
-				i18n.LANGUAGEMAPPING.WaypointReforgeTitle,
+				strStyle.Render(i18n.LANGUAGEMAPPING.WaypointReforgeTitle),
 				popUp.ReforgeWaypointNameInput.View(),
 			)
 		}

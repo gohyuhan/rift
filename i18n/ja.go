@@ -9,6 +9,8 @@ var jA = LanguageMapping{
 	PathNotAbsoluteError:     "パスは絶対パスである必要があります。指定されたパス: %s",
 	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
 	InvalidValueProvided:     "無効な値が指定されました。スペースは使用できません。また、空にすることもできません",
+	SkippingDueToCwdErr:      "rift：カレントディレクトリの取得に失敗したため、ルーンコマンドをスキップします",
+	SkippingDueToExecutorErr: "rift：エグゼキューターの起動に失敗したため、ルーンコマンドをスキップします",
 
 	// Settings
 	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
@@ -28,6 +30,8 @@ var jA = LanguageMapping{
 	WaypointDataCorruptedError:  "ウェイポイント [%s] のデータが破損しており、読み込めません",
 	SpellBucketNotFoundError:    "データベースにスペルバケットが見つかりません。`rift awaken` を再実行してください",
 	SpellDataCorruptedError:     "スペル [%s] のデータが破損しており、読み込めません",
+	RuneBucketNotFoundError:     "データベースにルーンバケットが見つかりません。`rift awaken` を再実行してください",
+	RuneDataCorruptedError:      "パス [%s] のルーンデータが破損しており、読み込めません",
 
 	// Updater
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
@@ -77,6 +81,7 @@ var jA = LanguageMapping{
 	RiftFlagVersionDescription:            "rift の現在のバージョンを表示します",
 	RiftFlagCastDescription:               "ナビゲーションの代わりに、習得したスペルをウェイポイントのパスでキャストします。スペルコマンドは、ウェイポイントのパスを作業ディレクトリとして実行されます",
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
+	RiftRuneDescription:                   "ウェイポイントに移動時・離脱時のトリガーコマンドを設定します；rift でそのウェイポイントへ、またはそこから移動する際に自動的に実行されます",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
@@ -96,7 +101,7 @@ var jA = LanguageMapping{
 	RiftWaypointUpdateError:               "rift：ウェイポイント %q の更新に失敗しました、[ERROR: %s]",
 	RiftWaypointSealedError:               "rift：ウェイポイント %q は封印されており、移動できません。理由：%q",
 	RiftWaypointSealedLabel:               "(封印済み)",
-	RiftWaypointRetrieveAllError:          "rift：ウェイポイントの取得に失敗しました",
+	RiftWaypointRetrieveAllError:          "rift：ウェイポイントの取得に失敗しました: %s",
 	RiftWaypointDestroySuccess:            "rift：ウェイポイント %q を削除しました",
 	RiftWaypointDestroyError:              "rift：ウェイポイント %q の削除に失敗しました、[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：再バインド先のパス %q はディレクトリではありません",
@@ -105,6 +110,11 @@ var jA = LanguageMapping{
 	RiftWaypointReforgeAlreadyExistsError: "rift：ウェイポイント %q は既に存在するため、既存の名前にリフォージすることはできません",
 	RiftWaypointReforgeError:              "rift：ウェイポイント %q のリフォージに失敗しました、[ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift：ウェイポイント %q を %q にリフォージしました",
+
+	// Rune operations
+	RiftRuneEngraveSuccessful: "rift：ルーンをウェイポイント %q に刻みました",
+	RiftRuneEngraveNone:       "rift：ウェイポイント %q にルーンは刻まれませんでした",
+	RiftRuneUpdateError:       "rift：パス %q のルーン更新に失敗しました、[ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "スペル名：",
@@ -185,6 +195,23 @@ var jA = LanguageMapping{
 	SpellCommandInputTitle:                   "スペルコマンド：",
 	SpellUIChooseCastLocationKeyHelp:         "詠唱場所を選択",
 	SpellUIChooseWaypointCastLocationKeyHelp: "スペルを詠唱するウェイポイントを選択",
+
+	// Rune interactive UI
+	RuneInteractiveError:              "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle:    "ルーンオプション",
+	EngraveRuneEnterTitle:             "移動時ルーンのコマンド：",
+	EngraveRuneLeaveTitle:             "離脱時ルーンのコマンド：",
+	EngraveRuneEngraveButton:          "刻む",
+	RuneCommandsPlaceHolder:           "コマンドを入力… （cd は効果がありません。パス変更には rift の使用を推薦します）",
+	RuneCommandsInvalidDueToCDCommand: "cd を使用しているルーンが1つ以上検出されました。rift ルーンでは cd は効果がありません。パスの変更には `rift` を使用してください。",
+	EngraveRuneEnterOptionName:        "移動時ルーンを刻む",
+	EngraveRuneEnterOptionDesc:        "このウェイポイントに移動した際に実行するコマンドを設定する",
+	EngraveRuneLeaveOptionName:        "離脱時ルーンを刻む",
+	EngraveRuneLeaveOptionDesc:        "このウェイポイントから離脱した際に実行するコマンドを設定する",
+	RemoveRuneEnterOptionName:         "移動時ルーンを削除する",
+	RemoveRuneEnterOptionDesc:         "このウェイポイントに移動した際に実行するコマンドを削除する",
+	RemoveRuneLeaveOptionName:         "離脱時ルーンを削除する",
+	RemoveRuneLeaveOptionDesc:         "このウェイポイントから離脱した際に実行するコマンドを削除する",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "詠唱場所",

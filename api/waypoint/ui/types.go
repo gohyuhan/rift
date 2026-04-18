@@ -5,13 +5,13 @@ import (
 	"io"
 	"strings"
 
-	"github.com/charmbracelet/x/ansi"
-	"github.com/gohyuhan/rift/i18n"
-	"github.com/gohyuhan/rift/style"
-
 	"charm.land/bubbles/v2/list"
 	"charm.land/bubbles/v2/textinput"
 	tea "charm.land/bubbletea/v2"
+	"github.com/charmbracelet/x/ansi"
+	"github.com/gohyuhan/rift/i18n"
+	pb "github.com/gohyuhan/rift/proto"
+	"github.com/gohyuhan/rift/style"
 )
 
 // HelpListItem holds the display data for a single row in the help popup.
@@ -29,10 +29,14 @@ type HelpListItem struct {
 type (
 	waypointInfoDelegate struct{}
 	waypointInfoItem     struct {
-		WaypointName         string
-		WaypointPath         string
-		WaypointIsSealed     bool
-		WaypointSealedReason string
+		WaypointName           string
+		WaypointPath           string
+		WaypointAddedAt        string
+		WaypointTravelledCount int64
+		WaypointIsSealed       bool
+		WaypointSealedReason   string
+		EnterRune              []*pb.RuneCmds
+		LeaveRune              []*pb.RuneCmds
 	}
 )
 
@@ -99,6 +103,18 @@ func (d waypointInfoDelegate) Render(w io.Writer, m list.Model, index int, listI
 	} else {
 		waypointName = style.RenderStringWithColor(waypointName, style.ColorPurpleVibrant, false)
 		waypointPath = style.RenderStringWithColor(waypointPath, style.ColorPurpleSoft, true)
+	}
+
+	// append enter/leave rune state icons
+	if len(i.EnterRune) > 0 {
+		waypointName = waypointName + " " + style.RenderStringWithColor("\uf4bf", style.ColorPurpleVibrant, false)
+	} else {
+		waypointName = waypointName + " " + style.RenderStringWithColor("\uf4bf", style.ColorSealedMuted, true)
+	}
+	if len(i.LeaveRune) > 0 {
+		waypointName = waypointName + " " + style.RenderStringWithColor("\uf4bf", style.ColorPurpleVibrant, false)
+	} else {
+		waypointName = waypointName + " " + style.RenderStringWithColor("\uf4bf", style.ColorSealedMuted, true)
 	}
 
 	str := fmt.Sprintf("%s\n%s\n%s", waypointName, waypointPath, waypointSealedReason)

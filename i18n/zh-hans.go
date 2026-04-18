@@ -9,6 +9,8 @@ var zH_HANS = LanguageMapping{
 	PathNotAbsoluteError:     "路径必须为绝对路径，收到: %s",
 	NotFileOrDirError:        "指定路径不存在（非文件或目录）",
 	InvalidValueProvided:     "提供的值无效，不允许包含空格 且不能为空",
+	SkippingDueToCwdErr:      "rift：无法获取当前工作目录，符文命令已跳过",
+	SkippingDueToExecutorErr: "rift：执行器启动失败，符文命令已跳过",
 
 	// Settings
 	SettingsPathError:                 "无法访问设置目录，[ERROR: %s]",
@@ -28,6 +30,8 @@ var zH_HANS = LanguageMapping{
 	WaypointDataCorruptedError:  "航点 [%s] 的数据已损坏，无法读取",
 	SpellBucketNotFoundError:    "在数据库中找不到咒语存储区，请重新运行 `rift awaken`",
 	SpellDataCorruptedError:     "咒语 [%s] 的数据已损坏，无法读取",
+	RuneBucketNotFoundError:     "在数据库中找不到符文存储区，请重新运行 `rift awaken`",
+	RuneDataCorruptedError:      "路径 [%s] 的符文数据已损坏，无法读取",
 
 	// Updater
 	UpdaterDownloadPrompt:               "发现新版本 %s，是否立即下载？(y/n): ",
@@ -77,6 +81,7 @@ var zH_HANS = LanguageMapping{
 	RiftFlagVersionDescription:            "打印 rift 的当前版本",
 	RiftFlagCastDescription:               "代替导航，对航点的路径施放已习得的咒语；咒语命令将在航点的路径作为工作目录时执行",
 	RiftFlagRetrieveError:                 "rift：获取标志 %q 失败，[ERROR: %s]",
+	RiftRuneDescription:                   "为航点绑定进入和离开时的触发命令；当 rift 导航至或离开该航点时自动执行",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：已习得 %q -> %s",
@@ -96,7 +101,7 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointUpdateError:               "rift：更新航点 %q 失败，[ERROR: %s]",
 	RiftWaypointSealedError:               "rift：航点 %q 已封印，无法前往，原因：%q",
 	RiftWaypointSealedLabel:               "（已封印）",
-	RiftWaypointRetrieveAllError:          "rift：获取航点列表失败",
+	RiftWaypointRetrieveAllError:          "rift：获取航点列表失败：%s",
 	RiftWaypointDestroySuccess:            "rift：航点 %q 已被销毁",
 	RiftWaypointDestroyError:              "rift：销毁航点 %q 失败，[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：重新绑定的路径 %q 不是一个目录",
@@ -105,6 +110,11 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointReforgeAlreadyExistsError: "rift：航点 %q 已存在，无法重铸为已有名称",
 	RiftWaypointReforgeError:              "rift：重铸航点 %q 失败，[ERROR: %s]",
 	RiftWaypointReforgeSuccess:            "rift：航点 %q 已重铸为 %q",
+
+	// Rune operations
+	RiftRuneEngraveSuccessful: "rift：符文已刻印到航点 %q",
+	RiftRuneEngraveNone:       "rift：未将符文刻印到航点 %q",
+	RiftRuneUpdateError:       "rift：更新路径 %q 的符文失败，[ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "咒语名称：",
@@ -185,6 +195,23 @@ var zH_HANS = LanguageMapping{
 	SpellCommandInputTitle:                   "咒语命令：",
 	SpellUIChooseCastLocationKeyHelp:         "选择施放位置",
 	SpellUIChooseWaypointCastLocationKeyHelp: "选择施放咒语的航点",
+
+	// Rune interactive UI
+	RuneInteractiveError:              "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle:    "符文选项",
+	EngraveRuneEnterTitle:             "进入时符文的命令：",
+	EngraveRuneLeaveTitle:             "离开时符文的命令：",
+	EngraveRuneEngraveButton:          "刻印",
+	RuneCommandsPlaceHolder:           "输入命令…（cd 无效，推荐使用 rift 切换路径）",
+	RuneCommandsInvalidDueToCDCommand: "检测到一个或多个符文使用了 cd，cd 在 rift 符文中无效。请改用 `rift` 切换路径。",
+	EngraveRuneEnterOptionName:        "刻印进入时符文",
+	EngraveRuneEnterOptionDesc:        "设置进入此航点时执行的命令",
+	EngraveRuneLeaveOptionName:        "刻印离开时符文",
+	EngraveRuneLeaveOptionDesc:        "设置离开此航点时执行的命令",
+	RemoveRuneEnterOptionName:         "移除进入时符文",
+	RemoveRuneEnterOptionDesc:         "清除进入此航点时执行的命令",
+	RemoveRuneLeaveOptionName:         "移除离开时符文",
+	RemoveRuneLeaveOptionDesc:         "清除离开此航点时执行的命令",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "施放位置",

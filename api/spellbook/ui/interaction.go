@@ -91,7 +91,6 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 						m.IsQuit = true
 						return m, tea.Quit
 					case CastWaypoint:
-						// TODO: implement cast to waypoint functionality
 						m.PopUpType = CastWaypointLocationOptionPopUp
 						m.ShowPopUp.Store(true)
 						initCastWaypointLocationOptionPopUpModel(m, popUp.SelectedSpellName)

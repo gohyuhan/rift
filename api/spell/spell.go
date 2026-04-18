@@ -49,7 +49,7 @@ func RetrieveAndCastSpell(spellName string, executionPath string) error {
 		return retrieveErr
 	}
 
-	spellCmdExecutor := executor.CmdExecutor().RunCmd(retrievedSpellCmd, executionPath)
+	spellCmdExecutor := executor.CmdExecutor().RunCmd(retrievedSpellCmd, executionPath, []string{})
 	if spellCmdExecutor == nil {
 		errMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.InvalidSpellCommandError, strings.Join(retrievedSpellCmd, " ")), style.ColorError, false)
 		return fmt.Errorf("%s", errMessage)

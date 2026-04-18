@@ -1,7 +1,6 @@
 package waypoint
 
 import (
-	"fmt"
 	"strings"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
@@ -32,11 +31,7 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 		}
 
 		if pathToNavigate != "" && waypointName != "" {
-			// Only this line goes to stdout — the shell wrapper evals it.
-			fmt.Printf("cd %q", pathToNavigate)
-
-			// best-effort: increment travel count; failure is silently ignored
-			apiUtils.UpdateWaypointTravelledCount(waypointName)
+			apiUtils.ChangeDir(pathToNavigate, waypointName)
 		}
 
 		return nil

@@ -43,6 +43,15 @@ func initLearnPopUpModel(m *SpellbookInteractiveModel) {
 	m.SpellPopUpModel = popUpModel
 }
 
+// ----------------------------------
+//
+//	Builds the CastLocationOptionPopUpModel with two options — cast at the
+//	current working directory (CastCWD) or cast at a waypoint (CastWaypoint).
+//	The list title is truncated to prevent overflow on narrow terminals.
+//	Stores the resulting model and the selected spell name on the parent
+//	SpellbookInteractiveModel.
+//
+// ----------------------------------
 func initCastLocationOptionPopUpModel(m *SpellbookInteractiveModel, spellName string) {
 	castLocationOptionListArray := []list.Item{
 		castLocationOptionItem{
@@ -80,6 +89,14 @@ func initCastLocationOptionPopUpModel(m *SpellbookInteractiveModel, spellName st
 	m.SpellPopUpModel = popUpModel
 }
 
+// ----------------------------------
+//
+//	Builds the CastWaypointLocationOptionPopUpModel by loading all waypoints
+//	from the DB and presenting them as selectable list items. The list title is
+//	truncated to prevent overflow on narrow terminals. Stores the resulting model
+//	and the selected spell name on the parent SpellbookInteractiveModel.
+//
+// ----------------------------------
 func initCastWaypointLocationOptionPopUpModel(m *SpellbookInteractiveModel, spellName string) {
 	titleWidthLimit := m.Width - ListItemOrTitleWidthPad - ListTitleHorizontalPadding
 

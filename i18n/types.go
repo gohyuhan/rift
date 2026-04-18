@@ -15,6 +15,8 @@ type LanguageMapping struct {
 	PathNotAbsoluteError     string
 	NotFileOrDirError        string
 	InvalidValueProvided     string
+	SkippingDueToCwdErr      string
+	SkippingDueToExecutorErr string
 
 	// Settings
 	SettingsPathError                 string
@@ -34,6 +36,8 @@ type LanguageMapping struct {
 	WaypointDataCorruptedError  string
 	SpellBucketNotFoundError    string
 	SpellDataCorruptedError     string
+	RuneBucketNotFoundError     string
+	RuneDataCorruptedError      string
 
 	// Updater
 	UpdaterDownloadPrompt               string
@@ -83,6 +87,7 @@ type LanguageMapping struct {
 	RiftFlagVersionDescription            string
 	RiftFlagCastDescription               string
 	RiftFlagRetrieveError                 string
+	RiftRuneDescription                   string
 
 	// Spell operations
 	RiftSpellSaved            string
@@ -94,6 +99,11 @@ type LanguageMapping struct {
 	ForbiddenCDSpellCommand   string
 	SpellCommandEmpty         string
 	InvalidSpellCommandError  string
+
+	// Rune operations
+	RiftRuneEngraveSuccessful string
+	RiftRuneEngraveNone       string
+	RiftRuneUpdateError       string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string
@@ -191,6 +201,23 @@ type LanguageMapping struct {
 	SpellCommandInputTitle                   string
 	SpellUIChooseCastLocationKeyHelp         string
 	SpellUIChooseWaypointCastLocationKeyHelp string
+
+	// Rune interactive UI
+	RuneInteractiveError              string
+	RuneEngraveTypeOptionListTitle    string
+	EngraveRuneEnterTitle             string
+	EngraveRuneLeaveTitle             string
+	EngraveRuneEngraveButton          string
+	RuneCommandsPlaceHolder           string
+	RuneCommandsInvalidDueToCDCommand string
+	EngraveRuneEnterOptionName        string
+	EngraveRuneEnterOptionDesc        string
+	EngraveRuneLeaveOptionName        string
+	EngraveRuneLeaveOptionDesc        string
+	RemoveRuneEnterOptionName         string
+	RemoveRuneEnterOptionDesc         string
+	RemoveRuneLeaveOptionName         string
+	RemoveRuneLeaveOptionDesc         string
 
 	// Cast location option popup
 	CastLocationOptionTitle               string

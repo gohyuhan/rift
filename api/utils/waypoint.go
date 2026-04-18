@@ -26,10 +26,14 @@ import (
 //
 // ----------------------------------
 type WaypointInfo struct {
-	WaypointName         string
-	WaypointPath         string
-	WaypointIsSealed     bool
-	WaypointSealedReason string
+	WaypointName           string
+	WaypointPath           string
+	WaypointAddedAt        string
+	WaypointTravelledCount int64
+	WaypointIsSealed       bool
+	WaypointSealedReason   string
+	EnterRune              []*pb.RuneCmds
+	LeaveRune              []*pb.RuneCmds
 }
 
 // ----------------------------------
@@ -192,8 +196,10 @@ func UpdateWaypointTravelledCount(waypointName string) error {
 // ----------------------------------
 func GetAllWaypointsInfo() ([]WaypointInfo, error) {
 	var waypointsInfo []WaypointInfo
-	var corruptedWaypointName []string
+	var corruptedWaypointName []string     // for waypoint corrupted data
+	var corruptedRuneWaypointPath []string // for rune corrupted data
 	waypointCorrupted := false
+	runeCorrupted := false
 
 	// seal updates are collected during the read-only View and applied afterwards;
 	// calling a write transaction (Update) inside a View callback deadlocks bbolt
@@ -240,12 +246,26 @@ func GetAllWaypointsInfo() ([]WaypointInfo, error) {
 				toSeal = append(toSeal, pendingSeal{name: string(k), reason: existingWaypoint.WaypointSealedReason})
 			}
 
+			_, runes, isCorrupted, runeErr := RetrieveRuneBasedOnWaypointPath(tx, existingWaypoint.WaypointPath)
+			if isCorrupted {
+				runeCorrupted = true
+				corruptedRuneWaypointPath = append(corruptedRuneWaypointPath, existingWaypoint.WaypointPath)
+			}
+
+			if runeErr != nil && !isCorrupted {
+				return runeErr
+			}
+
 			// construct the waypoint info type
 			info := WaypointInfo{
-				WaypointName:         string(k),
-				WaypointPath:         existingWaypoint.WaypointPath,
-				WaypointIsSealed:     existingWaypoint.WaypointIsSealed,
-				WaypointSealedReason: existingWaypoint.WaypointSealedReason,
+				WaypointName:           string(k),
+				WaypointPath:           existingWaypoint.WaypointPath,
+				WaypointAddedAt:        existingWaypoint.WaypointAddedAt,
+				WaypointTravelledCount: existingWaypoint.WaypointTravelledCount,
+				WaypointIsSealed:       existingWaypoint.WaypointIsSealed,
+				WaypointSealedReason:   existingWaypoint.WaypointSealedReason,
+				EnterRune:              runes.EnterRunes,
+				LeaveRune:              runes.LeaveRunes,
 			}
 
 			waypointsInfo = append(waypointsInfo, info)
@@ -255,7 +275,7 @@ func GetAllWaypointsInfo() ([]WaypointInfo, error) {
 
 		// wrap ForEach failure into a user-facing message
 		if retrieveError != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RiftWaypointRetrieveAllError, style.ColorError, false))
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRetrieveAllError, retrieveError.Error()), style.ColorError, false))
 		}
 
 		return nil
@@ -275,5 +295,64 @@ func GetAllWaypointsInfo() ([]WaypointInfo, error) {
 		viewErr = RecordCorruptedWaypointInfo(corruptedWaypointName)
 	}
 
+	if runeCorrupted {
+		viewErr = RecordCorruptedRuneInfo(corruptedRuneWaypointPath)
+	}
+
 	return waypointsInfo, viewErr
+}
+
+// ----------------------------------
+//
+//	Looks up a waypoint by name and returns the full deserialized *pb.Waypoint
+//	record using a read-only View transaction. Returns an error when the waypoint
+//	bucket is missing, the waypoint does not exist, or the stored proto is corrupted.
+//
+// ----------------------------------
+func RetrieveWaypointInfo(waypointName string) (WaypointInfo, error) {
+	waypoint := &pb.Waypoint{}
+	var rune *pb.Rune
+	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+	var waypointInfo WaypointInfo
+	if bboltReadDbErr != nil {
+		return waypointInfo, bboltReadDbErr
+	}
+	defer db.CloseDB(bboltReadDb)
+
+	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
+		bucket := tx.Bucket(db.WaypointBucket)
+		if bucket == nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+		}
+
+		existing := bucket.Get([]byte(waypointName))
+		if existing == nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDoNotExistsError, waypointName), style.ColorError, false))
+		}
+
+		if err := proto.Unmarshal(existing, waypoint); err != nil {
+			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.WaypointDataCorruptedError, waypointName), style.ColorError, false))
+		}
+
+		_, retrievedRune, _, runeErr := RetrieveRuneBasedOnWaypointPath(tx, waypoint.WaypointPath)
+
+		rune = retrievedRune
+
+		return runeErr
+	})
+
+	if viewErr == nil {
+		waypointInfo = WaypointInfo{
+			WaypointName:           waypoint.WaypointName,
+			WaypointPath:           waypoint.WaypointPath,
+			WaypointAddedAt:        waypoint.WaypointAddedAt,
+			WaypointTravelledCount: waypoint.WaypointTravelledCount,
+			WaypointIsSealed:       waypoint.WaypointIsSealed,
+			WaypointSealedReason:   waypoint.WaypointSealedReason,
+			EnterRune:              rune.EnterRunes,
+			LeaveRune:              rune.LeaveRunes,
+		}
+	}
+
+	return waypointInfo, viewErr
 }
