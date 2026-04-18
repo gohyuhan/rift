@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/gohyuhan/rift/proto";
+
+message RuneCmds {
+  repeated string commands = 1;
+}
+
+// Rune represent metadata of commands that will be triggered for a dir when it enter or leaves the define path using rift
+message Rune {
+  string waypoint_path = 1; // the actual dir path that will trigger the rune
+  repeated RuneCmds enter_runes = 2; // rune that will trigger when using rift to enter a dir
+  repeated RuneCmds leave_runes = 3; // rune that will trigger when using rift to leave a dir
+}

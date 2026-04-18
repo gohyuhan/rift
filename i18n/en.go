@@ -28,6 +28,8 @@ var eN = LanguageMapping{
 	WaypointDataCorruptedError:  "Waypoint data for [%s] is corrupted and could not be read",
 	SpellBucketNotFoundError:    "Spell bucket not found in database, perhaps rerun `rift awaken`",
 	SpellDataCorruptedError:     "Spell data for [%s] is corrupted and could not be read",
+	RuneBucketNotFoundError:     "Rune bucket not found in database, perhaps rerun `rift awaken`",
+	RuneDataCorruptedError:      "Rune data for path [%s] is corrupted and could not be read",
 
 	// Updater
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
@@ -110,6 +112,7 @@ var eN = LanguageMapping{
 	// Rune operations
 	RiftRuneEngraveSuccessful: "rift: rune engraved on waypoint %q",
 	RiftRuneEngraveNone:       "rift: no rune was engraved on waypoint %q",
+	RiftRuneUpdateError:       "rift: failed to update rune for path %q, [ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "Spell Name:",

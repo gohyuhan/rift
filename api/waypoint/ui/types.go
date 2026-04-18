@@ -33,8 +33,8 @@ type (
 		WaypointPath         string
 		WaypointIsSealed     bool
 		WaypointSealedReason string
-		WaypointEnterRune    []*pb.Rune
-		WaypointLeaveRune    []*pb.Rune
+		WaypointEnterRune    []*pb.RuneCmds
+		WaypointLeaveRune    []*pb.RuneCmds
 	}
 )
 

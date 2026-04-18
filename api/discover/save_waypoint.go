@@ -52,8 +52,6 @@ func saveWaypoint(waypointName string, path string) error {
 			WaypointTravelledCount: 0,
 			WaypointIsSealed:       false,
 			WaypointSealedReason:   "",
-			EnterRunes:             nil,
-			LeaveRunes:             nil,
 		}
 
 		data, err := proto.Marshal(waypoint)

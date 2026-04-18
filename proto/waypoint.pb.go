@@ -22,50 +22,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Rune struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Commands      []string               `protobuf:"bytes,1,rep,name=commands,proto3" json:"commands,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Rune) Reset() {
-	*x = Rune{}
-	mi := &file_proto_waypoint_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Rune) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Rune) ProtoMessage() {}
-
-func (x *Rune) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_waypoint_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Rune.ProtoReflect.Descriptor instead.
-func (*Rune) Descriptor() ([]byte, []int) {
-	return file_proto_waypoint_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Rune) GetCommands() []string {
-	if x != nil {
-		return x.Commands
-	}
-	return nil
-}
-
 // waypoint represent metadata for a dir in user's system with a user defined waypoint name and other metadata that will be used by rift
 type Waypoint struct {
 	state                  protoimpl.MessageState `protogen:"open.v1"`
@@ -75,15 +31,13 @@ type Waypoint struct {
 	WaypointTravelledCount int64                  `protobuf:"varint,4,opt,name=waypoint_travelled_count,json=waypointTravelledCount,proto3" json:"waypoint_travelled_count,omitempty"` // represent how many time user have traveled to this waypoint
 	WaypointIsSealed       bool                   `protobuf:"varint,5,opt,name=waypoint_is_sealed,json=waypointIsSealed,proto3" json:"waypoint_is_sealed,omitempty"`                   // represent if this waypoint no longer exist in user's system
 	WaypointSealedReason   string                 `protobuf:"bytes,6,opt,name=waypoint_sealed_reason,json=waypointSealedReason,proto3" json:"waypoint_sealed_reason,omitempty"`
-	EnterRunes             []*Rune                `protobuf:"bytes,7,rep,name=enter_runes,json=enterRunes,proto3" json:"enter_runes,omitempty"` // rune that will trigger when using rift to enter a dir
-	LeaveRunes             []*Rune                `protobuf:"bytes,8,rep,name=leave_runes,json=leaveRunes,proto3" json:"leave_runes,omitempty"` // rune that will trigger when using rift to leave a dir
 	unknownFields          protoimpl.UnknownFields
 	sizeCache              protoimpl.SizeCache
 }
 
 func (x *Waypoint) Reset() {
 	*x = Waypoint{}
-	mi := &file_proto_waypoint_proto_msgTypes[1]
+	mi := &file_proto_waypoint_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -95,7 +49,7 @@ func (x *Waypoint) String() string {
 func (*Waypoint) ProtoMessage() {}
 
 func (x *Waypoint) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_waypoint_proto_msgTypes[1]
+	mi := &file_proto_waypoint_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -108,7 +62,7 @@ func (x *Waypoint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Waypoint.ProtoReflect.Descriptor instead.
 func (*Waypoint) Descriptor() ([]byte, []int) {
-	return file_proto_waypoint_proto_rawDescGZIP(), []int{1}
+	return file_proto_waypoint_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Waypoint) GetWaypointName() string {
@@ -153,38 +107,18 @@ func (x *Waypoint) GetWaypointSealedReason() string {
 	return ""
 }
 
-func (x *Waypoint) GetEnterRunes() []*Rune {
-	if x != nil {
-		return x.EnterRunes
-	}
-	return nil
-}
-
-func (x *Waypoint) GetLeaveRunes() []*Rune {
-	if x != nil {
-		return x.LeaveRunes
-	}
-	return nil
-}
-
 var File_proto_waypoint_proto protoreflect.FileDescriptor
 
 const file_proto_waypoint_proto_rawDesc = "" +
 	"\n" +
-	"\x14proto/waypoint.proto\x12\x05proto\"\"\n" +
-	"\x04Rune\x12\x1a\n" +
-	"\bcommands\x18\x01 \x03(\tR\bcommands\"\xfa\x02\n" +
+	"\x14proto/waypoint.proto\x12\x05proto\"\x9e\x02\n" +
 	"\bWaypoint\x12#\n" +
 	"\rwaypoint_name\x18\x01 \x01(\tR\fwaypointName\x12#\n" +
 	"\rwaypoint_path\x18\x02 \x01(\tR\fwaypointPath\x12*\n" +
 	"\x11waypoint_added_at\x18\x03 \x01(\tR\x0fwaypointAddedAt\x128\n" +
 	"\x18waypoint_travelled_count\x18\x04 \x01(\x03R\x16waypointTravelledCount\x12,\n" +
 	"\x12waypoint_is_sealed\x18\x05 \x01(\bR\x10waypointIsSealed\x124\n" +
-	"\x16waypoint_sealed_reason\x18\x06 \x01(\tR\x14waypointSealedReason\x12,\n" +
-	"\venter_runes\x18\a \x03(\v2\v.proto.RuneR\n" +
-	"enterRunes\x12,\n" +
-	"\vleave_runes\x18\b \x03(\v2\v.proto.RuneR\n" +
-	"leaveRunesB Z\x1egithub.com/gohyuhan/rift/protob\x06proto3"
+	"\x16waypoint_sealed_reason\x18\x06 \x01(\tR\x14waypointSealedReasonB Z\x1egithub.com/gohyuhan/rift/protob\x06proto3"
 
 var (
 	file_proto_waypoint_proto_rawDescOnce sync.Once
@@ -198,19 +132,16 @@ func file_proto_waypoint_proto_rawDescGZIP() []byte {
 	return file_proto_waypoint_proto_rawDescData
 }
 
-var file_proto_waypoint_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_proto_waypoint_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_proto_waypoint_proto_goTypes = []any{
-	(*Rune)(nil),     // 0: proto.Rune
-	(*Waypoint)(nil), // 1: proto.Waypoint
+	(*Waypoint)(nil), // 0: proto.Waypoint
 }
 var file_proto_waypoint_proto_depIdxs = []int32{
-	0, // 0: proto.Waypoint.enter_runes:type_name -> proto.Rune
-	0, // 1: proto.Waypoint.leave_runes:type_name -> proto.Rune
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // [0:0] is the sub-list for method output_type
+	0, // [0:0] is the sub-list for method input_type
+	0, // [0:0] is the sub-list for extension type_name
+	0, // [0:0] is the sub-list for extension extendee
+	0, // [0:0] is the sub-list for field type_name
 }
 
 func init() { file_proto_waypoint_proto_init() }
@@ -224,7 +155,7 @@ func file_proto_waypoint_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_proto_waypoint_proto_rawDesc), len(file_proto_waypoint_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

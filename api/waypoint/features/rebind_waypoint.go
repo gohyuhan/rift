@@ -60,8 +60,6 @@ func RebindWaypoint(waypointName string, rebindTo string, logToTerminal bool) er
 		waypoint.WaypointSealedReason = ""
 		waypoint.WaypointTravelledCount = 0
 		waypoint.WaypointAddedAt = time.Now().UTC().Format(time.RFC3339)
-		waypoint.EnterRunes = nil
-		waypoint.LeaveRunes = nil
 
 		// persist the updated record back under the same key
 		putWaypointErr := apiUtils.PutWaypoint(waypointBucket, waypointName, waypoint)

@@ -28,6 +28,8 @@ var jA = LanguageMapping{
 	WaypointDataCorruptedError:  "ウェイポイント [%s] のデータが破損しており、読み込めません",
 	SpellBucketNotFoundError:    "データベースにスペルバケットが見つかりません。`rift awaken` を再実行してください",
 	SpellDataCorruptedError:     "スペル [%s] のデータが破損しており、読み込めません",
+	RuneBucketNotFoundError:     "データベースにルーンバケットが見つかりません。`rift awaken` を再実行してください",
+	RuneDataCorruptedError:      "パス [%s] のルーンデータが破損しており、読み込めません",
 
 	// Updater
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
@@ -110,6 +112,7 @@ var jA = LanguageMapping{
 	// Rune operations
 	RiftRuneEngraveSuccessful: "rift：ルーンをウェイポイント %q に刻みました",
 	RiftRuneEngraveNone:       "rift：ウェイポイント %q にルーンは刻まれませんでした",
+	RiftRuneUpdateError:       "rift：パス %q のルーン更新に失敗しました、[ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "スペル名：",

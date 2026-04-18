@@ -26,6 +26,8 @@ func initChooseRuneEngraveOptionPopUpModel(m *RuneInteractiveModel) tea.Cmd {
 		m.IsQuit = true
 		return tea.Quit
 	}
+	m.ChosenWaypointPath = wp.WaypointPath
+
 	m.ExistingEnterRune = wp.EnterRunes
 	m.ExistingLeaveRune = wp.LeaveRunes
 

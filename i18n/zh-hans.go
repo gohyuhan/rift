@@ -28,6 +28,8 @@ var zH_HANS = LanguageMapping{
 	WaypointDataCorruptedError:  "航点 [%s] 的数据已损坏，无法读取",
 	SpellBucketNotFoundError:    "在数据库中找不到咒语存储区，请重新运行 `rift awaken`",
 	SpellDataCorruptedError:     "咒语 [%s] 的数据已损坏，无法读取",
+	RuneBucketNotFoundError:     "在数据库中找不到符文存储区，请重新运行 `rift awaken`",
+	RuneDataCorruptedError:      "路径 [%s] 的符文数据已损坏，无法读取",
 
 	// Updater
 	UpdaterDownloadPrompt:               "发现新版本 %s，是否立即下载？(y/n): ",
@@ -110,6 +112,7 @@ var zH_HANS = LanguageMapping{
 	// Rune operations
 	RiftRuneEngraveSuccessful: "rift：符文已刻印到航点 %q",
 	RiftRuneEngraveNone:       "rift：未将符文刻印到航点 %q",
+	RiftRuneUpdateError:       "rift：更新路径 %q 的符文失败，[ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "咒语名称：",

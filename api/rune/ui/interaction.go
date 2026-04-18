@@ -48,10 +48,10 @@ func handleNonTypingInteraction(m *RuneInteractiveModel, msg tea.KeyPressMsg) (*
 						m.IsTypingMode.Store(true)
 						initEngraveRuneCommandsPopUpModel(m, EngraveRuneLeaveType)
 					case RemoveRuneEnterType:
-						apiUtils.RemoveWaypointEnterRunes(m.ChosenWaypointName)
+						apiUtils.RemoveEnterRuneCmds(m.ChosenWaypointPath)
 						cmd = initChooseRuneEngraveOptionPopUpModel(m)
 					case RemoveRuneLeaveType:
-						apiUtils.RemoveWaypointLeaveRunes(m.ChosenWaypointName)
+						apiUtils.RemoveLeaveRuneCmds(m.ChosenWaypointPath)
 						cmd = initChooseRuneEngraveOptionPopUpModel(m)
 					}
 				}
@@ -115,9 +115,9 @@ func handleTypingInteraction(m *RuneInteractiveModel, msg tea.KeyPressMsg) (*Run
 				var engraveErr error
 				switch popUp.RuneEngraveOptionType {
 				case EngraveRuneEnterType:
-					engraveErr = apiUtils.EngraveWaypointEnterRunes(m.ChosenWaypointName, normRuneCmd)
+					engraveErr = apiUtils.EngraveEnterRuneCmds(m.ChosenWaypointPath, normRuneCmd)
 				case EngraveRuneLeaveType:
-					engraveErr = apiUtils.EngraveWaypointLeaveRunes(m.ChosenWaypointName, normRuneCmd)
+					engraveErr = apiUtils.EngraveLeaveRuneCmds(m.ChosenWaypointPath, normRuneCmd)
 				}
 
 				if engraveErr != nil {

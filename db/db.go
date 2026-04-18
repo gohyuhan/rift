@@ -17,6 +17,8 @@ var (
 	WaypointDataCorruptedBucketRecord = []byte("rift-waypoint-data-corrupted")
 	SpellBucket                       = []byte("rift-spell")
 	SpellDataCorruptedBucketRecord    = []byte("rift-spell-data-corrupted")
+	RuneBucket                        = []byte("rift-rune")
+	RuneDataCorruptedBucketRecord     = []byte("rift-rune-data-corrupted")
 )
 
 // ----------------------------------
@@ -67,6 +69,12 @@ func SetupBuckets() error {
 			return err
 		}
 		if _, err := tx.CreateBucketIfNotExists(SpellDataCorruptedBucketRecord); err != nil {
+			return err
+		}
+		if _, err := tx.CreateBucketIfNotExists(RuneBucket); err != nil {
+			return err
+		}
+		if _, err := tx.CreateBucketIfNotExists(RuneDataCorruptedBucketRecord); err != nil {
 			return err
 		}
 		return nil

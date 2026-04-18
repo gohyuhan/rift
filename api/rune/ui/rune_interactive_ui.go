@@ -19,6 +19,7 @@ import (
 // ----------------------------------
 type RuneInteractiveModel struct {
 	ChosenWaypointName string
+	ChosenWaypointPath string
 	RuneEngraved       atomic.Bool
 	IsQuit             bool
 	ShowPopUp          atomic.Bool
@@ -29,8 +30,8 @@ type RuneInteractiveModel struct {
 	Width              int
 	Height             int
 	IsRenderInit       atomic.Bool
-	ExistingEnterRune  []*pb.Rune
-	ExistingLeaveRune  []*pb.Rune
+	ExistingEnterRune  []*pb.RuneCmds
+	ExistingLeaveRune  []*pb.RuneCmds
 }
 
 // ----------------------------------
