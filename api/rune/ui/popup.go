@@ -4,7 +4,6 @@ import (
 	"image/color"
 
 	"charm.land/lipgloss/v2"
-	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
 )
@@ -83,21 +82,6 @@ func renderEngraveRuneCommandsPopUp(m *RuneInteractiveModel) string {
 			title = i18n.LANGUAGEMAPPING.EngraveRuneEnterTitle
 		case EngraveRuneLeaveType:
 			title = i18n.LANGUAGEMAPPING.EngraveRuneLeaveTitle
-		}
-
-		normRuneArray, runeCmdsErr := apiUtils.NormalizeAndCheckRuneCommandsAreValid(popUp.RuneCommandsTextArea.Value())
-		if runeCmdsErr != nil {
-			popUp.Error = runeCmdsErr
-			popUp.EngraveDisable.Store(true)
-		} else {
-			popUp.Error = nil
-			popUp.EngraveDisable.Store(false)
-		}
-
-		if len(normRuneArray) > 0 {
-			popUp.EngraveDisable.Store(false)
-		} else {
-			popUp.EngraveDisable.Store(true)
 		}
 
 		disabled := popUp.EngraveDisable.Load()

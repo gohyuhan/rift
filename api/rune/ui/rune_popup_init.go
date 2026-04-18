@@ -28,8 +28,8 @@ func initChooseRuneEngraveOptionPopUpModel(m *RuneInteractiveModel) tea.Cmd {
 	}
 	m.ChosenWaypointPath = wp.WaypointPath
 
-	m.ExistingEnterRune = wp.EnterRunes
-	m.ExistingLeaveRune = wp.LeaveRunes
+	m.ExistingEnterRune = wp.EnterRune
+	m.ExistingLeaveRune = wp.LeaveRune
 
 	engraveOptionListArray := []list.Item{
 		runeEngraveOptionInfoItem{
@@ -44,7 +44,7 @@ func initChooseRuneEngraveOptionPopUpModel(m *RuneInteractiveModel) tea.Cmd {
 		},
 	}
 
-	if m.ExistingEnterRune != nil || len(m.ExistingEnterRune) > 0 {
+	if len(m.ExistingEnterRune) > 0 {
 		engraveOptionListArray = append(engraveOptionListArray, runeEngraveOptionInfoItem{
 			runeEngraveOptionName: i18n.LANGUAGEMAPPING.RemoveRuneEnterOptionName,
 			runeEngraveOptionDesc: i18n.LANGUAGEMAPPING.RemoveRuneEnterOptionDesc,
@@ -52,7 +52,7 @@ func initChooseRuneEngraveOptionPopUpModel(m *RuneInteractiveModel) tea.Cmd {
 		})
 	}
 
-	if m.ExistingLeaveRune != nil || len(m.ExistingLeaveRune) > 0 {
+	if len(m.ExistingLeaveRune) > 0 {
 		engraveOptionListArray = append(engraveOptionListArray, runeEngraveOptionInfoItem{
 			runeEngraveOptionName: i18n.LANGUAGEMAPPING.RemoveRuneLeaveOptionName,
 			runeEngraveOptionDesc: i18n.LANGUAGEMAPPING.RemoveRuneLeaveOptionDesc,
@@ -109,8 +109,8 @@ func initEngraveRuneCommandsPopUpModel(m *RuneInteractiveModel, runeEngraveOptio
 		Error:                 nil,
 	}
 
-	popUpModel.EngraveDisable.Store(true)
 	popUpModel.TextAreaFocused.Store(true)
+	validateAndUpdateRunePopUpState(popUpModel)
 
 	m.RunePopUpModel = popUpModel
 }

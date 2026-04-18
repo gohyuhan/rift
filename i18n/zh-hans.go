@@ -101,7 +101,7 @@ var zH_HANS = LanguageMapping{
 	RiftWaypointUpdateError:               "rift：更新航点 %q 失败，[ERROR: %s]",
 	RiftWaypointSealedError:               "rift：航点 %q 已封印，无法前往，原因：%q",
 	RiftWaypointSealedLabel:               "（已封印）",
-	RiftWaypointRetrieveAllError:          "rift：获取航点列表失败",
+	RiftWaypointRetrieveAllError:          "rift：获取航点列表失败：%s",
 	RiftWaypointDestroySuccess:            "rift：航点 %q 已被销毁",
 	RiftWaypointDestroyError:              "rift：销毁航点 %q 失败，[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：重新绑定的路径 %q 不是一个目录",

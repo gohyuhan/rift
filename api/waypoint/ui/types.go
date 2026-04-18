@@ -29,12 +29,14 @@ type HelpListItem struct {
 type (
 	waypointInfoDelegate struct{}
 	waypointInfoItem     struct {
-		WaypointName         string
-		WaypointPath         string
-		WaypointIsSealed     bool
-		WaypointSealedReason string
-		WaypointEnterRune    []*pb.RuneCmds
-		WaypointLeaveRune    []*pb.RuneCmds
+		WaypointName           string
+		WaypointPath           string
+		WaypointAddedAt        string
+		WaypointTravelledCount int64
+		WaypointIsSealed       bool
+		WaypointSealedReason   string
+		EnterRune              []*pb.RuneCmds
+		LeaveRune              []*pb.RuneCmds
 	}
 )
 
@@ -104,12 +106,12 @@ func (d waypointInfoDelegate) Render(w io.Writer, m list.Model, index int, listI
 	}
 
 	// append enter/leave rune state icons
-	if i.WaypointEnterRune != nil || len(i.WaypointEnterRune) > 0 {
+	if len(i.EnterRune) > 0 {
 		waypointName = waypointName + " " + style.RenderStringWithColor("\uf4bf", style.ColorPurpleVibrant, false)
 	} else {
 		waypointName = waypointName + " " + style.RenderStringWithColor("\uf4bf", style.ColorSealedMuted, true)
 	}
-	if i.WaypointLeaveRune != nil || len(i.WaypointLeaveRune) > 0 {
+	if len(i.LeaveRune) > 0 {
 		waypointName = waypointName + " " + style.RenderStringWithColor("\uf4bf", style.ColorPurpleVibrant, false)
 	} else {
 		waypointName = waypointName + " " + style.RenderStringWithColor("\uf4bf", style.ColorSealedMuted, true)

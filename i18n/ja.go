@@ -101,7 +101,7 @@ var jA = LanguageMapping{
 	RiftWaypointUpdateError:               "rift：ウェイポイント %q の更新に失敗しました、[ERROR: %s]",
 	RiftWaypointSealedError:               "rift：ウェイポイント %q は封印されており、移動できません。理由：%q",
 	RiftWaypointSealedLabel:               "(封印済み)",
-	RiftWaypointRetrieveAllError:          "rift：ウェイポイントの取得に失敗しました",
+	RiftWaypointRetrieveAllError:          "rift：ウェイポイントの取得に失敗しました: %s",
 	RiftWaypointDestroySuccess:            "rift：ウェイポイント %q を削除しました",
 	RiftWaypointDestroyError:              "rift：ウェイポイント %q の削除に失敗しました、[ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift：再バインド先のパス %q はディレクトリではありません",

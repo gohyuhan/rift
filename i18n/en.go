@@ -101,7 +101,7 @@ var eN = LanguageMapping{
 	RiftWaypointUpdateError:               "rift: failed to update waypoint %q, [ERROR: %s]",
 	RiftWaypointSealedError:               "rift: waypoint %q is sealed and cannot be travelled to due to %q",
 	RiftWaypointSealedLabel:               "(SEALED)",
-	RiftWaypointRetrieveAllError:          "rift: failed to retrieve waypoints",
+	RiftWaypointRetrieveAllError:          "rift: failed to retrieve waypoints: %s",
 	RiftWaypointDestroySuccess:            "rift: waypoint %q has been destroyed",
 	RiftWaypointDestroyError:              "rift: failed to destroy waypoint %q, [ERROR: %s]",
 	RiftWaypointRebindNotDirError:         "rift: rebind path %q is not a directory",

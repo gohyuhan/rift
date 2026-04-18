@@ -60,13 +60,13 @@ func RetrieveWaypointInfoDetail(waypointName string) ([]string, error) {
 		nameValue = style.RenderStringWithColor(waypointName, style.ColorCyanSoft, false)
 	}
 
-	if existingWaypoint.EnterRunes != nil || len(existingWaypoint.EnterRunes) > 0 {
+	if len(existingWaypoint.EnterRune) > 0 {
 		nameValue = nameValue + " " + style.RenderStringWithColor("\uf4bf", style.ColorCyanSoft, false)
 	} else {
 		nameValue = nameValue + " " + style.RenderStringWithColor("\uf4bf", style.ColorSealedMuted, true)
 	}
 
-	if existingWaypoint.LeaveRunes != nil || len(existingWaypoint.LeaveRunes) > 0 {
+	if len(existingWaypoint.LeaveRune) > 0 {
 		nameValue = nameValue + " " + style.RenderStringWithColor("\uf4bf", style.ColorCyanSoft, false)
 	} else {
 		nameValue = nameValue + " " + style.RenderStringWithColor("\uf4bf", style.ColorSealedMuted, true)

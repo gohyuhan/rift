@@ -101,6 +101,7 @@ func handleTypingInteraction(m *RuneInteractiveModel, msg tea.KeyPressMsg) (*Run
 			popUp, ok := m.RunePopUpModel.(*EngraveRuneCommandsPopUpModel)
 			if ok && popUp.TextAreaFocused.Load() {
 				popUp.RuneCommandsTextArea, cmd = popUp.RuneCommandsTextArea.Update(msg)
+				validateAndUpdateRunePopUpState(popUp)
 			}
 		}
 		return m, cmd
@@ -159,9 +160,21 @@ func handleTypingInteraction(m *RuneInteractiveModel, msg tea.KeyPressMsg) (*Run
 		if ok {
 			if popUp.TextAreaFocused.Load() {
 				popUp.RuneCommandsTextArea, cmd = popUp.RuneCommandsTextArea.Update(msg)
+				validateAndUpdateRunePopUpState(popUp)
 			}
 			return m, cmd
 		}
 	}
 	return m, nil
+}
+
+func validateAndUpdateRunePopUpState(popUp *EngraveRuneCommandsPopUpModel) {
+	normCmds, err := apiUtils.NormalizeAndCheckRuneCommandsAreValid(popUp.RuneCommandsTextArea.Value())
+	if err != nil {
+		popUp.Error = err
+		popUp.EngraveDisable.Store(true)
+	} else {
+		popUp.Error = nil
+		popUp.EngraveDisable.Store(len(normCmds) == 0)
+	}
 }

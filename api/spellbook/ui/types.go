@@ -212,12 +212,14 @@ type CastWaypointLocationOptionPopUpModel struct {
 type (
 	castWaypointLocationDelegate   struct{}
 	castWaypointLocationOptionItem struct {
-		WaypointName         string
-		WaypointPath         string
-		WaypointIsSealed     bool
-		WaypointSealedReason string
-		WaypointEnterRune    []*pb.RuneCmds
-		WaypointLeaveRune    []*pb.RuneCmds
+		WaypointName           string
+		WaypointPath           string
+		WaypointAddedAt        string
+		WaypointTravelledCount int64
+		WaypointIsSealed       bool
+		WaypointSealedReason   string
+		EnterRune              []*pb.RuneCmds
+		LeaveRune              []*pb.RuneCmds
 	}
 )
 
