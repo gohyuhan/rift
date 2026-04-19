@@ -45,6 +45,7 @@ func (c *cmdExecutor) RunCmd(args []string, executionPath string, envs []string)
 	// route all command output through stderr so it reaches the terminal directly.
 	cmd.Stdout = os.Stderr
 	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 	return cmd
 }
 
@@ -73,5 +74,6 @@ func (c *cmdExecutor) RunCmdWithContext(ctx context.Context, args []string, exec
 	// route all command output through stderr so it reaches the terminal directly.
 	cmd.Stdout = os.Stderr
 	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
 	return cmd
 }

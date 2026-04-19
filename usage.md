@@ -14,7 +14,8 @@ Everything you need to wield rift from the terminal.
   - [waypoint](#waypoint)
   - [learn](#learn)
   - [spell](#spell)
-  - [spellbook](#spellbook) *(pre-release)*
+  - [rune](#rune)
+  - [spellbook](#spellbook)
 - [Settings Flags](#settings-flags)
   - [--language](#--language)
   - [--autoupdate](#--autoupdate)
@@ -270,9 +271,72 @@ rift spell build --forget
 
 ---
 
-### spellbook
+### rune
 
-> **Pre-release** — Available in v0.3.0 (pre-release). Not yet in a stable release.
+Engraves on-enter and on-leave shell commands onto a waypoint. When you travel **to** the waypoint via `rift <name>`, its on-enter commands run automatically. When you travel **away** from a waypoint (your current directory matches its path and you `rift` elsewhere), its on-leave commands run first. Runes only fire when traveling via rift — plain `cd` does not trigger them.
+
+```sh
+rift rune <waypoint-name>
+```
+
+**Examples**
+
+```sh
+# Engrave rune commands onto the "api" waypoint
+rift rune api
+
+# After engraving on-enter, traveling fires the rune automatically
+rift api
+# [RUNE_ON_ENTER (1/2) - docker compose up -d]
+# ...
+# [RUNE_ON_ENTER (2/2) - echo "env loaded"]
+# ...
+```
+
+**Notes**
+- Rune commands cannot use `cd` — path changes inside runes have no effect. Use `rift <name>` for navigation instead.
+- Commands run with the waypoint's path as the working directory.
+- Multiple commands per slot — enter one command per line in the textarea.
+- On-leave fires based on your current working directory at travel time, not the waypoint name.
+- Engraving a slot overwrites any previously saved commands for that slot.
+
+#### Interactive TUI
+
+Running `rift rune <waypoint-name>` opens an interactive TUI for engraving and removing rune commands.
+
+**Option selection**
+
+| Key | Action |
+| --- | ------ |
+| `j` / `↓` | Move cursor down |
+| `k` / `↑` | Move cursor up |
+| `enter` | Select option |
+| `q` / `ctrl+c` | Quit |
+| `esc` | Quit |
+
+**Available options**
+
+| Option | Description |
+| ------ | ----------- |
+| Engrave On-Enter Rune | Set commands to run when entering this waypoint |
+| Engrave On-Leave Rune | Set commands to run when leaving this waypoint |
+| Remove On-Enter Rune | Clear all on-enter commands from this waypoint |
+| Remove On-Leave Rune | Clear all on-leave commands from this waypoint |
+
+**In command entry popup**
+
+| Key | Action |
+| --- | ------ |
+| `tab` | Move focus from textarea to Engrave button |
+| `shift+tab` | Move focus back to textarea |
+| `ctrl+y` | Copy textarea content to clipboard |
+| `ctrl+p` | Paste from clipboard into textarea |
+| `enter` | Save the rune (when Engrave button is focused) |
+| `esc` | Go back to option list |
+
+---
+
+### spellbook
 
 Browse and manage your learned spells through an interactive TUI. With a spell name, shows detailed info for that spell instead.
 

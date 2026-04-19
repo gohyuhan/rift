@@ -27,16 +27,17 @@ A tool forged for those who refuse to waste their power on traversal. Memorize a
 
 ## Spellbook
 
-| Spell        | Incantation                              | Effect                                                   |
-| ------------ | ---------------------------------------- | -------------------------------------------------------- |
-| **Travel**   | `rift <name>`                            | Tear open a rift and teleport to a memorized waypoint    |
-| **Cast**     | `rift <name> --cast <spell>`             | Cast a spell at a waypoint's path without navigating there |
-| **Discover** | `rift discover <name>`                   | Inscribe your current location as a waypoint             |
-| **Awaken**   | `rift awaken`                            | Repair shell integration or database if something breaks |
-| **Waypoint** | `rift waypoint [name] [--destroy\|--rebind\|--reforge]` | Inspect, rename, rebind, or destroy waypoints |
-| **Learn**    | `rift learn <spell name> <command>`           | Bind a terminal command to a spell name for quick recall |
-| **Spell**    | `rift spell <name> [--forget]`                | Cast a learned spell, or remove it with `--forget` |
-| **Spellbook** *(pre-release)* | `rift spellbook [spell-name]` | Browse and manage spells via interactive TUI, or show detail for a specific spell |
+| Spell         | Incantation                                             | Effect                                                                                                                           |
+| ------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Travel**    | `rift <name>`                                           | Tear open a rift and teleport to a memorized waypoint                                                                            |
+| **Cast**      | `rift <name> --cast <spell>`                            | Cast a spell at a waypoint's path without navigating there                                                                       |
+| **Discover**  | `rift discover <name>`                                  | Inscribe your current location as a waypoint                                                                                     |
+| **Awaken**    | `rift awaken`                                           | Repair shell integration or database if something breaks                                                                         |
+| **Waypoint**  | `rift waypoint [name] [--destroy\|--rebind\|--reforge]` | Inspect, rename, rebind, or destroy waypoints                                                                                    |
+| **Learn**     | `rift learn <spell name> <command>`                     | Bind a terminal command to a spell name for quick recall                                                                         |
+| **Spell**     | `rift spell <name> [--forget]`                          | Cast a learned spell, or remove it with `--forget`                                                                               |
+| **Rune**      | `rift rune <waypoint-name>`                             | Engrave on-enter and on-leave commands onto a waypoint; fire automatically when traveling via rift (not triggered by plain `cd`) |
+| **Spellbook** | `rift spellbook [spell-name]`                           | Browse and manage spells via interactive TUI, or show detail for a specific spell                                                |
 
 > Full usage, examples, and settings flags → **[usage.md](usage.md)**
 
@@ -230,14 +231,14 @@ Remove-Item -Path "$env:APPDATA\rift" -Recurse -Force
 
 Once rift awaken or the initial automatic setup completes, reload your shell config to activate the integration in your current session:
 
-| Shell      | Command                              |
-| ---------- | ------------------------------------ |
-| zsh        | `source ~/.zshrc`                    |
-| bash (Linux) | `source ~/.bashrc`                 |
-| bash (macOS) | `source ~/.bash_profile`           |
-| fish       | `source ~/.config/fish/config.fish`  |
-| ksh        | `source ~/.kshrc`                    |
-| PowerShell | `. $PROFILE`                         |
+| Shell        | Command                             |
+| ------------ | ----------------------------------- |
+| zsh          | `source ~/.zshrc`                   |
+| bash (Linux) | `source ~/.bashrc`                  |
+| bash (macOS) | `source ~/.bash_profile`            |
+| fish         | `source ~/.config/fish/config.fish` |
+| ksh          | `source ~/.kshrc`                   |
+| PowerShell   | `. $PROFILE`                        |
 
 > **If you skip this step** and try to navigate before reloading, you will see a raw `cd /path/to/dir` printed in your terminal instead of your shell changing directory. Run the `source` command above (or open a new terminal) and rift will work as expected.
 
@@ -275,6 +276,18 @@ kill <PID>
 
 ## Changelog
 
+### v0.3.0
+
+Core
+
+- Rune — TUI with enhanced input handling for special key bindings and nested trigger logic
+- Spellbook — browse and manage spells via interactive TUI, or show detail for a specific spell
+
+Rune
+
+- Enter/Leave hooks — trigger commands on rune entry and exit
+- Path change trigger — execute rune trigger when navigating to a new path via rift
+
 ### v0.2.0
 
 Core
@@ -287,9 +300,11 @@ Spell
 - Spell — cast a named spell at the current working directory
 
 Spell Flag
+
 - --forget — remove a bound spell from a waypoint
 
 Navigate Flag
+
 - --cast \<spell name\> — cast a named spell at a waypoint's path without navigating there
 
 ### v0.1.0
@@ -300,6 +315,7 @@ Core
 - Navigate — jump to a saved waypoint instantly by name
 
 Waypoint Management
+
 - List — view all saved waypoints
 - Info — view details of a specific waypoint
 - Destroy — delete a waypoint
@@ -307,6 +323,7 @@ Waypoint Management
 - Reforge — rename an existing waypoint
 
 Settings Flag
+
 - --update — check for updates
 - --version — show current version
 - --language — set the display language for rift

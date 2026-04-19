@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"image/color"
 	"os"
 	"strconv"
 	"strings"
@@ -60,14 +61,6 @@ func triggerWaypointRune(runeType string, path string) {
 		return
 	}
 
-	var runeCmds []*pb.RuneCmds
-	switch runeType {
-	case RUNE_ON_ENTER:
-		runeCmds = rune.EnterRunes
-	case RUNE_ON_LEAVE:
-		runeCmds = rune.LeaveRunes
-	}
-
 	runeDepth := 0
 	if val, ok := os.LookupEnv("RIFT_RUNE_DEPTH"); ok {
 		if n, err := strconv.Atoi(val); err == nil {
@@ -80,12 +73,23 @@ func triggerWaypointRune(runeType string, path string) {
 		return
 	}
 
+	var runeCmds []*pb.RuneCmds
+	var logColor color.Color
+	switch runeType {
+	case RUNE_ON_ENTER:
+		runeCmds = rune.EnterRunes
+		logColor = style.EnterRuneColorCycle[runeDepth%len(style.EnterRuneColorCycle)]
+	case RUNE_ON_LEAVE:
+		runeCmds = rune.LeaveRunes
+		logColor = style.ColorYellowSoft
+	}
+
 	padding := strings.Repeat("  ", runeDepth)
 	runeCmdsCount := len(runeCmds)
 	for index, cmd := range runeCmds {
 		runeExecutor := executor.CmdExecutor().RunCmd(cmd.Commands, path, []string{fmt.Sprintf("RIFT_RUNE_DEPTH=%v", runeDepth+1)})
 		if runeExecutor != nil {
-			msg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, strings.Join(cmd.Commands, " ")), style.ColorPurpleVibrant, false)
+			msg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, strings.Join(cmd.Commands, " ")), logColor, false)
 			logger.LOGGER.LogToTerminal([]string{msg})
 			runeExecutor.Run()
 		} else {
