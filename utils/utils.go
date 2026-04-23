@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 
 	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/i18n"
@@ -140,4 +141,11 @@ func CheckIsPathExist(path string) (bool, error) {
 		return false, fmt.Errorf("%s", i18n.LANGUAGEMAPPING.NotFileOrDirError)
 	}
 	return false, pathErr
+}
+
+func IsShellBuiltInCmd(cmd []string) bool {
+	if len(cmd) < 1 || len(cmd[0]) < 1 {
+		return false
+	}
+	return slices.Contains(constant.ShellBuildInCmd, cmd[0])
 }

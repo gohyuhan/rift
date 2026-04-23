@@ -203,21 +203,21 @@ type LanguageMapping struct {
 	SpellUIChooseWaypointCastLocationKeyHelp string
 
 	// Rune interactive UI
-	RuneInteractiveError              string
-	RuneEngraveTypeOptionListTitle    string
-	EngraveRuneEnterTitle             string
-	EngraveRuneLeaveTitle             string
-	EngraveRuneEngraveButton          string
-	RuneCommandsPlaceHolder           string
-	RuneCommandsInvalidDueToCDCommand string
-	EngraveRuneEnterOptionName        string
-	EngraveRuneEnterOptionDesc        string
-	EngraveRuneLeaveOptionName        string
-	EngraveRuneLeaveOptionDesc        string
-	RemoveRuneEnterOptionName         string
-	RemoveRuneEnterOptionDesc         string
-	RemoveRuneLeaveOptionName         string
-	RemoveRuneLeaveOptionDesc         string
+	RuneInteractiveError                        string
+	RuneEngraveTypeOptionListTitle              string
+	EngraveRuneEnterTitle                       string
+	EngraveRuneLeaveTitle                       string
+	EngraveRuneEngraveButton                    string
+	RuneCommandsPlaceHolder                     string
+	RuneCommandsInvalidDueToShellBuildInCommand string
+	EngraveRuneEnterOptionName                  string
+	EngraveRuneEnterOptionDesc                  string
+	EngraveRuneLeaveOptionName                  string
+	EngraveRuneLeaveOptionDesc                  string
+	RemoveRuneEnterOptionName                   string
+	RemoveRuneEnterOptionDesc                   string
+	RemoveRuneLeaveOptionName                   string
+	RemoveRuneLeaveOptionDesc                   string
 
 	// Cast location option popup
 	CastLocationOptionTitle               string

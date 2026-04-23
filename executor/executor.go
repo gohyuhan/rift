@@ -1,7 +1,9 @@
 package executor
 
 import (
+	"bufio"
 	"context"
+	"fmt"
 	"os"
 	"os/exec"
 )
@@ -47,6 +49,41 @@ func (c *cmdExecutor) RunCmd(args []string, executionPath string, envs []string)
 	cmd.Stderr = os.Stderr
 	cmd.Stdin = os.Stdin
 	return cmd
+}
+
+// ----------------------------------
+//
+//	ExecWithPadding runs args and prefixes every output line with padding on
+//	stderr. Falls back to plain Run when padding is empty or pipe fails.
+//
+// ----------------------------------
+func (c *cmdExecutor) ExecWithPadding(args []string, executionPath string, envs []string, padding string) {
+	cmd := c.RunCmd(args, executionPath, envs)
+	if cmd == nil {
+		return
+	}
+	if padding == "" {
+		cmd.Run()
+		return
+	}
+	pr, pw, err := os.Pipe()
+	if err != nil {
+		cmd.Run()
+		return
+	}
+	defer pr.Close()
+	cmd.Stdout = pw
+	cmd.Stderr = pw
+	if err := cmd.Start(); err != nil {
+		pw.Close()
+		return
+	}
+	pw.Close()
+	scanner := bufio.NewScanner(pr)
+	for scanner.Scan() {
+		fmt.Fprintf(os.Stderr, "%s%s\n", padding, scanner.Text())
+	}
+	cmd.Wait()
 }
 
 // ----------------------------------

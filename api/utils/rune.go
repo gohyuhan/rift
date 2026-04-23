@@ -2,8 +2,10 @@ package utils
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 
+	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
 	pb "github.com/gohyuhan/rift/proto"
@@ -32,8 +34,8 @@ func NormalizeAndCheckRuneCommandsAreValid(commandsString string) ([]*pb.RuneCmd
 			return nil, cmdArrayErr
 		}
 		if len(cmdArray) > 0 {
-			if cmdArray[0] == "cd" {
-				return nil, fmt.Errorf("%s", i18n.LANGUAGEMAPPING.RuneCommandsInvalidDueToCDCommand)
+			if slices.Contains(constant.ShellBuildInCmd, cmdArray[0]) {
+				return nil, fmt.Errorf("%s", i18n.LANGUAGEMAPPING.RuneCommandsInvalidDueToShellBuildInCommand)
 			} else {
 				normalizedRuneCmds = append(normalizedRuneCmds, &pb.RuneCmds{Commands: cmdArray})
 			}
