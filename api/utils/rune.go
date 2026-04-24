@@ -10,6 +10,7 @@ import (
 	"github.com/gohyuhan/rift/i18n"
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/utils"
 	"go.etcd.io/bbolt"
 	"google.golang.org/protobuf/proto"
 	"mvdan.cc/sh/v3/shell"
@@ -36,6 +37,9 @@ func NormalizeAndCheckRuneCommandsAreValid(commandsString string) ([]*pb.RuneCmd
 		if len(cmdArray) > 0 {
 			if slices.Contains(constant.ShellBuildInCmd, cmdArray[0]) {
 				return nil, fmt.Errorf("%s", i18n.LANGUAGEMAPPING.RuneCommandsInvalidDueToShellBuildInCommand)
+			} else if utils.IsRiftNavigationCommand(cmdArray) {
+				errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ForbiddenRiftNavigationRuneCommand, style.ColorError, false)
+				return nil, fmt.Errorf("%s", errMessage)
 			} else {
 				normalizedRuneCmds = append(normalizedRuneCmds, &pb.RuneCmds{Commands: cmdArray})
 			}

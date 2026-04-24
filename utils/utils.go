@@ -143,9 +143,70 @@ func CheckIsPathExist(path string) (bool, error) {
 	return false, pathErr
 }
 
+// ----------------------------------
+//
+//	Reports whether the first token of cmd is a shell built-in command.
+//	Returns false if cmd is empty or the first token is empty.
+//
+// ----------------------------------
 func IsShellBuiltInCmd(cmd []string) bool {
 	if len(cmd) < 1 || len(cmd[0]) < 1 {
 		return false
 	}
 	return slices.Contains(constant.ShellBuildInCmd, cmd[0])
+}
+
+// ----------------------------------
+//
+//	riftSubcommands is the exhaustive list of rift's own subcommand keywords.
+//	A second token matching any of these is a rift subcommand invocation, not
+//	a waypoint navigation.
+//
+// ----------------------------------
+var riftSubcommands = []string{
+	constant.RIFT_CMD_KEYWORD,
+	constant.AWAKEN_CMD_KEYWORD,
+	constant.DISCOVER_CMD_KEYWORD,
+	constant.WAYPOINT_CMD_KEYWORD,
+	constant.SPELL_CMD_KEYWORD,
+	constant.LEARN_CMD_KEYWORD,
+	constant.SPELLBOOK_CMD_KEYWORD,
+	constant.CAST_CMD_KEYWORD,
+	constant.RITUAL_CMD_KEYWORD,
+	constant.INSCRIBE_CMD_KEYWORD,
+	constant.SCROLL_CMD_KEYWORD,
+	constant.SORCERY_CMD_KEYWORD,
+	constant.SUMMON_CMD_KEYWORD,
+	constant.DEPLOY_CMD_KEYWORD,
+	constant.RUNE_CMD_KEYWORD,
+	constant.SEER_CMD_KEYWORD,
+	constant.RECALL_CMD_KEYWORD,
+	constant.LOOT_CMD_KEYWORD,
+	constant.GRIMOIRE_CMD_KEYWORD,
+	constant.LORE_CMD_KEYWORD,
+	constant.STATS_CMD_KEYWORD,
+}
+
+// ----------------------------------
+//
+//	IsRiftNavigationCommand reports whether cmd represents a rift waypoint
+//	navigation invocation of the form `rift <waypointName>`.
+//
+//	It returns true only when:
+//	  - exactly two tokens are present
+//	  - the first token is "rift"
+//	  - the second token is not one of rift's own root flags
+//	  - the second token is not one of rift's own reserved subcommands
+//
+// ----------------------------------
+func IsRiftNavigationCommand(cmd []string) bool {
+	if len(cmd) != 2 {
+		return false
+	}
+	if cmd[0] != constant.RIFT_CMD_KEYWORD {
+		return false
+	}
+	arg := cmd[1]
+
+	return !slices.Contains(riftSubcommands, arg) && !slices.Contains(constant.RiftRootFlags, arg)
 }

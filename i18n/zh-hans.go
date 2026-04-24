@@ -9,7 +9,6 @@ var zH_HANS = LanguageMapping{
 	PathNotAbsoluteError:     "路径必须为绝对路径，收到: %s",
 	NotFileOrDirError:        "指定路径不存在（非文件或目录）",
 	InvalidValueProvided:     "提供的值无效，不允许包含空格 且不能为空",
-	SkippingDueToCwdErr:      "rift：无法获取当前工作目录，符文命令已跳过",
 	SkippingDueToExecutorErr: "rift：执行器启动失败，符文命令已跳过",
 
 	// Settings
@@ -90,9 +89,19 @@ var zH_HANS = LanguageMapping{
 	RiftSpellForgetError:      "rift：遗忘咒语 %q 失败，[ERROR: %s]",
 	RiftSpellDoNotExistsError: "rift：咒语 %q 不存在",
 	RiftSpellUpdateError:      "rift：更新咒语 %q 失败，[ERROR: %s]",
-	ForbiddenCDSpellCommand:   "rift：会更改工作路径的终端命令不能作为咒语使用",
-	SpellCommandEmpty:         "rift：咒语命令不能为空",
-	InvalidSpellCommandError:  "rift：咒语命令 [%s] 无效，无法执行",
+	ForbiddenShellBuiltinSpellCommand: "rift：Shell 内建命令（如 cd、export、source、alias）只影响执行它们的进程，无法修改当前 Shell 会话。" +
+		"如需在命令序列中使用内建命令，请使用 Shell 的 -c 参数显式调用 Shell 并链接命令。" +
+		"使用 --login（或等效选项）可在该进程中加载完整的 Shell 环境（PATH、别名、配置文件等）。\n\n" +
+		"示例:\n" +
+		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
+		"  cmd /c \"activate.bat && python main.py\"",
+	ForbiddenRiftNavigationSpellCommand: "rift：rift 路径导航命令（如 rift <路径点名称>）不能作为咒语学习 — 它们由 Shell 集成直接处理，不会作为子进程运行。",
+	ForbiddenRiftNavigationRuneCommand:  "rift：rift 路径导航命令（如 rift <路径点名称>）不支持在符文中使用 — 如需在特定目录运行命令，请改用 `rift <路径点名称> --cast <咒语名称>`。",
+	SpellCommandEmpty:                   "rift：咒语命令不能为空",
+	InvalidSpellCommandError:            "rift：咒语命令 [%s] 无效，无法执行",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：已保存 %q -> %s",
@@ -197,21 +206,29 @@ var zH_HANS = LanguageMapping{
 	SpellUIChooseWaypointCastLocationKeyHelp: "选择施放咒语的航点",
 
 	// Rune interactive UI
-	RuneInteractiveError:                        "[ERROR: %s]",
-	RuneEngraveTypeOptionListTitle:              "符文选项",
-	EngraveRuneEnterTitle:                       "进入时符文的命令：",
-	EngraveRuneLeaveTitle:                       "离开时符文的命令：",
-	EngraveRuneEngraveButton:                    "刻印",
-	RuneCommandsPlaceHolder:                     "输入命令…（cd 无效，推荐使用 rift 切换路径）",
-	RuneCommandsInvalidDueToShellBuildInCommand: "检测到一个或多个符文使用了 Shell 内建命令（如 cd、export、alias），这些命令在子进程中无法修改父 Shell 状态，在 rift 符文中无效。",
-	EngraveRuneEnterOptionName:                  "刻印进入时符文",
-	EngraveRuneEnterOptionDesc:                  "设置进入此航点时执行的命令",
-	EngraveRuneLeaveOptionName:                  "刻印离开时符文",
-	EngraveRuneLeaveOptionDesc:                  "设置离开此航点时执行的命令",
-	RemoveRuneEnterOptionName:                   "移除进入时符文",
-	RemoveRuneEnterOptionDesc:                   "清除进入此航点时执行的命令",
-	RemoveRuneLeaveOptionName:                   "移除离开时符文",
-	RemoveRuneLeaveOptionDesc:                   "清除离开此航点时执行的命令",
+	RuneInteractiveError:           "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle: "符文选项",
+	EngraveRuneEnterTitle:          "进入时符文的命令：",
+	EngraveRuneLeaveTitle:          "离开时符文的命令：",
+	EngraveRuneEngraveButton:       "刻印",
+	RuneCommandsPlaceHolder:        "输入命令…（cd 无效，推荐使用 rift 切换路径）",
+	RuneCommandsInvalidDueToShellBuildInCommand: "检测到符文使用了 Shell 内建命令（如 cd、export、source、alias）——内建命令只影响执行它们的进程，无法修改当前 Shell 会话。" +
+		"如需在命令序列中使用内建命令，请使用 Shell 的 -c 参数显式调用 Shell 并链接命令。" +
+		"使用 --login（或等效选项）可在该进程中加载完整的 Shell 环境（PATH、别名、配置文件等）。\n\n" +
+		"示例:\n" +
+		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
+		"  cmd /c \"activate.bat && python main.py\"",
+	EngraveRuneEnterOptionName: "刻印进入时符文",
+	EngraveRuneEnterOptionDesc: "设置进入此航点时执行的命令",
+	EngraveRuneLeaveOptionName: "刻印离开时符文",
+	EngraveRuneLeaveOptionDesc: "设置离开此航点时执行的命令",
+	RemoveRuneEnterOptionName:  "移除进入时符文",
+	RemoveRuneEnterOptionDesc:  "清除进入此航点时执行的命令",
+	RemoveRuneLeaveOptionName:  "移除离开时符文",
+	RemoveRuneLeaveOptionDesc:  "清除离开此航点时执行的命令",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "施放位置",

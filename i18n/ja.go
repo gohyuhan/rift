@@ -9,7 +9,6 @@ var jA = LanguageMapping{
 	PathNotAbsoluteError:     "パスは絶対パスである必要があります。指定されたパス: %s",
 	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
 	InvalidValueProvided:     "無効な値が指定されました。スペースは使用できません。また、空にすることもできません",
-	SkippingDueToCwdErr:      "rift：カレントディレクトリの取得に失敗したため、ルーンコマンドをスキップします",
 	SkippingDueToExecutorErr: "rift：エグゼキューターの起動に失敗したため、ルーンコマンドをスキップします",
 
 	// Settings
@@ -90,9 +89,19 @@ var jA = LanguageMapping{
 	RiftSpellForgetError:      "rift：スペル %q の忘却に失敗しました、[ERROR: %s]",
 	RiftSpellDoNotExistsError: "rift：スペル %q は存在しません",
 	RiftSpellUpdateError:      "rift：スペル %q の更新に失敗しました、[ERROR: %s]",
-	ForbiddenCDSpellCommand:   "rift：作業パスを変更するターミナルコマンドはスペルとして使用できません",
-	SpellCommandEmpty:         "rift：スペルコマンドは空にできません",
-	InvalidSpellCommandError:  "rift：スペルコマンド [%s] が無効のため実行できませんでした",
+	ForbiddenShellBuiltinSpellCommand: "rift：シェル組み込みコマンド（cd、export、source、alias など）は実行したプロセス内にのみ影響し、現在のシェルセッションを変更することはできません。" +
+		"組み込みコマンドをコマンドシーケンスの一部として使用するには、シェルを -c フラグで明示的に呼び出してコマンドをチェーンしてください。" +
+		"--login（または同等のオプション）を使用すると、完全なシェル環境（PATH、エイリアス、プロファイルなど）を読み込めます。\n\n" +
+		"例:\n" +
+		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
+		"  cmd /c \"activate.bat && python main.py\"",
+	ForbiddenRiftNavigationSpellCommand: "rift：rift ウェイポイントナビゲーションコマンド（例: rift <ウェイポイント名>）はスペルとして登録できません — これらはシェル統合によって直接処理され、子プロセスとして実行されません。",
+	ForbiddenRiftNavigationRuneCommand:  "rift：rift ウェイポイントナビゲーションコマンド（例: rift <ウェイポイント名>）はルーンではサポートされていません — 特定のディレクトリでコマンドを実行するには、`rift <ウェイポイント名> --cast <スペル名>` を使用してください。",
+	SpellCommandEmpty:                   "rift：スペルコマンドは空にできません",
+	InvalidSpellCommandError:            "rift：スペルコマンド [%s] が無効のため実行できませんでした",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift：%q -> %s を保存しました",
@@ -197,21 +206,29 @@ var jA = LanguageMapping{
 	SpellUIChooseWaypointCastLocationKeyHelp: "スペルを詠唱するウェイポイントを選択",
 
 	// Rune interactive UI
-	RuneInteractiveError:                        "[ERROR: %s]",
-	RuneEngraveTypeOptionListTitle:              "ルーンオプション",
-	EngraveRuneEnterTitle:                       "移動時ルーンのコマンド：",
-	EngraveRuneLeaveTitle:                       "離脱時ルーンのコマンド：",
-	EngraveRuneEngraveButton:                    "刻む",
-	RuneCommandsPlaceHolder:                     "コマンドを入力… （cd は効果がありません。パス変更には rift の使用を推薦します）",
-	RuneCommandsInvalidDueToShellBuildInCommand: "シェル組み込みコマンド（cd、export、alias など）を使用しているルーンが1つ以上検出されました。これらのコマンドはサブプロセス内では親シェルの状態を変更できないため、rift ルーンでは効果がありません。",
-	EngraveRuneEnterOptionName:                  "移動時ルーンを刻む",
-	EngraveRuneEnterOptionDesc:                  "このウェイポイントに移動した際に実行するコマンドを設定する",
-	EngraveRuneLeaveOptionName:                  "離脱時ルーンを刻む",
-	EngraveRuneLeaveOptionDesc:                  "このウェイポイントから離脱した際に実行するコマンドを設定する",
-	RemoveRuneEnterOptionName:                   "移動時ルーンを削除する",
-	RemoveRuneEnterOptionDesc:                   "このウェイポイントに移動した際に実行するコマンドを削除する",
-	RemoveRuneLeaveOptionName:                   "離脱時ルーンを削除する",
-	RemoveRuneLeaveOptionDesc:                   "このウェイポイントから離脱した際に実行するコマンドを削除する",
+	RuneInteractiveError:           "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle: "ルーンオプション",
+	EngraveRuneEnterTitle:          "移動時ルーンのコマンド：",
+	EngraveRuneLeaveTitle:          "離脱時ルーンのコマンド：",
+	EngraveRuneEngraveButton:       "刻む",
+	RuneCommandsPlaceHolder:        "コマンドを入力… （cd は効果がありません。パス変更には rift の使用を推薦します）",
+	RuneCommandsInvalidDueToShellBuildInCommand: "シェル組み込みコマンド（cd、export、source、alias など）が検出されました。組み込みコマンドは実行したプロセス内にのみ影響し、現在のシェルセッションを変更することはできません。" +
+		"組み込みコマンドをコマンドシーケンスの一部として使用するには、シェルを -c フラグで明示的に呼び出してコマンドをチェーンしてください。" +
+		"--login（または同等のオプション）を使用すると、完全なシェル環境（PATH、エイリアス、プロファイルなど）を読み込めます。\n\n" +
+		"例:\n" +
+		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
+		"  cmd /c \"activate.bat && python main.py\"",
+	EngraveRuneEnterOptionName: "移動時ルーンを刻む",
+	EngraveRuneEnterOptionDesc: "このウェイポイントに移動した際に実行するコマンドを設定する",
+	EngraveRuneLeaveOptionName: "離脱時ルーンを刻む",
+	EngraveRuneLeaveOptionDesc: "このウェイポイントから離脱した際に実行するコマンドを設定する",
+	RemoveRuneEnterOptionName:  "移動時ルーンを削除する",
+	RemoveRuneEnterOptionDesc:  "このウェイポイントに移動した際に実行するコマンドを削除する",
+	RemoveRuneLeaveOptionName:  "離脱時ルーンを削除する",
+	RemoveRuneLeaveOptionDesc:  "このウェイポイントから離脱した際に実行するコマンドを削除する",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "詠唱場所",

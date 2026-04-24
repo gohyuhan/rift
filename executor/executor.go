@@ -2,10 +2,11 @@ package executor
 
 import (
 	"bufio"
-	"context"
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
+	"strings"
 )
 
 type cmdExecutor struct{}
@@ -42,7 +43,7 @@ func (c *cmdExecutor) RunCmd(args []string, executionPath string, envs []string)
 
 	cmd := exec.Command(argName, argsArray...)
 	cmd.Dir = executionPath
-	cmd.Env = append(os.Environ(), envs...)
+	cmd.Env = buildEnv(envs)
 	// stdout is reserved for the rift shell eval (cd command only);
 	// route all command output through stderr so it reaches the terminal directly.
 	cmd.Stdout = os.Stderr
@@ -86,31 +87,21 @@ func (c *cmdExecutor) ExecWithPadding(args []string, executionPath string, envs 
 	cmd.Wait()
 }
 
-// ----------------------------------
-//
-//	RunCmdWithContext creates a command that respects context cancellation.
-//	When the context is cancelled, the command will be terminated automatically.
-//
-// ----------------------------------
-func (c *cmdExecutor) RunCmdWithContext(ctx context.Context, args []string, executionPath string, envs []string) *exec.Cmd {
-	var argName string
-	var argsArray []string
-	if len(args) > 1 {
-		argName = args[0]
-		argsArray = args[1:]
-	} else if len(args) == 1 {
-		argName = args[0]
-	} else {
-		return nil
+// buildEnv returns a clean environment for a child process: strips the
+// inherited RIFT_RUNE_DEPTH, reads its value (default 0), increments it by 1,
+// injects the new value, then appends any caller-supplied overrides.
+func buildEnv(envs []string) []string {
+	depth := 0
+	base := make([]string, 0, len(os.Environ())+1)
+	for _, e := range os.Environ() {
+		if val, ok := strings.CutPrefix(e, "RIFT_RUNE_DEPTH="); ok {
+			if n, err := strconv.Atoi(val); err == nil {
+				depth = n
+			}
+			continue
+		}
+		base = append(base, e)
 	}
-
-	cmd := exec.CommandContext(ctx, argName, argsArray...)
-	cmd.Dir = executionPath
-	cmd.Env = append(os.Environ(), envs...)
-	// stdout is reserved for the rift shell eval (cd command only);
-	// route all command output through stderr so it reaches the terminal directly.
-	cmd.Stdout = os.Stderr
-	cmd.Stderr = os.Stderr
-	cmd.Stdin = os.Stdin
-	return cmd
+	base = append(base, fmt.Sprintf("RIFT_RUNE_DEPTH=%d", depth+1))
+	return append(base, envs...)
 }

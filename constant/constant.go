@@ -22,6 +22,15 @@ const (
 // example: go build -ldflags "-X rift/constant.APPVERSION=v1.x.x" -o main
 var APPVERSION = "v0.3.0"
 
+var RiftRootFlags = []string{
+	"--language",
+	"--autoupdate",
+	"--download-pre-release",
+	"--update",
+	"--version",
+	"--cast",
+}
+
 const (
 	RIFT_CMD_KEYWORD      = "rift"
 	AWAKEN_CMD_KEYWORD    = "awaken"

@@ -22,16 +22,16 @@ const (
 
 // ----------------------------------
 //
-//	Fires the on-leave rune for the current directory, emits a cd command to
-//	stdout for the shell wrapper to eval, increments the waypoint travel count,
-//	then fires the on-enter rune for the destination. Travel-count failure is
-//	silently ignored so navigation is never blocked.
+//	Fires the on-leave rune for the current directory (skipped if CWD cannot
+//	be resolved), increments the waypoint travel count (failure silently
+//	ignored so navigation is never blocked), fires the on-enter rune for the
+//	destination, then emits a cd command to stdout for the shell wrapper to eval.
 //
 // ----------------------------------
 func ChangeDir(retrievedPath, waypointName string) {
-	leavePath, cwdErr := utils.GetCWD()
+	path, cwdErr := utils.GetCWD()
 	if cwdErr == nil {
-		triggerWaypointRune(RUNE_ON_LEAVE, strings.TrimSpace(leavePath))
+		triggerWaypointRune(RUNE_ON_LEAVE, path)
 	}
 
 	// best-effort: increment travel count; failure is silently ignored
@@ -41,17 +41,18 @@ func ChangeDir(retrievedPath, waypointName string) {
 	// Only this line goes to stdout — the shell wrapper evals it.
 	// Skip at depth>0: nested rift calls run inside executor subprocesses;
 	// their stdout is not eval'd by the shell wrapper.
-	if val, ok := os.LookupEnv("RIFT_RUNE_DEPTH"); !ok || val == "0" {
-		fmt.Printf("cd %q", retrievedPath)
-	}
+	fmt.Printf("cd %q", retrievedPath)
 }
 
 // ----------------------------------
 //
-//	Looks up and executes the rune commands for path. runeType selects
+//	Executes the rune commands registered for path. runeType selects
 //	RUNE_ON_ENTER or RUNE_ON_LEAVE commands. Silently returns if no rune is
-//	registered for path. Each command runs with path as its working directory
-//	so that nested rift calls inherit the correct CWD for their own triggers.
+//	registered for path. path is passed in by the caller (not resolved
+//	internally). Each command runs with path as its working directory so that
+//	nested rift calls inherit the correct CWD for their own triggers.
+//	Commands with an empty slice are skipped with an error log; rift
+//	navigation commands are blocked with an error log.
 //
 // ----------------------------------
 func triggerWaypointRune(runeType string, path string) {
@@ -68,11 +69,6 @@ func triggerWaypointRune(runeType string, path string) {
 		}
 	}
 
-	// at depth>0, no real chdir has occurred — outer call already fired LEAVE
-	if runeType == RUNE_ON_LEAVE && runeDepth > 0 {
-		return
-	}
-
 	var runeCmds []*pb.RuneCmds
 	var logColor color.Color
 	switch runeType {
@@ -87,14 +83,18 @@ func triggerWaypointRune(runeType string, path string) {
 	padding := strings.Repeat("  ", runeDepth)
 	runeCmdsCount := len(runeCmds)
 	for index, cmd := range runeCmds {
-		runeExecutor := executor.CmdExecutor().RunCmd(cmd.Commands, path, []string{fmt.Sprintf("RIFT_RUNE_DEPTH=%v", runeDepth+1)})
-		if runeExecutor != nil {
-			msg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, strings.Join(cmd.Commands, " ")), logColor, false)
-			logger.LOGGER.LogToTerminal([]string{msg})
-			runeExecutor.Run()
-		} else {
+		if len(cmd.Commands) == 0 {
 			errMsg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, i18n.LANGUAGEMAPPING.SkippingDueToExecutorErr), style.ColorError, false)
 			logger.LOGGER.LogToTerminal([]string{errMsg})
+			continue
 		}
+		if utils.IsRiftNavigationCommand(cmd.Commands) {
+			errMsg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, i18n.LANGUAGEMAPPING.ForbiddenRiftNavigationRuneCommand), style.ColorError, false)
+			logger.LOGGER.LogToTerminal([]string{errMsg})
+			continue
+		}
+		msg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, strings.Join(cmd.Commands, " ")), logColor, false)
+		logger.LOGGER.LogToTerminal([]string{msg})
+		executor.CmdExecutor().ExecWithPadding(cmd.Commands, path, nil, padding)
 	}
 }
