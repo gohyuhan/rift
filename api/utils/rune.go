@@ -37,7 +37,8 @@ func NormalizeAndCheckRuneCommandsAreValid(commandsString string) ([]*pb.RuneCmd
 		}
 		if len(cmdArray) > 0 {
 			if slices.Contains(constant.ShellBuildInCmd, cmdArray[0]) {
-				return nil, fmt.Errorf("%s", i18n.LANGUAGEMAPPING.RuneCommandsInvalidDueToShellBuildInCommand)
+				msg := fmt.Sprintf(i18n.LANGUAGEMAPPING.RuneCommandsInvalidDueToShellBuildInCommand, utils.ShellBuiltinExample())
+				return nil, fmt.Errorf("%s", msg)
 			} else if utils.IsRiftNavigationCommand(cmdArray) {
 				errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ForbiddenRiftNavigationRuneCommand, style.ColorError, false)
 				return nil, fmt.Errorf("%s", errMessage)

@@ -215,12 +215,7 @@ var zH_HANS = LanguageMapping{
 	RuneCommandsInvalidDueToShellBuildInCommand: "检测到符文使用了 Shell 内建命令（如 cd、export、source、alias）——内建命令只影响执行它们的进程，无法修改当前 Shell 会话。" +
 		"如需在命令序列中使用内建命令，请使用 Shell 的 -c 参数显式调用 Shell 并链接命令。" +
 		"使用 -i（交互模式）可加载 Shell 的交互配置（.zshrc、.bashrc 等）——若环境依赖其中内容（如使用 rift 切换目录、nvm、conda）则必须使用此选项。\n\n" +
-		"示例:\n" +
-		"  bash -i -c \"source env/bin/activate && python main.py\"\n" +
-		"  zsh -i -c \"source env/bin/activate && python main.py\"\n" +
-		"  fish -i -c \"source env/bin/activate.fish; python main.py\"\n" +
-		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
-		"  cmd /c \"activate.bat && python main.py\"",
+		"示例:\n  %s",
 	EngraveRuneEnterOptionName: "刻印进入时符文",
 	EngraveRuneEnterOptionDesc: "设置进入此航点时执行的命令",
 	EngraveRuneLeaveOptionName: "刻印离开时符文",
