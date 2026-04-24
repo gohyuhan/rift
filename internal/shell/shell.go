@@ -152,7 +152,7 @@ func FunctionSnippet(sh Shell) string {
 		return `
 # rift shell integration
 function rift
-    eval (command rift $argv)
+    command rift $argv | source
 end
 `
 	case Ksh:
@@ -164,12 +164,12 @@ rift() { eval "$(command rift "$@")"; }
 		if runtime.GOOS == "windows" {
 			return `
 # rift shell integration
-function rift { Invoke-Expression (rift.exe $args) }
+function rift { & rift.exe $args | Invoke-Expression }
 `
 		}
 		return `
 # rift shell integration
-function rift { Invoke-Expression (& (Get-Command -CommandType Application rift) $args) }
+function rift { & (Get-Command -CommandType Application rift) $args | Invoke-Expression }
 `
 	default:
 		// bash and zsh share identical POSIX function syntax.

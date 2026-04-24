@@ -10,9 +10,11 @@ import (
 	"github.com/gohyuhan/rift/i18n"
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/utils"
 	"go.etcd.io/bbolt"
 	"google.golang.org/protobuf/proto"
 	"mvdan.cc/sh/v3/shell"
+	"mvdan.cc/sh/v3/syntax"
 )
 
 // ----------------------------------
@@ -36,6 +38,9 @@ func NormalizeAndCheckRuneCommandsAreValid(commandsString string) ([]*pb.RuneCmd
 		if len(cmdArray) > 0 {
 			if slices.Contains(constant.ShellBuildInCmd, cmdArray[0]) {
 				return nil, fmt.Errorf("%s", i18n.LANGUAGEMAPPING.RuneCommandsInvalidDueToShellBuildInCommand)
+			} else if utils.IsRiftNavigationCommand(cmdArray) {
+				errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ForbiddenRiftNavigationRuneCommand, style.ColorError, false)
+				return nil, fmt.Errorf("%s", errMessage)
 			} else {
 				normalizedRuneCmds = append(normalizedRuneCmds, &pb.RuneCmds{Commands: cmdArray})
 			}
@@ -48,15 +53,21 @@ func NormalizeAndCheckRuneCommandsAreValid(commandsString string) ([]*pb.RuneCmd
 // ----------------------------------
 //
 //	Joins a slice of *pb.Rune command arrays into a single string suitable for
-//	pre-populating the rune commands textarea. Each Rune's tokens are space-joined
-//	and the results are concatenated in order. Returns an empty string when
-//	runeCommands is nil or empty.
+//	pre-populating the rune commands textarea. Each token is shell-quoted if it
+//	contains characters that shell.Fields would interpret as operators or
+//	word-splitters, so that the reconstructed line round-trips through
+//	shell.Fields without error. Returns an empty string when runeCommands is
+//	nil or empty.
 //
 // ----------------------------------
 func ParseRuneCommandsToString(runeCommands []*pb.RuneCmds) string {
 	var parsedString strings.Builder
 	for _, rune := range runeCommands {
-		parsedString.WriteString(strings.Join(rune.Commands, " "))
+		quoted := make([]string, len(rune.Commands))
+		for i, token := range rune.Commands {
+			quoted[i], _ = syntax.Quote(token, syntax.LangBash)
+		}
+		parsedString.WriteString(strings.Join(quoted, " "))
 		parsedString.WriteRune('\n')
 	}
 	return parsedString.String()

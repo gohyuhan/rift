@@ -9,7 +9,6 @@ var eN = LanguageMapping{
 	PathNotAbsoluteError:     "Path must be absolute, got: %s",
 	NotFileOrDirError:        "Path does not exist as a file or directory",
 	InvalidValueProvided:     "Invalid value provided, no whitespace allowed and cannot be empty",
-	SkippingDueToCwdErr:      "rift: rune commands skipped — failed to retrieve current working directory",
 	SkippingDueToExecutorErr: "rift: rune command skipped — failed to start executor",
 
 	// Settings
@@ -90,9 +89,19 @@ var eN = LanguageMapping{
 	RiftSpellForgetError:      "rift: failed to forget spell %q, [ERROR: %s]",
 	RiftSpellDoNotExistsError: "rift: spell %q does not exist",
 	RiftSpellUpdateError:      "rift: failed to update spell %q, [ERROR: %s]",
-	ForbiddenCDSpellCommand:   "rift: terminal commands that change the working path are not allowed as a spell",
-	SpellCommandEmpty:         "rift: spell command cannot be empty",
-	InvalidSpellCommandError:  "rift: spell command [%s] is invalid and could not be executed",
+	ForbiddenShellBuiltinSpellCommand: "rift: shell built-in commands (e.g. cd, export, source, alias) only affect the process that runs them — they cannot modify your current shell session. " +
+		"To use built-ins as part of a command sequence, invoke your shell explicitly with -c and chain your commands. " +
+		"Use --login (or equivalent) to load your full shell environment (PATH, aliases, profiles, etc.).\n\n" +
+		"Examples:\n" +
+		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
+		"  cmd /c \"activate.bat && python main.py\"",
+	ForbiddenRiftNavigationSpellCommand: "rift: rift waypoint navigation commands (e.g. rift <waypointName>) cannot be learned as a spell — they are handled directly by the shell integration and do not run as a child process.",
+	ForbiddenRiftNavigationRuneCommand:  "rift: rift waypoint navigation commands (e.g. rift <waypointName>) are not supported in runes — to run commands in a specific directory, use `rift <waypointName> --cast <spellName>` instead.",
+	SpellCommandEmpty:                   "rift: spell command cannot be empty",
+	InvalidSpellCommandError:            "rift: spell command [%s] is invalid and could not be executed",
 
 	// Waypoint operations
 	RiftSavedWaypoint:                     "rift: saved %q -> %s",
@@ -197,21 +206,29 @@ var eN = LanguageMapping{
 	SpellUIChooseWaypointCastLocationKeyHelp: "choose waypoint to cast spell to",
 
 	// Rune interactive UI
-	RuneInteractiveError:                        "[ERROR: %s]",
-	RuneEngraveTypeOptionListTitle:              "Rune Options",
-	EngraveRuneEnterTitle:                       "Commands for On Enter Rune:",
-	EngraveRuneLeaveTitle:                       "Commands for On Leave Rune:",
-	EngraveRuneEngraveButton:                    "Engrave",
-	RuneCommandsPlaceHolder:                     "Enter commands... (cd has no effect, recommend using rift to change path)",
-	RuneCommandsInvalidDueToShellBuildInCommand: "Detected one or more runes use shell built-in commands (e.g. cd, export, alias), which have no effect in rift rune — built-ins mutate parent-shell state that a subprocess cannot propagate.",
-	EngraveRuneEnterOptionName:                  "Engrave On-Enter Rune",
-	EngraveRuneEnterOptionDesc:                  "Set commands to run when entering this waypoint",
-	EngraveRuneLeaveOptionName:                  "Engrave On-Leave Rune",
-	EngraveRuneLeaveOptionDesc:                  "Set commands to run when leaving this waypoint",
-	RemoveRuneEnterOptionName:                   "Remove On-Enter Rune",
-	RemoveRuneEnterOptionDesc:                   "Clear the commands that run when entering this waypoint",
-	RemoveRuneLeaveOptionName:                   "Remove On-Leave Rune",
-	RemoveRuneLeaveOptionDesc:                   "Clear the commands that run when leaving this waypoint",
+	RuneInteractiveError:           "[ERROR: %s]",
+	RuneEngraveTypeOptionListTitle: "Rune Options",
+	EngraveRuneEnterTitle:          "Commands for On Enter Rune:",
+	EngraveRuneLeaveTitle:          "Commands for On Leave Rune:",
+	EngraveRuneEngraveButton:       "Engrave",
+	RuneCommandsPlaceHolder:        "Enter commands... (cd has no effect, recommend using rift to change path)",
+	RuneCommandsInvalidDueToShellBuildInCommand: "Detected shell built-in command (e.g. cd, export, source, alias) — built-ins only affect the process that runs them and cannot modify your current shell session. " +
+		"To use built-ins as part of a command sequence, invoke your shell explicitly with -c and chain your commands. " +
+		"Use --login (or equivalent) to load your full shell environment (PATH, aliases, profiles, etc.).\n\n" +
+		"Examples:\n" +
+		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
+		"  cmd /c \"activate.bat && python main.py\"",
+	EngraveRuneEnterOptionName: "Engrave On-Enter Rune",
+	EngraveRuneEnterOptionDesc: "Set commands to run when entering this waypoint",
+	EngraveRuneLeaveOptionName: "Engrave On-Leave Rune",
+	EngraveRuneLeaveOptionDesc: "Set commands to run when leaving this waypoint",
+	RemoveRuneEnterOptionName:  "Remove On-Enter Rune",
+	RemoveRuneEnterOptionDesc:  "Clear the commands that run when entering this waypoint",
+	RemoveRuneLeaveOptionName:  "Remove On-Leave Rune",
+	RemoveRuneLeaveOptionDesc:  "Clear the commands that run when leaving this waypoint",
 
 	// Cast location option popup
 	CastLocationOptionTitle:               "Cast Location",

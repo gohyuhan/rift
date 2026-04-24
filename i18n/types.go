@@ -15,7 +15,6 @@ type LanguageMapping struct {
 	PathNotAbsoluteError     string
 	NotFileOrDirError        string
 	InvalidValueProvided     string
-	SkippingDueToCwdErr      string
 	SkippingDueToExecutorErr string
 
 	// Settings
@@ -90,15 +89,17 @@ type LanguageMapping struct {
 	RiftRuneDescription                   string
 
 	// Spell operations
-	RiftSpellSaved            string
-	RiftSpellUpdated          string
-	RiftSpellForgetSuccess    string
-	RiftSpellForgetError      string
-	RiftSpellDoNotExistsError string
-	RiftSpellUpdateError      string
-	ForbiddenCDSpellCommand   string
-	SpellCommandEmpty         string
-	InvalidSpellCommandError  string
+	RiftSpellSaved                      string
+	RiftSpellUpdated                    string
+	RiftSpellForgetSuccess              string
+	RiftSpellForgetError                string
+	RiftSpellDoNotExistsError           string
+	RiftSpellUpdateError                string
+	ForbiddenShellBuiltinSpellCommand   string
+	ForbiddenRiftNavigationSpellCommand string
+	ForbiddenRiftNavigationRuneCommand  string
+	SpellCommandEmpty                   string
+	InvalidSpellCommandError            string
 
 	// Rune operations
 	RiftRuneEngraveSuccessful string

@@ -6,10 +6,12 @@ import (
 	"time"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
+	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
 	pb "github.com/gohyuhan/rift/proto"
 	"github.com/gohyuhan/rift/style"
+	"github.com/gohyuhan/rift/utils"
 	"go.etcd.io/bbolt"
 	"google.golang.org/protobuf/proto"
 	"mvdan.cc/sh/v3/shell"
@@ -61,9 +63,15 @@ func SaveSpell(spellName string, spellCmd string) (bool, error) {
 			return fmt.Errorf("%s", errMessage)
 		}
 
-		// check if the command is not for path navigation
-		if slices.Contains(spellCommandArray, "cd") {
-			errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ForbiddenCDSpellCommand, style.ColorError, false)
+		// check if the command starts with a shell built-in
+		if slices.Contains(constant.ShellBuildInCmd, spellCommandArray[0]) {
+			errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ForbiddenShellBuiltinSpellCommand, style.ColorError, false)
+			return fmt.Errorf("%s", errMessage)
+		}
+
+		// check if the command is a rift waypoint navigation command
+		if utils.IsRiftNavigationCommand(spellCommandArray) {
+			errMessage := style.RenderStringWithColor(i18n.LANGUAGEMAPPING.ForbiddenRiftNavigationSpellCommand, style.ColorError, false)
 			return fmt.Errorf("%s", errMessage)
 		}
 
