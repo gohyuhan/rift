@@ -39,8 +39,6 @@ func ChangeDir(retrievedPath, waypointName string) {
 	triggerWaypointRune(RUNE_ON_ENTER, retrievedPath)
 
 	// Only this line goes to stdout — the shell wrapper evals it.
-	// Skip at depth>0: nested rift calls run inside executor subprocesses;
-	// their stdout is not eval'd by the shell wrapper.
 	fmt.Printf("cd %q", retrievedPath)
 }
 
