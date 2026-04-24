@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var spellKeyword = fmt.Sprintf("%s [spell name]", constant.SPELL_CMD_KEYWORD)
+var spellKeyword = fmt.Sprintf("%s <spell name | \"command string\">", constant.SPELL_CMD_KEYWORD)
 
 var spellCmd = &cobra.Command{
 	Use:  spellKeyword,
