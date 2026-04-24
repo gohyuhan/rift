@@ -97,7 +97,7 @@ var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
 			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "cast", castArgErr.Error()), style.ColorError, false))
 		}
 
-		return spell.RetrieveAndCastSpell(castArg, retrievedPath)
+		return spell.CastSpell(castArg, retrievedPath)
 	} else {
 		apiUtils.ChangeDir(retrievedPath, waypointName)
 	}

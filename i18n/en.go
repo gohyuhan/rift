@@ -67,7 +67,7 @@ var eN = LanguageMapping{
 	RiftDiscoverDescription:               "Assign a waypoint name to the current working directory",
 	RiftWaypointDescription:               "Start interactive UI for waypoints or display info for a specific waypoint",
 	RiftLearnDescription:                  "Teach rift a new spell by assigning a name to a command; wrap multi-word commands in quotes (e.g. rift learn build \"docker compose up --build\")",
-	RiftSpellDescription:                  "Cast a spell by name to execute its bound terminal command",
+	RiftSpellDescription:                  "Cast a learned spell by name, or execute a command string directly (e.g. \"git commit -m 'msg'\")",
 	RiftSpellbookDescription:              "Start interactive UI for spells or display info for a specific spell",
 	RiftFlagLanguageDescription:           "Set the language for rift (supported: EN, JA, ZH-HANS, ZH-HANT)",
 	RiftFlagAutoUpdateDescription:         "Set whether rift should automatically check for updates (use --autoupdate to set true, --autoupdate=false to set false)",
@@ -78,7 +78,7 @@ var eN = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "Rename an existing waypoint to a new name",
 	RiftFlagUpdateDescription:             "Manually trigger a check for the latest version and update if available",
 	RiftFlagVersionDescription:            "Print the current version of rift",
-	RiftFlagCastDescription:               "Instead of navigation, cast a learned spell on the waypoint's path; the spell command will be executed with the waypoint's path as the working directory",
+	RiftFlagCastDescription:               "Instead of navigation, cast a learned spell or run a command string (e.g. \"git commit -m 'msg'\") on the waypoint's path as the working directory",
 	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
 	RiftRuneDescription:                   "Attach on-enter and on-leave trigger commands to a waypoint; triggers fire automatically when rift navigates to or from that waypoint",
 

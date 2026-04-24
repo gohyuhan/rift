@@ -67,7 +67,7 @@ var jA = LanguageMapping{
 	RiftDiscoverDescription:               "現在の作業ディレクトリにウェイポイント名を割り当てます",
 	RiftWaypointDescription:               "ウェイポイントのインタラクティブUIを起動するか、特定のウェイポイントの情報を表示します",
 	RiftLearnDescription:                  "コマンドに名前を付けて rift に新しいスペルを教えます。複数単語のコマンドは引用符で囲んでください（例：rift learn build \"docker compose up --build\"）",
-	RiftSpellDescription:                  "スペル名を指定してキャストし、紐付けられたターミナルコマンドを実行します",
+	RiftSpellDescription:                  "習得したスペル名を指定してキャストするか、コマンド文字列を直接実行します（例：\"git commit -m 'msg'\"）",
 	RiftSpellbookDescription:              "スペルのインタラクティブUIを起動するか、特定のスペルの情報を表示します",
 	RiftFlagLanguageDescription:           "rift の言語を設定します（対応言語：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "rift が自動的にアップデートを確認するかどうかを設定します（有効にするには --autoupdate、無効にするには --autoupdate=false）",
@@ -78,7 +78,7 @@ var jA = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "既存のウェイポイントを新しい名前に変更します",
 	RiftFlagUpdateDescription:             "最新バージョンの確認を手動でトリガーし、利用可能な場合はアップデートします",
 	RiftFlagVersionDescription:            "rift の現在のバージョンを表示します",
-	RiftFlagCastDescription:               "ナビゲーションの代わりに、習得したスペルをウェイポイントのパスでキャストします。スペルコマンドは、ウェイポイントのパスを作業ディレクトリとして実行されます",
+	RiftFlagCastDescription:               "ナビゲーションの代わりに、習得したスペル名またはコマンド文字列（例：\"git commit -m 'msg'\"）をウェイポイントのパスを作業ディレクトリとして実行します",
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 	RiftRuneDescription:                   "ウェイポイントに移動時・離脱時のトリガーコマンドを設定します；rift でそのウェイポイントへ、またはそこから移動する際に自動的に実行されます",
 

@@ -67,7 +67,7 @@ var zH_HANT = LanguageMapping{
 	RiftDiscoverDescription:               "為目前工作目錄指定一個航點名稱",
 	RiftWaypointDescription:               "啟動航點互動介面或顯示指定航點的詳細資訊",
 	RiftLearnDescription:                  "透過為指令指定名稱來教 rift 一個新咒語；多詞指令請用引號括起（例：rift learn build \"docker compose up --build\"）",
-	RiftSpellDescription:                  "透過咒語名稱施咒，執行其綁定的終端命令",
+	RiftSpellDescription:                  "透過已習得的咒語名稱施咒，或直接執行命令字串（例：\"git commit -m 'msg'\"）",
 	RiftSpellbookDescription:              "啟動咒語互動介面或顯示指定咒語的詳細資訊",
 	RiftFlagLanguageDescription:           "設定 rift 的語言（支援：EN、JA、ZH-HANS、ZH-HANT）",
 	RiftFlagAutoUpdateDescription:         "設定 rift 是否自動檢查更新（使用 --autoupdate 設為啟用，--autoupdate=false 設為停用）",
@@ -78,7 +78,7 @@ var zH_HANT = LanguageMapping{
 	RiftFlagWaypointReforgeDescription:    "將現有航點重新命名為新名稱",
 	RiftFlagUpdateDescription:             "手動觸發檢查最新版本，如有可用更新則進行升級",
 	RiftFlagVersionDescription:            "列印 rift 的目前版本",
-	RiftFlagCastDescription:               "取代導航，對航點的路徑施放已習得的咒語；咒語命令將在航點的路徑作為工作目錄時執行",
+	RiftFlagCastDescription:               "取代導航，在航點路徑下施放已習得的咒語或執行命令字串（例：\"git commit -m 'msg'\"）；命令將以航點路徑為工作目錄執行",
 	RiftFlagRetrieveError:                 "rift：取得旗標 %q 失敗，[ERROR: %s]",
 	RiftRuneDescription:                   "為航點綁定進入和離開時的觸發命令；當 rift 導航至或離開該航點時自動執行",
 
