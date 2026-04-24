@@ -17,8 +17,7 @@ import (
 //
 //	Cobra handler for the spell command.
 //	Dispatches to ForgetSpell when --forget is passed, otherwise resolves
-//	the current working directory and casts the named spell via
-//	RetrieveAndCastSpell.
+//	the current working directory and casts the named spell via CastSpell.
 //
 // ----------------------------------
 var RiftSpellFunc = func(cmd *cobra.Command, args []string) error {
@@ -50,9 +49,12 @@ var RiftSpellFunc = func(cmd *cobra.Command, args []string) error {
 func CastSpell(spellNameOrCmdString string, executionPath string) error {
 	var spellCmd []string
 	var castSpellErr error
+
+	needUpdateCastCount := false
+
 	spellCmd, castSpellErr = retrieveSpellInfoForCast(spellNameOrCmdString)
 	if castSpellErr == nil {
-		apiUtils.UpdateSpellCastedCount(spellNameOrCmdString)
+		needUpdateCastCount = true
 	} else {
 		spellCmd, castSpellErr = shell.Fields(spellNameOrCmdString, nil)
 		if castSpellErr != nil {
@@ -60,10 +62,18 @@ func CastSpell(spellNameOrCmdString string, executionPath string) error {
 		}
 	}
 
+	if len(spellCmd) < 1 {
+		return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellCommandEmpty, style.ColorError, false))
+	}
+
 	spellCmdExecutor := executor.CmdExecutor().RunCmd(spellCmd, executionPath, []string{})
 	if spellCmdExecutor == nil {
 		errMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.InvalidSpellCommandError, strings.Join(spellCmd, " ")), style.ColorError, false)
 		return fmt.Errorf("%s", errMessage)
+	}
+
+	if needUpdateCastCount {
+		apiUtils.UpdateSpellCastedCount(spellNameOrCmdString)
 	}
 
 	// Run the user's command; the exit code is intentionally not propagated —
