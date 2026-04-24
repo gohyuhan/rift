@@ -215,12 +215,7 @@ var eN = LanguageMapping{
 	RuneCommandsInvalidDueToShellBuildInCommand: "Detected shell built-in command (e.g. cd, export, source, alias) — built-ins only affect the process that runs them and cannot modify your current shell session. " +
 		"To use built-ins as part of a command sequence, invoke your shell explicitly with -c and chain your commands. " +
 		"Use -i (interactive mode) to load your shell's interactive config (.zshrc, .bashrc, etc.) — required if your environment depends on it (e.g. changing directory with rift, nvm, conda).\n\n" +
-		"Examples:\n" +
-		"  bash -i -c \"source env/bin/activate && python main.py\"\n" +
-		"  zsh -i -c \"source env/bin/activate && python main.py\"\n" +
-		"  fish -i -c \"source env/bin/activate.fish; python main.py\"\n" +
-		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
-		"  cmd /c \"activate.bat && python main.py\"",
+		"Example:\n  %s",
 	EngraveRuneEnterOptionName: "Engrave On-Enter Rune",
 	EngraveRuneEnterOptionDesc: "Set commands to run when entering this waypoint",
 	EngraveRuneLeaveOptionName: "Engrave On-Leave Rune",

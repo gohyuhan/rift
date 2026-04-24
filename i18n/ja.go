@@ -215,12 +215,7 @@ var jA = LanguageMapping{
 	RuneCommandsInvalidDueToShellBuildInCommand: "シェル組み込みコマンド（cd、export、source、alias など）が検出されました。組み込みコマンドは実行したプロセス内にのみ影響し、現在のシェルセッションを変更することはできません。" +
 		"組み込みコマンドをコマンドシーケンスの一部として使用するには、シェルを -c フラグで明示的に呼び出してコマンドをチェーンしてください。" +
 		"-i（インタラクティブモード）を使用すると、シェルのインタラクティブ設定（.zshrc、.bashrc など）を読み込めます — 環境がそれに依存している場合（rift でのディレクトリ移動、nvm、conda など）は必須です。\n\n" +
-		"例:\n" +
-		"  bash -i -c \"source env/bin/activate && python main.py\"\n" +
-		"  zsh -i -c \"source env/bin/activate && python main.py\"\n" +
-		"  fish -i -c \"source env/bin/activate.fish; python main.py\"\n" +
-		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
-		"  cmd /c \"activate.bat && python main.py\"",
+		"例:\n  %s",
 	EngraveRuneEnterOptionName: "移動時ルーンを刻む",
 	EngraveRuneEnterOptionDesc: "このウェイポイントに移動した際に実行するコマンドを設定する",
 	EngraveRuneLeaveOptionName: "離脱時ルーンを刻む",

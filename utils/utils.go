@@ -14,6 +14,7 @@ import (
 
 	"github.com/gohyuhan/rift/constant"
 	"github.com/gohyuhan/rift/i18n"
+	ishell "github.com/gohyuhan/rift/internal/shell"
 	"github.com/gohyuhan/rift/logger"
 	"github.com/gohyuhan/rift/style"
 )
@@ -141,6 +142,28 @@ func CheckIsPathExist(path string) (bool, error) {
 		return false, fmt.Errorf("%s", i18n.LANGUAGEMAPPING.NotFileOrDirError)
 	}
 	return false, pathErr
+}
+
+// ----------------------------------
+//
+//	ShellBuiltinExample returns a shell-specific one-liner example for the
+//	shell builtin error message, based on the detected current shell.
+//	CMD is not supported — falls through to the bash default.
+//
+// ----------------------------------
+func ShellBuiltinExample() string {
+	switch ishell.Detect() {
+	case ishell.Zsh:
+		return `zsh -i -c "source env/bin/activate && python main.py"`
+	case ishell.Fish:
+		return `fish -i -c "source env/bin/activate.fish; python main.py"`
+	case ishell.Ksh:
+		return `ksh -i -c "source env/bin/activate && python main.py"`
+	case ishell.PowerShell:
+		return `pwsh -Login -Command ". ./env/bin/Activate.ps1; python main.py"`
+	default:
+		return `bash -i -c "source env/bin/activate && python main.py"`
+	}
 }
 
 // ----------------------------------
