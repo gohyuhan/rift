@@ -214,11 +214,11 @@ var eN = LanguageMapping{
 	RuneCommandsPlaceHolder:        "Enter commands... (cd has no effect, recommend using rift to change path)",
 	RuneCommandsInvalidDueToShellBuildInCommand: "Detected shell built-in command (e.g. cd, export, source, alias) — built-ins only affect the process that runs them and cannot modify your current shell session. " +
 		"To use built-ins as part of a command sequence, invoke your shell explicitly with -c and chain your commands. " +
-		"Use --login (or equivalent) to load your full shell environment (PATH, aliases, profiles, etc.).\n\n" +
+		"Use -i (interactive mode) to load your shell's interactive config (.zshrc, .bashrc, etc.) — required if your environment depends on it (e.g. changing directory with rift, nvm, conda).\n\n" +
 		"Examples:\n" +
-		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
-		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
-		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  bash -i -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh -i -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish -i -c \"source env/bin/activate.fish; python main.py\"\n" +
 		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
 		"  cmd /c \"activate.bat && python main.py\"",
 	EngraveRuneEnterOptionName: "Engrave On-Enter Rune",

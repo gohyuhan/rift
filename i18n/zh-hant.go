@@ -214,11 +214,11 @@ var zH_HANT = LanguageMapping{
 	RuneCommandsPlaceHolder:        "輸入命令…（cd 無效，推薦使用 rift 切換路徑）",
 	RuneCommandsInvalidDueToShellBuildInCommand: "偵測到符文使用了 Shell 內建命令（如 cd、export、source、alias）——內建命令只影響執行它們的進程，無法修改當前 Shell 會話。" +
 		"如需在命令序列中使用內建命令，請使用 Shell 的 -c 參數顯式呼叫 Shell 並串連命令。" +
-		"使用 --login（或等效選項）可在該進程中載入完整的 Shell 環境（PATH、別名、設定檔等）。\n\n" +
+		"使用 -i（互動模式）可載入 Shell 的互動設定（.zshrc、.bashrc 等）——若環境依賴其中內容（如使用 rift 切換目錄、nvm、conda）則必須使用此選項。\n\n" +
 		"範例:\n" +
-		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
-		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
-		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  bash -i -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh -i -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish -i -c \"source env/bin/activate.fish; python main.py\"\n" +
 		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
 		"  cmd /c \"activate.bat && python main.py\"",
 	EngraveRuneEnterOptionName: "刻印進入時符文",

@@ -214,11 +214,11 @@ var jA = LanguageMapping{
 	RuneCommandsPlaceHolder:        "コマンドを入力… （cd は効果がありません。パス変更には rift の使用を推薦します）",
 	RuneCommandsInvalidDueToShellBuildInCommand: "シェル組み込みコマンド（cd、export、source、alias など）が検出されました。組み込みコマンドは実行したプロセス内にのみ影響し、現在のシェルセッションを変更することはできません。" +
 		"組み込みコマンドをコマンドシーケンスの一部として使用するには、シェルを -c フラグで明示的に呼び出してコマンドをチェーンしてください。" +
-		"--login（または同等のオプション）を使用すると、完全なシェル環境（PATH、エイリアス、プロファイルなど）を読み込めます。\n\n" +
+		"-i（インタラクティブモード）を使用すると、シェルのインタラクティブ設定（.zshrc、.bashrc など）を読み込めます — 環境がそれに依存している場合（rift でのディレクトリ移動、nvm、conda など）は必須です。\n\n" +
 		"例:\n" +
-		"  bash --login -c \"source env/bin/activate && python main.py\"\n" +
-		"  zsh --login -c \"source env/bin/activate && python main.py\"\n" +
-		"  fish --login -c \"source env/bin/activate.fish; python main.py\"\n" +
+		"  bash -i -c \"source env/bin/activate && python main.py\"\n" +
+		"  zsh -i -c \"source env/bin/activate && python main.py\"\n" +
+		"  fish -i -c \"source env/bin/activate.fish; python main.py\"\n" +
 		"  pwsh -Login -Command \". ./env/bin/Activate.ps1; python main.py\"\n" +
 		"  cmd /c \"activate.bat && python main.py\"",
 	EngraveRuneEnterOptionName: "移動時ルーンを刻む",
