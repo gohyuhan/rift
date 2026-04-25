@@ -81,6 +81,7 @@ var eN = LanguageMapping{
 	RiftFlagCastDescription:               "Instead of navigation, cast a learned spell or run a command string (e.g. \"git commit -m 'msg'\") on the waypoint's path as the working directory",
 	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
 	RiftRuneDescription:                   "Attach on-enter and on-leave trigger commands to a waypoint; triggers fire automatically when rift navigates to or from that waypoint",
+	RiftInscribeDescription:               "Inscribe a new ritual by name, optional description, and one or more commands; pass an empty string (\"\") to skip the description, separate multiple commands with \\n (e.g. rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\")",
 
 	// Spell operations
 	RiftSpellSaved:            "rift: learned %q -> %s",

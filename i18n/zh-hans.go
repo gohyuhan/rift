@@ -81,6 +81,7 @@ var zH_HANS = LanguageMapping{
 	RiftFlagCastDescription:               "代替导航，在航点路径下施放已习得的咒语或执行命令字符串（例：\"git commit -m 'msg'\"）；命令将以航点路径为工作目录执行",
 	RiftFlagRetrieveError:                 "rift：获取标志 %q 失败，[ERROR: %s]",
 	RiftRuneDescription:                   "为航点绑定进入和离开时的触发命令；当 rift 导航至或离开该航点时自动执行",
+	RiftInscribeDescription:               "通过名称、可选描述和一个或多个命令刻录新仪式；描述可传空字符串（\"\"）跳过，多个命令用 \\n 分隔（例：rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\"）",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：已习得 %q -> %s",

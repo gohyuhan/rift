@@ -87,6 +87,7 @@ type LanguageMapping struct {
 	RiftFlagCastDescription               string
 	RiftFlagRetrieveError                 string
 	RiftRuneDescription                   string
+	RiftInscribeDescription               string
 
 	// Spell operations
 	RiftSpellSaved                      string

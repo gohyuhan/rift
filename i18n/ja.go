@@ -81,6 +81,7 @@ var jA = LanguageMapping{
 	RiftFlagCastDescription:               "ナビゲーションの代わりに、習得したスペル名またはコマンド文字列（例：\"git commit -m 'msg'\"）をウェイポイントのパスを作業ディレクトリとして実行します",
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 	RiftRuneDescription:                   "ウェイポイントに移動時・離脱時のトリガーコマンドを設定します；rift でそのウェイポイントへ、またはそこから移動する際に自動的に実行されます",
+	RiftInscribeDescription:               "名前・任意の説明・コマンドで新しいリチュアルを刻みます；説明を省略する場合は空文字列（\"\"）を指定し、複数のコマンドは \\n で区切ります（例：rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\"）",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
