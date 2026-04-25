@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	// "github.com/gohyuhan/rift/api/rune/features"
 	runeUI "github.com/gohyuhan/rift/api/rune/ui"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"

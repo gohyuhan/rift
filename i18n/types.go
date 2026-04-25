@@ -37,6 +37,8 @@ type LanguageMapping struct {
 	SpellDataCorruptedError     string
 	RuneBucketNotFoundError     string
 	RuneDataCorruptedError      string
+	RitualBucketNotFoundError   string
+	RitualDataCorruptedError    string
 
 	// Updater
 	UpdaterDownloadPrompt               string
@@ -106,6 +108,12 @@ type LanguageMapping struct {
 	RiftRuneEngraveSuccessful string
 	RiftRuneEngraveNone       string
 	RiftRuneUpdateError       string
+
+	// Ritual operations
+	RiftRitualDoNotExistsError                    string
+	RiftRitualUpdateError                         string
+	ForbiddenRiftNavigationRitualCommand          string
+	RitualCommandsInvalidDueToShellBuildInCommand string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string

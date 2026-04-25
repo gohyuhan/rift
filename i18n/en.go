@@ -31,6 +31,8 @@ var eN = LanguageMapping{
 	SpellDataCorruptedError:     "Spell data for [%s] is corrupted and could not be read",
 	RuneBucketNotFoundError:     "Rune bucket not found in database, perhaps rerun `rift awaken`",
 	RuneDataCorruptedError:      "Rune data for path [%s] is corrupted and could not be read",
+	RitualBucketNotFoundError:   "Ritual bucket not found in database, perhaps rerun `rift awaken`",
+	RitualDataCorruptedError:    "Ritual data for [%s] is corrupted and could not be read",
 
 	// Updater
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
@@ -125,6 +127,15 @@ var eN = LanguageMapping{
 	RiftRuneEngraveSuccessful: "rift: rune engraved on waypoint %q",
 	RiftRuneEngraveNone:       "rift: no rune was engraved on waypoint %q",
 	RiftRuneUpdateError:       "rift: failed to update rune for path %q, [ERROR: %s]",
+
+	// Ritual operations
+	RiftRitualDoNotExistsError:           "rift: ritual %q does not exist",
+	RiftRitualUpdateError:                "rift: failed to update ritual %q, [ERROR: %s]",
+	ForbiddenRiftNavigationRitualCommand: "rift: rift waypoint navigation commands (e.g. rift <waypointName>) are not supported in rituals — to run commands in a specific directory, use `rift <waypointName> --cast <spellName>` instead.",
+	RitualCommandsInvalidDueToShellBuildInCommand: "Detected shell built-in command (e.g. cd, export, source, alias) — built-ins only affect the process that runs them and cannot modify your current shell session. " +
+		"To use built-ins as part of a command sequence, invoke your shell explicitly with -c and chain your commands. " +
+		"Use -i (interactive mode) to load your shell's interactive config (.zshrc, .bashrc, etc.) — required if your environment depends on it (e.g. changing directory with rift, nvm, conda).\n\n" +
+		"Example:\n  %s",
 
 	// Spell detail view
 	RiftSpellDetailName:      "Spell Name:",

@@ -31,6 +31,8 @@ var jA = LanguageMapping{
 	SpellDataCorruptedError:     "スペル [%s] のデータが破損しており、読み込めません",
 	RuneBucketNotFoundError:     "データベースにルーンバケットが見つかりません。`rift awaken` を再実行してください",
 	RuneDataCorruptedError:      "パス [%s] のルーンデータが破損しており、読み込めません",
+	RitualBucketNotFoundError:   "データベースにリチュアルバケットが見つかりません。`rift awaken` を再実行してください",
+	RitualDataCorruptedError:    "リチュアル [%s] のデータが破損しており、読み込めません",
 
 	// Updater
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
@@ -125,6 +127,15 @@ var jA = LanguageMapping{
 	RiftRuneEngraveSuccessful: "rift：ルーンをウェイポイント %q に刻みました",
 	RiftRuneEngraveNone:       "rift：ウェイポイント %q にルーンは刻まれませんでした",
 	RiftRuneUpdateError:       "rift：パス %q のルーン更新に失敗しました、[ERROR: %s]",
+
+	// Ritual operations
+	RiftRitualDoNotExistsError:           "rift：リチュアル %q は存在しません",
+	RiftRitualUpdateError:                "rift：リチュアル %q の更新に失敗しました、[ERROR: %s]",
+	ForbiddenRiftNavigationRitualCommand: "rift：rift ウェイポイントナビゲーションコマンド（例: rift <ウェイポイント名>）はリチュアルではサポートされていません — 特定のディレクトリでコマンドを実行するには、`rift <ウェイポイント名> --cast <スペル名>` を使用してください。",
+	RitualCommandsInvalidDueToShellBuildInCommand: "シェル組み込みコマンド（cd、export、source、alias など）が検出されました。組み込みコマンドは実行したプロセス内にのみ影響し、現在のシェルセッションを変更することはできません。" +
+		"組み込みコマンドをコマンドシーケンスの一部として使用するには、シェルを -c フラグで明示的に呼び出してコマンドをチェーンしてください。" +
+		"-i（インタラクティブモード）を使用すると、シェルのインタラクティブ設定（.zshrc、.bashrc など）を読み込めます — 環境がそれに依存している場合（rift でのディレクトリ移動、nvm、conda など）は必須です。\n\n" +
+		"例:\n  %s",
 
 	// Spell detail view
 	RiftSpellDetailName:      "スペル名：",
