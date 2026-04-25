@@ -86,14 +86,14 @@ Tears open a rift and teleports you to the directory bound to a waypoint name. P
 
 ```sh
 rift <name>
-rift <name> --cast <spell-name>
+rift <name> --cast <spell-name-or-command>
 ```
 
 **Flags**
 
 | Flag | Description |
 | ---- | ----------- |
-| `--cast <spell-name>` | Cast the named spell with the waypoint's path as the working directory instead of navigating there |
+| `--cast <spell-name-or-command>` | Instead of navigating, cast a learned spell or run a command string at the waypoint's path as the working directory |
 
 **Examples**
 
@@ -105,15 +105,19 @@ rift api
 rift ui
 # You are now at /Users/alice/projects/frontend/src/components
 
-# Cast a spell at a waypoint's path without changing your current directory
+# Cast a saved spell at a waypoint's path without changing your current directory
 rift api --cast build
 # runs: docker compose up --build (in /Users/alice/projects/backend/src/api)
+
+# Run a command string directly at a waypoint's path (no saved spell needed)
+rift api --cast "git status"
+# runs: git status (in /Users/alice/projects/backend/src/api)
 ```
 
 **Notes**
 - If the waypoint name does not exist, rift will tell you.
 - Waypoints persist across sessions — discover once, travel forever.
-- `--cast` requires the named spell to have been saved with `rift learn`.
+- `--cast` first tries to resolve the value as a saved spell name; if no match is found, it parses and runs the value as a raw command string.
 - When `--cast` is used, your working directory does not change.
 
 ---
@@ -236,10 +240,10 @@ rift learn build "make build"
 
 ### spell
 
-Casts a learned spell by name — runs its bound terminal command in the current working directory. Pass `--forget` to remove the spell instead.
+Casts a learned spell by name, or runs a command string directly in the current working directory. Pass `--forget` to remove a saved spell instead.
 
 ```sh
-rift spell <name>
+rift spell <name-or-command>
 rift spell <name> --forget
 ```
 
@@ -252,11 +256,16 @@ rift spell <name> --forget
 **Examples**
 
 ```sh
+# Cast a saved spell
 rift spell build
 # runs: docker compose up --build
 
 rift spell test
 # runs: go test ./...
+
+# Run a command string directly (no saved spell needed)
+rift spell "git log --oneline -10"
+# runs: git log --oneline -10
 
 # Remove a spell
 rift spell build --forget
@@ -264,9 +273,10 @@ rift spell build --forget
 ```
 
 **Notes**
-- The spell must have been saved with `rift learn` before it can be cast.
+- If the value matches a saved spell name, that spell is cast (and its cast count incremented). Otherwise, rift parses and runs the value as a raw command string.
 - The command runs in the directory you are in when you invoke `rift spell` — it does not change your working directory.
 - The exit code of the bound command is not propagated; rift is a launcher, not a validator of the command's outcome.
+- `--forget` only works with saved spell names, not raw command strings.
 - `--forget` is permanent — the spell cannot be recovered after removal.
 
 ---
