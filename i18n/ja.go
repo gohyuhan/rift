@@ -84,6 +84,7 @@ var jA = LanguageMapping{
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 	RiftRuneDescription:                   "ウェイポイントに移動時・離脱時のトリガーコマンドを設定します；rift でそのウェイポイントへ、またはそこから移動する際に自動的に実行されます",
 	RiftInscribeDescription:               "名前・任意の説明・コマンドで新しいリチュアルを刻みます；説明を省略する場合は空文字列（\"\"）を指定し、複数のコマンドは \\n で区切ります（例：rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\"）",
+	RiftFlagRitualOverrideDescription:     "同名の既存リチュアルを上書きします",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
@@ -129,6 +130,7 @@ var jA = LanguageMapping{
 	RiftRuneUpdateError:       "rift：パス %q のルーン更新に失敗しました、[ERROR: %s]",
 
 	// Ritual operations
+	RiftRitualSaved:                      "rift：リチュアル %q を刻みました",
 	RiftRitualDoNotExistsError:           "rift：リチュアル %q は存在しません",
 	RiftRitualUpdateError:                "rift：リチュアル %q の更新に失敗しました、[ERROR: %s]",
 	ForbiddenRiftNavigationRitualCommand: "rift：rift ウェイポイントナビゲーションコマンド（例: rift <ウェイポイント名>）はリチュアルではサポートされていません — 特定のディレクトリでコマンドを実行するには、`rift <ウェイポイント名> --cast <スペル名>` を使用してください。",
@@ -136,6 +138,8 @@ var jA = LanguageMapping{
 		"組み込みコマンドをコマンドシーケンスの一部として使用するには、シェルを -c フラグで明示的に呼び出してコマンドをチェーンしてください。" +
 		"-i（インタラクティブモード）を使用すると、シェルのインタラクティブ設定（.zshrc、.bashrc など）を読み込めます — 環境がそれに依存している場合（rift でのディレクトリ移動、nvm、conda など）は必須です。\n\n" +
 		"例:\n  %s",
+	RitualCommandEmpty:                    "rift：リチュアルコマンドは空にできません",
+	RitualExistAndOverrideNotAllowedError: "rift：リチュアル %q は既に存在します — --override を使用して上書きしてください",
 
 	// Spell detail view
 	RiftSpellDetailName:      "スペル名：",
