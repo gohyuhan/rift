@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "github.com/gohyuhan/rift/proto";
+
+message RitualCmds {
+  repeated string commands = 1;
+}
+
+// Ritual represent metadata of commands
+message Ritual {
+  string ritual_name = 1; // the assign name of the ritual
+  string ritual_desc = 2; // the summary description of the ritual
+  repeated RitualCmds ritual_cmds = 3; // the set of ritual commands
+  string ritual_added_at = 4; // when was this ritual added
+  int64 ritual_invoke_count = 5; // represent how many times user have invoke this ritual
+}
