@@ -276,6 +276,24 @@ kill <PID>
 
 ## Changelog
 
+### v0.3.1
+
+Spell
+
+- Direct command — `spell` and `--cast` now accept a command string directly, without requiring a named spell
+
+Shell
+
+- Builtin command detection — alert and block when user enters a shell builtin command (e.g. `cd`, `export`) that rift cannot execute
+
+i18n
+
+- Dynamic shell example — shell usage examples now reflect the user's current shell session
+
+Fix
+
+- Cast sequence — improved castspell handling for cast count tracking and edge cases in multi-cast sequences
+
 ### v0.3.0
 
 Core
