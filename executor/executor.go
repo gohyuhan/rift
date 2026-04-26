@@ -88,13 +88,13 @@ func (c *cmdExecutor) ExecWithPadding(args []string, executionPath string, envs 
 }
 
 // buildEnv returns a clean environment for a child process: strips the
-// inherited RIFT_RUNE_DEPTH, reads its value (default 0), increments it by 1,
+// inherited RIFT_EXECUTION_DEPTH, reads its value (default 0), increments it by 1,
 // injects the new value, then appends any caller-supplied overrides.
 func buildEnv(envs []string) []string {
 	depth := 0
 	base := make([]string, 0, len(os.Environ())+1)
 	for _, e := range os.Environ() {
-		if val, ok := strings.CutPrefix(e, "RIFT_RUNE_DEPTH="); ok {
+		if val, ok := strings.CutPrefix(e, "RIFT_EXECUTION_DEPTH="); ok {
 			if n, err := strconv.Atoi(val); err == nil {
 				depth = n
 			}
@@ -102,6 +102,6 @@ func buildEnv(envs []string) []string {
 		}
 		base = append(base, e)
 	}
-	base = append(base, fmt.Sprintf("RIFT_RUNE_DEPTH=%d", depth+1))
+	base = append(base, fmt.Sprintf("RIFT_EXECUTION_DEPTH=%d", depth+1))
 	return append(base, envs...)
 }

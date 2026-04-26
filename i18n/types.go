@@ -91,6 +91,8 @@ type LanguageMapping struct {
 	RiftRuneDescription                   string
 	RiftInscribeDescription               string
 	RiftFlagRitualOverrideDescription     string
+	RiftRitualDescription                 string
+	RiftFlagRitualForgetDescription       string
 
 	// Spell operations
 	RiftSpellSaved                      string
@@ -118,6 +120,8 @@ type LanguageMapping struct {
 	RitualCommandsInvalidDueToShellBuildInCommand string
 	RitualCommandEmpty                            string
 	RitualExistAndOverrideNotAllowedError         string
+	RiftRitualForgetSuccess                       string
+	RiftRitualForgetError                         string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string

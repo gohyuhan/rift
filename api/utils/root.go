@@ -60,10 +60,10 @@ func triggerWaypointRune(runeType string, path string) {
 		return
 	}
 
-	runeDepth := 0
-	if val, ok := os.LookupEnv("RIFT_RUNE_DEPTH"); ok {
+	executionDepth := 0
+	if val, ok := os.LookupEnv("RIFT_EXECUTION_DEPTH"); ok {
 		if n, err := strconv.Atoi(val); err == nil {
-			runeDepth = n
+			executionDepth = n
 		}
 	}
 
@@ -72,13 +72,13 @@ func triggerWaypointRune(runeType string, path string) {
 	switch runeType {
 	case RUNE_ON_ENTER:
 		runeCmds = rune.EnterRunes
-		logColor = style.EnterRuneColorCycle[runeDepth%len(style.EnterRuneColorCycle)]
+		logColor = style.ExecutionDepthColorCycle[executionDepth%len(style.ExecutionDepthColorCycle)]
 	case RUNE_ON_LEAVE:
 		runeCmds = rune.LeaveRunes
 		logColor = style.ColorYellowSoft
 	}
 
-	padding := strings.Repeat("  ", runeDepth)
+	padding := strings.Repeat(" ", executionDepth)
 	runeCmdsCount := len(runeCmds)
 	for index, cmd := range runeCmds {
 		if len(cmd.Commands) == 0 {
