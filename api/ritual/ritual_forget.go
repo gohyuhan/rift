@@ -26,7 +26,7 @@ func ForgetRitual(ritualName string, logToTerminal bool) error {
 	}
 	defer db.CloseDB(bboltWriteDb)
 
-	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
+	dbErr := bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		// ensure the ritual bucket exists before attempting the delete
 		ritualBucket := tx.Bucket(db.RitualBucket)
 		if ritualBucket == nil {
@@ -45,12 +45,13 @@ func ForgetRitual(ritualName string, logToTerminal bool) error {
 			corruptedRitualBucket.Delete([]byte(ritualName))
 		}
 
-		// log success to terminal
-		if logToTerminal {
-			message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftRitualForgetSuccess, ritualName), style.ColorGreenSoft, false)
-			logger.LOGGER.LogToTerminal([]string{message})
-		}
-
 		return nil
 	})
+
+	// log success to terminal
+	if dbErr == nil && logToTerminal {
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftRitualForgetSuccess, ritualName), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
+	}
+	return dbErr
 }
