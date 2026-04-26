@@ -10,6 +10,7 @@ var eN = LanguageMapping{
 	NotFileOrDirError:        "Path does not exist as a file or directory",
 	InvalidValueProvided:     "Invalid value provided, no whitespace allowed and cannot be empty",
 	SkippingDueToExecutorErr: "rift: rune command skipped — failed to start executor",
+	ExecCommandError:         "rift: can't initialize executor",
 
 	// Settings
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",

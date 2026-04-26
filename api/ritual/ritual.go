@@ -60,7 +60,7 @@ func InvokeRitual(ritualName, executionPath string) error {
 	ritualCmdsCount := len(retrievedRitualCmds)
 	for index, cmd := range retrievedRitualCmds {
 		if len(cmd.Commands) == 0 {
-			errMsg := padding + style.RenderStringWithColor(fmt.Sprintf("[RITUAL (%v/%v) - %s]", index+1, ritualCmdsCount, i18n.LANGUAGEMAPPING.SkippingDueToExecutorErr), style.ColorError, false)
+			errMsg := padding + style.RenderStringWithColor(fmt.Sprintf("[RITUAL (%v/%v) - %s]", index+1, ritualCmdsCount, i18n.LANGUAGEMAPPING.RitualCommandEmpty), style.ColorError, false)
 			logger.LOGGER.LogToTerminal([]string{errMsg})
 			continue
 		}
@@ -71,7 +71,10 @@ func InvokeRitual(ritualName, executionPath string) error {
 		}
 		msg := padding + style.RenderStringWithColor(fmt.Sprintf("[RITUAL (%v/%v) - %s]", index+1, ritualCmdsCount, strings.Join(cmd.Commands, " ")), logColor, false)
 		logger.LOGGER.LogToTerminal([]string{msg})
-		executor.CmdExecutor().ExecWithPadding(cmd.Commands, executionPath, nil, padding)
+		execErr := executor.CmdExecutor().ExecWithPadding(cmd.Commands, executionPath, nil, padding)
+		if execErr != nil {
+			return execErr
+		}
 	}
 
 	return nil

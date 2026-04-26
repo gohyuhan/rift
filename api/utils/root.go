@@ -93,6 +93,11 @@ func triggerWaypointRune(runeType string, path string) {
 		}
 		msg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s]", runeType, index+1, runeCmdsCount, strings.Join(cmd.Commands, " ")), logColor, false)
 		logger.LOGGER.LogToTerminal([]string{msg})
-		executor.CmdExecutor().ExecWithPadding(cmd.Commands, path, nil, padding)
+		execErr := executor.CmdExecutor().ExecWithPadding(cmd.Commands, path, nil, padding)
+		if execErr != nil {
+			errMsg := padding + style.RenderStringWithColor(fmt.Sprintf("[%s (%v/%v) - %s: %s]", runeType, index+1, runeCmdsCount, i18n.LANGUAGEMAPPING.SkippingDueToExecutorErr, execErr.Error()), style.ColorError, false)
+			logger.LOGGER.LogToTerminal([]string{errMsg})
+			return
+		}
 	}
 }

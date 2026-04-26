@@ -10,6 +10,7 @@ var zH_HANS = LanguageMapping{
 	NotFileOrDirError:        "指定路径不存在（非文件或目录）",
 	InvalidValueProvided:     "提供的值无效，不允许包含空格 且不能为空",
 	SkippingDueToExecutorErr: "rift：执行器启动失败，符文命令已跳过",
+	ExecCommandError:         "rift：执行器初始化失败",
 
 	// Settings
 	SettingsPathError:                 "无法访问设置目录，[ERROR: %s]",
