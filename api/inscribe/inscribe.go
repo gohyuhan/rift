@@ -15,9 +15,12 @@ var RiftInscribeFunc = func(command *cobra.Command, args []string) error {
 	ritualDesc := strings.TrimSpace(args[1])
 	ritualCmds := strings.TrimSpace(args[2])
 
-	overrideFlagCalled := command.Flags().Changed("override")
+	override, overrideErr := command.Flags().GetBool("override")
+	if overrideErr != nil {
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "override", overrideErr.Error()), style.ColorError, false))
+	}
 
-	saveRitualErr := SaveRitual(ritualName, ritualDesc, ritualCmds, overrideFlagCalled)
+	saveRitualErr := SaveRitual(ritualName, ritualDesc, ritualCmds, override)
 
 	if saveRitualErr != nil {
 		return saveRitualErr
