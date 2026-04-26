@@ -23,6 +23,7 @@ var inscribeCmd = &cobra.Command{
 //
 // ----------------------------------
 func init() {
+	inscribeCmd.Flags().Bool("override", false, "")
 	rootCmd.AddCommand(inscribeCmd)
 }
 
@@ -33,4 +34,5 @@ func init() {
 // ----------------------------------
 func initInscribeI18n() {
 	inscribeCmd.Short = i18n.LANGUAGEMAPPING.RiftInscribeDescription
+	inscribeCmd.Flags().Lookup("override").Usage = i18n.LANGUAGEMAPPING.RiftFlagRitualOverrideDescription
 }

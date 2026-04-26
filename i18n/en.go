@@ -31,6 +31,8 @@ var eN = LanguageMapping{
 	SpellDataCorruptedError:     "Spell data for [%s] is corrupted and could not be read",
 	RuneBucketNotFoundError:     "Rune bucket not found in database, perhaps rerun `rift awaken`",
 	RuneDataCorruptedError:      "Rune data for path [%s] is corrupted and could not be read",
+	RitualBucketNotFoundError:   "Ritual bucket not found in database, perhaps rerun `rift awaken`",
+	RitualDataCorruptedError:    "Ritual data for [%s] is corrupted and could not be read",
 
 	// Updater
 	UpdaterDownloadPrompt:               "A new version %s is available. Download now? (y/n): ",
@@ -82,6 +84,7 @@ var eN = LanguageMapping{
 	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
 	RiftRuneDescription:                   "Attach on-enter and on-leave trigger commands to a waypoint; triggers fire automatically when rift navigates to or from that waypoint",
 	RiftInscribeDescription:               "Inscribe a new ritual by name, optional description, and one or more commands; pass an empty string (\"\") to skip the description, separate multiple commands with \\n (e.g. rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\")",
+	RiftFlagRitualOverrideDescription:     "Override an existing ritual with the same name",
 
 	// Spell operations
 	RiftSpellSaved:            "rift: learned %q -> %s",
@@ -125,6 +128,18 @@ var eN = LanguageMapping{
 	RiftRuneEngraveSuccessful: "rift: rune engraved on waypoint %q",
 	RiftRuneEngraveNone:       "rift: no rune was engraved on waypoint %q",
 	RiftRuneUpdateError:       "rift: failed to update rune for path %q, [ERROR: %s]",
+
+	// Ritual operations
+	RiftRitualSaved:                      "rift: inscribed ritual %q",
+	RiftRitualDoNotExistsError:           "rift: ritual %q does not exist",
+	RiftRitualUpdateError:                "rift: failed to update ritual %q, [ERROR: %s]",
+	ForbiddenRiftNavigationRitualCommand: "rift: rift waypoint navigation commands (e.g. rift <waypointName>) are not supported in rituals — to run commands in a specific directory, use `rift <waypointName> --cast <spellName>` instead.",
+	RitualCommandsInvalidDueToShellBuildInCommand: "Detected shell built-in command (e.g. cd, export, source, alias) — built-ins only affect the process that runs them and cannot modify your current shell session. " +
+		"To use built-ins as part of a command sequence, invoke your shell explicitly with -c and chain your commands. " +
+		"Use -i (interactive mode) to load your shell's interactive config (.zshrc, .bashrc, etc.) — required if your environment depends on it (e.g. changing directory with rift, nvm, conda).\n\n" +
+		"Example:\n  %s",
+	RitualCommandEmpty:                    "rift: ritual command cannot be empty",
+	RitualExistAndOverrideNotAllowedError: "rift: ritual %q already exists — use --override to overwrite it",
 
 	// Spell detail view
 	RiftSpellDetailName:      "Spell Name:",

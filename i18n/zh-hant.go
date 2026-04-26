@@ -31,6 +31,8 @@ var zH_HANT = LanguageMapping{
 	SpellDataCorruptedError:     "咒語 [%s] 的資料已損毀，無法讀取",
 	RuneBucketNotFoundError:     "在資料庫中找不到符文儲存區，請重新執行 `rift awaken`",
 	RuneDataCorruptedError:      "路徑 [%s] 的符文資料已損毀，無法讀取",
+	RitualBucketNotFoundError:   "在資料庫中找不到儀式儲存區，請重新執行 `rift awaken`",
+	RitualDataCorruptedError:    "儀式 [%s] 的資料已損毀，無法讀取",
 
 	// Updater
 	UpdaterDownloadPrompt:               "發現新版本 %s，是否立即下載？(y/n): ",
@@ -82,6 +84,7 @@ var zH_HANT = LanguageMapping{
 	RiftFlagRetrieveError:                 "rift：取得旗標 %q 失敗，[ERROR: %s]",
 	RiftRuneDescription:                   "為航點綁定進入和離開時的觸發命令；當 rift 導航至或離開該航點時自動執行",
 	RiftInscribeDescription:               "透過名稱、可選描述和一個或多個命令刻錄新儀式；描述可傳空字串（\"\"）跳過，多個命令用 \\n 分隔（例：rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\"）",
+	RiftFlagRitualOverrideDescription:     "覆蓋同名的已存在儀式",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：已習得 %q -> %s",
@@ -125,6 +128,18 @@ var zH_HANT = LanguageMapping{
 	RiftRuneEngraveSuccessful: "rift：符文已刻印至航點 %q",
 	RiftRuneEngraveNone:       "rift：未將符文刻印至航點 %q",
 	RiftRuneUpdateError:       "rift：更新路徑 %q 的符文失敗，[ERROR: %s]",
+
+	// Ritual operations
+	RiftRitualSaved:                      "rift：儀式 %q 已刻錄",
+	RiftRitualDoNotExistsError:           "rift：儀式 %q 不存在",
+	RiftRitualUpdateError:                "rift：更新儀式 %q 失敗，[ERROR: %s]",
+	ForbiddenRiftNavigationRitualCommand: "rift：rift 路徑導航命令（如 rift <路徑點名稱>）不支援在儀式中使用 — 如需在特定目錄執行命令，請改用 `rift <路徑點名稱> --cast <咒語名稱>`。",
+	RitualCommandsInvalidDueToShellBuildInCommand: "偵測到儀式使用了 Shell 內建命令（如 cd、export、source、alias）——內建命令只影響執行它們的進程，無法修改當前 Shell 會話。" +
+		"如需在命令序列中使用內建命令，請使用 Shell 的 -c 參數顯式呼叫 Shell 並串連命令。" +
+		"使用 -i（互動模式）可載入 Shell 的互動設定（.zshrc、.bashrc 等）——若環境依賴其中內容（如使用 rift 切換目錄、nvm、conda）則必須使用此選項。\n\n" +
+		"範例:\n  %s",
+	RitualCommandEmpty:                    "rift：儀式命令不能為空",
+	RitualExistAndOverrideNotAllowedError: "rift：儀式 %q 已存在 — 使用 --override 覆蓋",
 
 	// Spell detail view
 	RiftSpellDetailName:      "咒語名稱：",
