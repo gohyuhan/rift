@@ -26,7 +26,7 @@ func DestroyDiscoveredWaypoint(waypointName string, logToTerminal bool) error {
 	}
 	defer db.CloseDB(bboltWriteDb)
 
-	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
+	dbErr := bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		// ensure the waypoint bucket exists before attempting the delete
 		waypointBucket := tx.Bucket(db.WaypointBucket)
 		if waypointBucket == nil {
@@ -46,12 +46,14 @@ func DestroyDiscoveredWaypoint(waypointName string, logToTerminal bool) error {
 			corruptedWaypointBucket.Delete([]byte(waypointName))
 		}
 
-		// report the destruction to the terminal
-		if logToTerminal {
-			message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroySuccess, waypointName), style.ColorGreenSoft, false)
-			logger.LOGGER.LogToTerminal([]string{message})
-		}
-
 		return nil
 	})
+
+	// report the destruction to the terminal
+	if dbErr == nil && logToTerminal {
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDestroySuccess, waypointName), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
+	}
+
+	return dbErr
 }

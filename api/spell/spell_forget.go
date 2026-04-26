@@ -26,7 +26,7 @@ func ForgetSpell(spellName string, logToTerminal bool) error {
 	}
 	defer db.CloseDB(bboltWriteDb)
 
-	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
+	dbErr := bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		// ensure the spell bucket exists before attempting the delete
 		spellBucket := tx.Bucket(db.SpellBucket)
 		if spellBucket == nil {
@@ -46,12 +46,14 @@ func ForgetSpell(spellName string, logToTerminal bool) error {
 			corruptedSpellBucket.Delete([]byte(spellName))
 		}
 
-		// report the forgetting to the terminal
-		if logToTerminal {
-			message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSpellForgetSuccess, spellName), style.ColorGreenSoft, false)
-			logger.LOGGER.LogToTerminal([]string{message})
-		}
-
 		return nil
 	})
+
+	// report the forgetting to the terminal
+	if dbErr == nil && logToTerminal {
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSpellForgetSuccess, spellName), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
+	}
+
+	return dbErr
 }

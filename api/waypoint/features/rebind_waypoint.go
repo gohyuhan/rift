@@ -47,7 +47,7 @@ func RebindWaypoint(waypointName string, rebindTo string, logToTerminal bool) er
 	}
 	defer db.CloseDB(bboltWriteDb)
 
-	return bboltWriteDb.Update(func(tx *bbolt.Tx) error {
+	dbErr := bboltWriteDb.Update(func(tx *bbolt.Tx) error {
 		// fetch the current waypoint record and its bucket in a single helper call
 		waypointBucket, waypoint, retrieveErr := apiUtils.GetWaypointForUpdate(tx, waypointName)
 		if retrieveErr != nil {
@@ -67,11 +67,14 @@ func RebindWaypoint(waypointName string, rebindTo string, logToTerminal bool) er
 			return putWaypointErr
 		}
 
-		// report the new binding to the terminal
-		if logToTerminal {
-			message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindSuccess, waypointName, rebindTo), style.ColorGreenSoft, false)
-			logger.LOGGER.LogToTerminal([]string{message})
-		}
 		return nil
 	})
+
+	// report the new binding to the terminal
+	if dbErr == nil && logToTerminal {
+		message := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointRebindSuccess, waypointName, rebindTo), style.ColorGreenSoft, false)
+		logger.LOGGER.LogToTerminal([]string{message})
+	}
+
+	return dbErr
 }
