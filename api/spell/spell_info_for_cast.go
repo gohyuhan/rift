@@ -28,41 +28,40 @@ func retrieveSpellInfoForCast(spellName string) ([]string, error) {
 	retrievedCmd := []string{}
 	spellCorrupted := false
 
-	// open DB for reading spell data
-	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
-	if bboltReadDbErr != nil {
-		return []string{}, bboltReadDbErr
-	}
-	defer db.CloseDB(bboltReadDb)
-
-	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket(db.SpellBucket)
-		if bucket == nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellBucketNotFoundError, style.ColorError, false))
+	viewErr := func() error {
+		// open DB for reading spell data
+		bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+		if bboltReadDbErr != nil {
+			return bboltReadDbErr
 		}
+		defer db.CloseDB(bboltReadDb)
 
-		// check the spell exists in the bucket
-		existing := bucket.Get([]byte(spellName))
-		if existing == nil {
-			errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSpellDoNotExistsError, spellName), style.ColorError, false)
-			return fmt.Errorf("%s", errorMessage)
-		}
+		return bboltReadDb.View(func(tx *bbolt.Tx) error {
+			bucket := tx.Bucket(db.SpellBucket)
+			if bucket == nil {
+				return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellBucketNotFoundError, style.ColorError, false))
+			}
 
-		// deserialize the stored proto; set the flag and return nil so the View
-		// commits cleanly — corruption recording is deferred to a follow-up Update
-		spellInfo := &pb.Spell{}
-		protoErr := proto.Unmarshal(existing, spellInfo)
-		if protoErr != nil {
-			spellCorrupted = true
+			// check the spell exists in the bucket
+			existing := bucket.Get([]byte(spellName))
+			if existing == nil {
+				errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftSpellDoNotExistsError, spellName), style.ColorError, false)
+				return fmt.Errorf("%s", errorMessage)
+			}
+
+			// deserialize the stored proto; set the flag and return nil so the View
+			// commits cleanly — corruption recording is deferred to a follow-up Update
+			spellInfo := &pb.Spell{}
+			protoErr := proto.Unmarshal(existing, spellInfo)
+			if protoErr != nil {
+				spellCorrupted = true
+				return nil
+			}
+
+			retrievedCmd = spellInfo.SpellCommand
 			return nil
-		}
-
-		retrievedCmd = spellInfo.SpellCommand
-		return nil
-	})
-
-	// close early so it will not block write connection below
-	db.CloseDB(bboltReadDb)
+		})
+	}()
 
 	if spellCorrupted {
 		viewErr = apiUtils.RecordCorruptedSpellInfo([]string{spellName})
