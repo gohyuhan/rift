@@ -10,6 +10,7 @@ var zH_HANS = LanguageMapping{
 	NotFileOrDirError:        "指定路径不存在（非文件或目录）",
 	InvalidValueProvided:     "提供的值无效，不允许包含空格 且不能为空",
 	SkippingDueToExecutorErr: "rift：执行器启动失败，符文命令已跳过",
+	ExecCommandError:         "rift：执行器初始化失败",
 
 	// Settings
 	SettingsPathError:                 "无法访问设置目录，[ERROR: %s]",
@@ -83,8 +84,10 @@ var zH_HANS = LanguageMapping{
 	RiftFlagCastDescription:               "代替导航，在航点路径下施放已习得的咒语或执行命令字符串（例：\"git commit -m 'msg'\"）；命令将以航点路径为工作目录执行",
 	RiftFlagRetrieveError:                 "rift：获取标志 %q 失败，[ERROR: %s]",
 	RiftRuneDescription:                   "为航点绑定进入和离开时的触发命令；当 rift 导航至或离开该航点时自动执行",
-	RiftInscribeDescription:               "通过名称、可选描述和一个或多个命令刻录新仪式；描述可传空字符串（\"\"）跳过，多个命令用 \\n 分隔（例：rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\"）",
+	RiftInscribeDescription:               "通过名称、可选描述和一个或多个命令刻录新仪式；描述可传空字符串（\"\"）跳过；多个命令用真实换行符分隔 — 在 bash/zsh 中使用 $'...' 语法让 \\n 成为真实换行符（例：rift inscribe deploy \"\" $'docker build -t app .\\ndocker run app'）",
 	RiftFlagRitualOverrideDescription:     "覆盖同名的已有仪式",
+	RiftRitualDescription:                 "按名称执行已刻录的仪式",
+	RiftFlagRitualForgetDescription:       "按名称删除一个已刻录的仪式",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：已习得 %q -> %s",
@@ -140,6 +143,8 @@ var zH_HANS = LanguageMapping{
 		"示例:\n  %s",
 	RitualCommandEmpty:                    "rift：仪式命令不能为空",
 	RitualExistAndOverrideNotAllowedError: "rift：仪式 %q 已存在 — 使用 --override 覆盖",
+	RiftRitualForgetSuccess:               "rift：仪式 %q 已被遗忘",
+	RiftRitualForgetError:                 "rift：遗忘仪式 %q 失败，[ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "咒语名称：",

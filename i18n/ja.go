@@ -10,6 +10,7 @@ var jA = LanguageMapping{
 	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
 	InvalidValueProvided:     "無効な値が指定されました。スペースは使用できません。また、空にすることもできません",
 	SkippingDueToExecutorErr: "rift：エグゼキューターの起動に失敗したため、ルーンコマンドをスキップします",
+	ExecCommandError:         "rift：エグゼキューターを初期化できません",
 
 	// Settings
 	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
@@ -83,8 +84,10 @@ var jA = LanguageMapping{
 	RiftFlagCastDescription:               "ナビゲーションの代わりに、習得したスペル名またはコマンド文字列（例：\"git commit -m 'msg'\"）をウェイポイントのパスを作業ディレクトリとして実行します",
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 	RiftRuneDescription:                   "ウェイポイントに移動時・離脱時のトリガーコマンドを設定します；rift でそのウェイポイントへ、またはそこから移動する際に自動的に実行されます",
-	RiftInscribeDescription:               "名前・任意の説明・コマンドで新しいリチュアルを刻みます；説明を省略する場合は空文字列（\"\"）を指定し、複数のコマンドは \\n で区切ります（例：rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\"）",
+	RiftInscribeDescription:               "名前・任意の説明・コマンドで新しいリチュアルを刻みます；説明を省略する場合は空文字列（\"\"）を指定し、複数のコマンドは実際の改行で区切ります — bash/zsh では $'...' 構文を使うと \\n が実際の改行になります（例：rift inscribe deploy \"\" $'docker build -t app .\\ndocker run app'）",
 	RiftFlagRitualOverrideDescription:     "同名の既存リチュアルを上書きします",
+	RiftRitualDescription:                 "刻まれたリチュアルを名前で実行します",
+	RiftFlagRitualForgetDescription:       "名前を指定して刻まれたリチュアルを削除します",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
@@ -140,6 +143,8 @@ var jA = LanguageMapping{
 		"例:\n  %s",
 	RitualCommandEmpty:                    "rift：リチュアルコマンドは空にできません",
 	RitualExistAndOverrideNotAllowedError: "rift：リチュアル %q は既に存在します — --override を使用して上書きしてください",
+	RiftRitualForgetSuccess:               "rift：リチュアル %q は忘れられました",
+	RiftRitualForgetError:                 "rift：リチュアル %q を忘れることができませんでした、[ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "スペル名：",

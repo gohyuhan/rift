@@ -7,6 +7,8 @@ import (
 	"os/exec"
 	"strconv"
 	"strings"
+
+	"github.com/gohyuhan/rift/i18n"
 )
 
 type cmdExecutor struct{}
@@ -58,43 +60,41 @@ func (c *cmdExecutor) RunCmd(args []string, executionPath string, envs []string)
 //	stderr. Falls back to plain Run when padding is empty or pipe fails.
 //
 // ----------------------------------
-func (c *cmdExecutor) ExecWithPadding(args []string, executionPath string, envs []string, padding string) {
+func (c *cmdExecutor) ExecWithPadding(args []string, executionPath string, envs []string, padding string) error {
 	cmd := c.RunCmd(args, executionPath, envs)
 	if cmd == nil {
-		return
+		return fmt.Errorf("%s", i18n.LANGUAGEMAPPING.ExecCommandError)
 	}
 	if padding == "" {
-		cmd.Run()
-		return
+		return cmd.Run()
 	}
 	pr, pw, err := os.Pipe()
 	if err != nil {
-		cmd.Run()
-		return
+		return cmd.Run()
 	}
 	defer pr.Close()
 	cmd.Stdout = pw
 	cmd.Stderr = pw
 	if err := cmd.Start(); err != nil {
 		pw.Close()
-		return
+		return err
 	}
 	pw.Close()
 	scanner := bufio.NewScanner(pr)
 	for scanner.Scan() {
 		fmt.Fprintf(os.Stderr, "%s%s\n", padding, scanner.Text())
 	}
-	cmd.Wait()
+	return cmd.Wait()
 }
 
 // buildEnv returns a clean environment for a child process: strips the
-// inherited RIFT_RUNE_DEPTH, reads its value (default 0), increments it by 1,
+// inherited RIFT_EXECUTION_DEPTH, reads its value (default 0), increments it by 1,
 // injects the new value, then appends any caller-supplied overrides.
 func buildEnv(envs []string) []string {
 	depth := 0
 	base := make([]string, 0, len(os.Environ())+1)
 	for _, e := range os.Environ() {
-		if val, ok := strings.CutPrefix(e, "RIFT_RUNE_DEPTH="); ok {
+		if val, ok := strings.CutPrefix(e, "RIFT_EXECUTION_DEPTH="); ok {
 			if n, err := strconv.Atoi(val); err == nil {
 				depth = n
 			}
@@ -102,6 +102,6 @@ func buildEnv(envs []string) []string {
 		}
 		base = append(base, e)
 	}
-	base = append(base, fmt.Sprintf("RIFT_RUNE_DEPTH=%d", depth+1))
+	base = append(base, fmt.Sprintf("RIFT_EXECUTION_DEPTH=%d", depth+1))
 	return append(base, envs...)
 }

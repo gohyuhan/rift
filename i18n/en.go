@@ -10,6 +10,7 @@ var eN = LanguageMapping{
 	NotFileOrDirError:        "Path does not exist as a file or directory",
 	InvalidValueProvided:     "Invalid value provided, no whitespace allowed and cannot be empty",
 	SkippingDueToExecutorErr: "rift: rune command skipped — failed to start executor",
+	ExecCommandError:         "rift: can't initialize executor",
 
 	// Settings
 	SettingsPathError:                 "Failed to access settings directory, [ERROR: %s]",
@@ -83,8 +84,10 @@ var eN = LanguageMapping{
 	RiftFlagCastDescription:               "Instead of navigation, cast a learned spell or run a command string (e.g. \"git commit -m 'msg'\") on the waypoint's path as the working directory",
 	RiftFlagRetrieveError:                 "rift: failed to retrieve flag %q, [ERROR: %s]",
 	RiftRuneDescription:                   "Attach on-enter and on-leave trigger commands to a waypoint; triggers fire automatically when rift navigates to or from that waypoint",
-	RiftInscribeDescription:               "Inscribe a new ritual by name, optional description, and one or more commands; pass an empty string (\"\") to skip the description, separate multiple commands with \\n (e.g. rift inscribe deploy \"\" \"docker build -t app .\\ndocker run app\")",
+	RiftInscribeDescription:               "Inscribe a new ritual by name, optional description, and one or more commands; pass an empty string (\"\") to skip the description; separate multiple commands with a real newline — in bash/zsh use $'...' so \\n becomes an actual newline (e.g. rift inscribe deploy \"\" $'docker build -t app .\\ndocker run app')",
 	RiftFlagRitualOverrideDescription:     "Override an existing ritual with the same name",
+	RiftRitualDescription:                 "Execute an inscribed ritual by name",
+	RiftFlagRitualForgetDescription:       "Remove an inscribed ritual by name",
 
 	// Spell operations
 	RiftSpellSaved:            "rift: learned %q -> %s",
@@ -140,6 +143,8 @@ var eN = LanguageMapping{
 		"Example:\n  %s",
 	RitualCommandEmpty:                    "rift: ritual command cannot be empty",
 	RitualExistAndOverrideNotAllowedError: "rift: ritual %q already exists — use --override to overwrite it",
+	RiftRitualForgetSuccess:               "rift: ritual %q has been forgotten",
+	RiftRitualForgetError:                 "rift: failed to forget ritual %q, [ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "Spell Name:",
