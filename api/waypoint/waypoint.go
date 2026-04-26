@@ -1,12 +1,15 @@
 package waypoint
 
 import (
+	"fmt"
 	"strings"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/api/waypoint/features"
 	waypointUI "github.com/gohyuhan/rift/api/waypoint/ui"
+	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
+	"github.com/gohyuhan/rift/style"
 	"github.com/spf13/cobra"
 )
 
@@ -41,11 +44,14 @@ var RiftWaypointFunc = func(cmd *cobra.Command, args []string) error {
 	waypointName := strings.TrimSpace(args[0])
 
 	// check which mutually exclusive operation flag was provided
-	destroyFlagCalled := cmd.Flags().Changed("destroy")
+	destroyFlag, destroyFlagErr := cmd.Flags().GetBool("destroy")
+	if destroyFlagErr != nil {
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "destroy", destroyFlagErr.Error()), style.ColorError, false))
+	}
 	rebindFlagCalled := cmd.Flags().Changed("rebind")
 	reforgeFlagCalled := cmd.Flags().Changed("reforge")
 
-	if destroyFlagCalled {
+	if destroyFlag {
 		// if destroy flag is called, we destroy the discovered waypoint in the waypoint bucket
 		destroyWaypointErr := features.DestroyDiscoveredWaypoint(waypointName, true)
 

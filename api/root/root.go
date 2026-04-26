@@ -32,12 +32,20 @@ import (
 //
 // ----------------------------------
 var RiftRootFunc = func(cmd *cobra.Command, args []string) error {
-	if cmd.Flags().Changed("update") {
+	updateFlag, updateFlagErr := cmd.Flags().GetBool("update")
+	if updateFlagErr != nil {
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "update", updateFlagErr.Error()), style.ColorError, false))
+	}
+	if updateFlag {
 		updater.Update()
 		return nil
 	}
 
-	if cmd.Flags().Changed("version") {
+	versionFlag, versionFlagErr := cmd.Flags().GetBool("version")
+	if versionFlagErr != nil {
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "version", versionFlagErr.Error()), style.ColorError, false))
+	}
+	if versionFlag {
 		message := style.RenderStringWithColor(constant.APPVERSION, style.ColorPurpleVibrant, false)
 		logger.LOGGER.LogToTerminal([]string{message})
 		return nil
