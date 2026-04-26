@@ -20,7 +20,7 @@ const (
 
 // this will be injected during build
 // example: go build -ldflags "-X rift/constant.APPVERSION=v1.x.x" -o main
-var APPVERSION = "v0.3.1"
+var APPVERSION = "v0.4.0-pr.1"
 
 var RiftRootFlags = []string{
 	"--language",
