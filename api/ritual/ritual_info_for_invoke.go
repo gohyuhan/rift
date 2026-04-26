@@ -28,41 +28,40 @@ func retrieveRitualInfoForInvoke(ritualName string) ([]*pb.RitualCmds, error) {
 	var retrievedRitualCmds []*pb.RitualCmds
 	ritualCorrupted := false
 
-	// open DB for reading ritual data
-	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
-	if bboltReadDbErr != nil {
-		return retrievedRitualCmds, bboltReadDbErr
-	}
-	defer db.CloseDB(bboltReadDb)
-
-	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket(db.RitualBucket)
-		if bucket == nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RitualBucketNotFoundError, style.ColorError, false))
+	viewErr := func() error {
+		// open DB for reading ritual data
+		bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+		if bboltReadDbErr != nil {
+			return bboltReadDbErr
 		}
+		defer db.CloseDB(bboltReadDb)
 
-		// check the ritual exists in the bucket
-		existing := bucket.Get([]byte(ritualName))
-		if existing == nil {
-			errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftRitualDoNotExistsError, ritualName), style.ColorError, false)
-			return fmt.Errorf("%s", errorMessage)
-		}
+		return bboltReadDb.View(func(tx *bbolt.Tx) error {
+			bucket := tx.Bucket(db.RitualBucket)
+			if bucket == nil {
+				return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RitualBucketNotFoundError, style.ColorError, false))
+			}
 
-		// deserialize the stored proto; set the flag and return nil so the View
-		// commits cleanly — corruption recording is deferred to a follow-up Update
-		ritualInfo := &pb.Ritual{}
-		protoErr := proto.Unmarshal(existing, ritualInfo)
-		if protoErr != nil {
-			ritualCorrupted = true
+			// check the ritual exists in the bucket
+			existing := bucket.Get([]byte(ritualName))
+			if existing == nil {
+				errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftRitualDoNotExistsError, ritualName), style.ColorError, false)
+				return fmt.Errorf("%s", errorMessage)
+			}
+
+			// deserialize the stored proto; set the flag and return nil so the View
+			// commits cleanly — corruption recording is deferred to a follow-up Update
+			ritualInfo := &pb.Ritual{}
+			protoErr := proto.Unmarshal(existing, ritualInfo)
+			if protoErr != nil {
+				ritualCorrupted = true
+				return nil
+			}
+
+			retrievedRitualCmds = ritualInfo.RitualCmds
 			return nil
-		}
-
-		retrievedRitualCmds = ritualInfo.RitualCmds
-		return nil
-	})
-
-	// close early so it will not block write connection below
-	db.CloseDB(bboltReadDb)
+		})
+	}()
 
 	if ritualCorrupted {
 		viewErr = apiUtils.RecordCorruptedRitualInfo([]string{ritualName})
