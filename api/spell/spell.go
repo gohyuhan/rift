@@ -23,9 +23,12 @@ import (
 var RiftSpellFunc = func(cmd *cobra.Command, args []string) error {
 	spellNameOrCmdString := strings.TrimSpace(args[0])
 	// --forget and casting are mutually exclusive; check which path to take
-	forgetFlagCalled := cmd.Flags().Changed("forget")
+	forgetFlag, forgetFlagErr := cmd.Flags().GetBool("forget")
+	if forgetFlagErr != nil {
+		return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftFlagRetrieveError, "forget", forgetFlagErr.Error()), style.ColorError, false))
+	}
 
-	if forgetFlagCalled {
+	if forgetFlag {
 		return ForgetSpell(spellNameOrCmdString, true)
 	} else {
 		executionPath, executionPathErr := utils.GetCWD()
