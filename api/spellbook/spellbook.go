@@ -26,8 +26,8 @@ var RiftSpellbookFunc = func(cmd *cobra.Command, args []string) error {
 		}
 
 		if spellName != "" && spellCastPath != "" {
-			// best-effort: increment spell cast count; failure is silently ignored
-			spell.RetrieveAndCastSpell(spellName, spellCastPath)
+			// Cast the spell; the cast count update is best-effort, but execution errors are returned.
+			return spell.RetrieveAndCastSpell(spellName, spellCastPath)
 		}
 
 		return nil

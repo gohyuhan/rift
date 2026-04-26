@@ -79,11 +79,8 @@ func CastSpell(spellNameOrCmdString string, executionPath string) error {
 		apiUtils.UpdateSpellCastedCount(spellNameOrCmdString)
 	}
 
-	// Run the user's command; the exit code is intentionally not propagated —
-	// rift is a launcher, not a validator of the command's outcome
-	spellCmdExecutor.Run()
-
-	return nil
+	// Run the user's command;
+	return spellCmdExecutor.Run()
 }
 
 // ----------------------------------
@@ -108,9 +105,6 @@ func RetrieveAndCastSpell(spellName string, executionPath string) error {
 	// best-effort: increment cast count; failure is silently ignored
 	apiUtils.UpdateSpellCastedCount(spellName)
 
-	// Run the user's command; the exit code is intentionally not propagated —
-	// rift is a launcher, not a validator of the command's outcome
-	spellCmdExecutor.Run()
-
-	return nil
+	// Run the user's command;
+	return spellCmdExecutor.Run()
 }
