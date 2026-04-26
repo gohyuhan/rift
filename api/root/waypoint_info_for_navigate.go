@@ -34,53 +34,52 @@ func retrieveWaypointInfoForNavigate(waypointName string) (string, error) {
 	needToSealReason := ""
 
 	// open DB for reading waypoint data
-	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
-	if bboltReadDbErr != nil {
-		return retrievedPath, bboltReadDbErr
-	}
-	defer db.CloseDB(bboltReadDb)
-
-	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
-		bucket := tx.Bucket(db.WaypointBucket)
-		if bucket == nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+	viewErr := func() error {
+		bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+		if bboltReadDbErr != nil {
+			return bboltReadDbErr
 		}
+		defer db.CloseDB(bboltReadDb)
 
-		// check the waypoint exists in the bucket
-		existing := bucket.Get([]byte(waypointName))
-		if existing == nil {
-			errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDoNotExistsError, waypointName), style.ColorError, false)
-			return fmt.Errorf("%s", errorMessage)
-		}
+		return bboltReadDb.View(func(tx *bbolt.Tx) error {
+			bucket := tx.Bucket(db.WaypointBucket)
+			if bucket == nil {
+				return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.WaypointBucketNotFoundError, style.ColorError, false))
+			}
 
-		// deserialize the stored proto; set the flag and return nil so the View
-		// commits cleanly — corruption recording is deferred to a follow-up Update
-		existingWaypoint := &pb.Waypoint{}
-		protoErr := proto.Unmarshal(existing, existingWaypoint)
-		if protoErr != nil {
-			waypointCorrupted = true
+			// check the waypoint exists in the bucket
+			existing := bucket.Get([]byte(waypointName))
+			if existing == nil {
+				errorMessage := style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointDoNotExistsError, waypointName), style.ColorError, false)
+				return fmt.Errorf("%s", errorMessage)
+			}
+
+			// deserialize the stored proto; set the flag and return nil so the View
+			// commits cleanly — corruption recording is deferred to a follow-up Update
+			existingWaypoint := &pb.Waypoint{}
+			protoErr := proto.Unmarshal(existing, existingWaypoint)
+			if protoErr != nil {
+				waypointCorrupted = true
+				return nil
+			}
+
+			// sealed means the path no longer exists or was manually sealed; block travel
+			if existingWaypoint.WaypointIsSealed {
+				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName, existingWaypoint.WaypointSealedReason), style.ColorError, false))
+			}
+
+			// verify the path still exists on disk; if not, seal the waypoint and abort
+			isPathExist, isPathExistErr := utils.CheckIsPathExist(existingWaypoint.WaypointPath)
+			if !isPathExist {
+				needToSealWaypoint = true
+				needToSealReason = isPathExistErr.Error()
+				return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName, isPathExistErr.Error()), style.ColorError, false))
+			}
+
+			retrievedPath = existingWaypoint.WaypointPath
 			return nil
-		}
-
-		// sealed means the path no longer exists or was manually sealed; block travel
-		if existingWaypoint.WaypointIsSealed {
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName, existingWaypoint.WaypointSealedReason), style.ColorError, false))
-		}
-
-		// verify the path still exists on disk; if not, seal the waypoint and abort
-		isPathExist, isPathExistErr := utils.CheckIsPathExist(existingWaypoint.WaypointPath)
-		if !isPathExist {
-			needToSealWaypoint = true
-			needToSealReason = isPathExistErr.Error()
-			return fmt.Errorf("%s", style.RenderStringWithColor(fmt.Sprintf(i18n.LANGUAGEMAPPING.RiftWaypointSealedError, waypointName, isPathExistErr.Error()), style.ColorError, false))
-		}
-
-		retrievedPath = existingWaypoint.WaypointPath
-		return nil
-	})
-
-	// close early so it will not block write connection below
-	db.CloseDB(bboltReadDb)
+		})
+	}()
 
 	if waypointCorrupted {
 		viewErr = apiUtils.RecordCorruptedWaypointInfo([]string{waypointName})

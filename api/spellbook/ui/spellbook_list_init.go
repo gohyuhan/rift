@@ -31,55 +31,54 @@ func getAllSpellInfo() ([]spellInfo, error) {
 	spellCorrupted := false
 
 	// open DB so we can read spell records
-	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
-	if bboltReadDbErr != nil {
-		return spellsInfo, bboltReadDbErr
-	}
-	defer db.CloseDB(bboltReadDb)
-
-	viewErr := bboltReadDb.View(func(tx *bbolt.Tx) error {
-		// ensure the spell bucket exists before iterating
-		spellBucket := tx.Bucket(db.SpellBucket)
-		if spellBucket == nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellBucketNotFoundError, style.ColorError, false))
+	viewErr := func() error {
+		bboltReadDb, bboltReadDbErr := db.OpenReadDB()
+		if bboltReadDbErr != nil {
+			return bboltReadDbErr
 		}
+		defer db.CloseDB(bboltReadDb)
 
-		// walk every key-value pair in the bucket
-		retrieveError := spellBucket.ForEach(func(k, v []byte) error {
-			// deserialize the stored proto; capture the name, set the flag, and
-			// return a sentinel error to stop ForEach — recording is deferred to
-			// a separate Update after the View transaction completes
-			existingSpell := &pb.Spell{}
-			protoErr := proto.Unmarshal(v, existingSpell)
+		return bboltReadDb.View(func(tx *bbolt.Tx) error {
+			// ensure the spell bucket exists before iterating
+			spellBucket := tx.Bucket(db.SpellBucket)
+			if spellBucket == nil {
+				return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.SpellBucketNotFoundError, style.ColorError, false))
+			}
 
-			// skip corrupted data
-			if protoErr != nil {
-				spellCorrupted = true
-				corruptedSpellName = append(corruptedSpellName, string(k))
+			// walk every key-value pair in the bucket
+			retrieveError := spellBucket.ForEach(func(k, v []byte) error {
+				// deserialize the stored proto; capture the name, set the flag, and
+				// return a sentinel error to stop ForEach — recording is deferred to
+				// a separate Update after the View transaction completes
+				existingSpell := &pb.Spell{}
+				protoErr := proto.Unmarshal(v, existingSpell)
+
+				// skip corrupted data
+				if protoErr != nil {
+					spellCorrupted = true
+					corruptedSpellName = append(corruptedSpellName, string(k))
+					return nil
+				}
+
+				// construct the spell info type
+				info := spellInfo{
+					SpellName:    string(k),
+					SpellCommand: existingSpell.SpellCommand,
+				}
+
+				spellsInfo = append(spellsInfo, info)
+
 				return nil
-			}
+			})
 
-			// construct the spell info type
-			info := spellInfo{
-				SpellName:    string(k),
-				SpellCommand: existingSpell.SpellCommand,
+			// wrap ForEach failure into a user-facing message
+			if retrieveError != nil {
+				return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RiftSpellRetrieveAllError, style.ColorError, false))
 			}
-
-			spellsInfo = append(spellsInfo, info)
 
 			return nil
 		})
-
-		// wrap ForEach failure into a user-facing message
-		if retrieveError != nil {
-			return fmt.Errorf("%s", style.RenderStringWithColor(i18n.LANGUAGEMAPPING.RiftSpellRetrieveAllError, style.ColorError, false))
-		}
-
-		return nil
-	})
-
-	// close early so it will not block write connection below
-	db.CloseDB(bboltReadDb)
+	}()
 
 	if spellCorrupted {
 		viewErr = apiUtils.RecordCorruptedSpellInfo(corruptedSpellName)

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	apiUtils "github.com/gohyuhan/rift/api/utils"
-	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/style"
 )
@@ -24,15 +23,6 @@ import (
 // ----------------------------------
 func RetrieveWaypointInfoDetail(waypointName string) ([]string, error) {
 	var waypointDetailInfo []string
-	var viewErr error
-	waypointCorrupted := false
-
-	// open DB so we can read waypoint records
-	bboltReadDb, bboltReadDbErr := db.OpenReadDB()
-	if bboltReadDbErr != nil {
-		return waypointDetailInfo, bboltReadDbErr
-	}
-	defer db.CloseDB(bboltReadDb)
 
 	existingWaypoint, viewErr := apiUtils.RetrieveWaypointInfo(waypointName)
 	if viewErr != nil {
@@ -103,14 +93,6 @@ func RetrieveWaypointInfoDetail(waypointName string) ([]string, error) {
 	if existingWaypoint.WaypointIsSealed {
 		reasonValue := style.RenderStringWithColor(existingWaypoint.WaypointSealedReason, style.ColorSealedMuted, false)
 		waypointDetailInfo = append(waypointDetailInfo, paddedLabels[5]+"  "+reasonValue)
-	}
-
-	// close early so it will not block write connection below
-	db.CloseDB(bboltReadDb)
-
-	// View is complete — safe to open an Update for the corruption write
-	if waypointCorrupted {
-		viewErr = apiUtils.RecordCorruptedWaypointInfo([]string{waypointName})
 	}
 
 	return waypointDetailInfo, viewErr
