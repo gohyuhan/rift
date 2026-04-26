@@ -23,9 +23,9 @@ var (
 	ColorSealedMuted   = lipgloss.Color("#5C5470")
 )
 
-// EnterRuneColorCycle provides 10 distinct vivid colors indexed by rune depth
+// ExecutionDepthColorCycle provides 10 distinct vivid colors indexed by execution depth
 // (depth % 10), so each nesting level has a unique color that repeats after 10.
-var EnterRuneColorCycle = []color.Color{
+var ExecutionDepthColorCycle = []color.Color{
 	lipgloss.Color("#FF4D4D"), // 0 red
 	lipgloss.Color("#FF9900"), // 1 orange
 	lipgloss.Color("#FFE600"), // 2 yellow

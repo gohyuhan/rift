@@ -10,6 +10,7 @@ var jA = LanguageMapping{
 	NotFileOrDirError:        "指定されたパスはファイルまたはディレクトリとして存在しません",
 	InvalidValueProvided:     "無効な値が指定されました。スペースは使用できません。また、空にすることもできません",
 	SkippingDueToExecutorErr: "rift：エグゼキューターの起動に失敗したため、ルーンコマンドをスキップします",
+	ExecCommandError:         "rift：エグゼキューターを初期化できません",
 
 	// Settings
 	SettingsPathError:                 "設定ディレクトリへのアクセスに失敗しました、[ERROR: %s]",
@@ -31,6 +32,8 @@ var jA = LanguageMapping{
 	SpellDataCorruptedError:     "スペル [%s] のデータが破損しており、読み込めません",
 	RuneBucketNotFoundError:     "データベースにルーンバケットが見つかりません。`rift awaken` を再実行してください",
 	RuneDataCorruptedError:      "パス [%s] のルーンデータが破損しており、読み込めません",
+	RitualBucketNotFoundError:   "データベースにリチュアルバケットが見つかりません。`rift awaken` を再実行してください",
+	RitualDataCorruptedError:    "リチュアル [%s] のデータが破損しており、読み込めません",
 
 	// Updater
 	UpdaterDownloadPrompt:               "新しいバージョン %s が利用可能です。今すぐダウンロードしますか？(y/n): ",
@@ -81,6 +84,10 @@ var jA = LanguageMapping{
 	RiftFlagCastDescription:               "ナビゲーションの代わりに、習得したスペル名またはコマンド文字列（例：\"git commit -m 'msg'\"）をウェイポイントのパスを作業ディレクトリとして実行します",
 	RiftFlagRetrieveError:                 "rift：フラグ %q の取得に失敗しました、[ERROR: %s]",
 	RiftRuneDescription:                   "ウェイポイントに移動時・離脱時のトリガーコマンドを設定します；rift でそのウェイポイントへ、またはそこから移動する際に自動的に実行されます",
+	RiftInscribeDescription:               "名前・任意の説明・コマンドで新しいリチュアルを刻みます；説明を省略する場合は空文字列（\"\"）を指定し、複数のコマンドは実際の改行で区切ります — bash/zsh では $'...' 構文を使うと \\n が実際の改行になります（例：rift inscribe deploy \"\" $'docker build -t app .\\ndocker run app'）",
+	RiftFlagRitualOverrideDescription:     "同名の既存リチュアルを上書きします",
+	RiftRitualDescription:                 "刻まれたリチュアルを名前で実行します",
+	RiftFlagRitualForgetDescription:       "名前を指定して刻まれたリチュアルを削除します",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
@@ -124,6 +131,20 @@ var jA = LanguageMapping{
 	RiftRuneEngraveSuccessful: "rift：ルーンをウェイポイント %q に刻みました",
 	RiftRuneEngraveNone:       "rift：ウェイポイント %q にルーンは刻まれませんでした",
 	RiftRuneUpdateError:       "rift：パス %q のルーン更新に失敗しました、[ERROR: %s]",
+
+	// Ritual operations
+	RiftRitualSaved:                      "rift：リチュアル %q を刻みました",
+	RiftRitualDoNotExistsError:           "rift：リチュアル %q は存在しません",
+	RiftRitualUpdateError:                "rift：リチュアル %q の更新に失敗しました、[ERROR: %s]",
+	ForbiddenRiftNavigationRitualCommand: "rift：rift ウェイポイントナビゲーションコマンド（例: rift <ウェイポイント名>）はリチュアルではサポートされていません — 特定のディレクトリでコマンドを実行するには、`rift <ウェイポイント名> --cast <スペル名>` を使用してください。",
+	RitualCommandsInvalidDueToShellBuildInCommand: "シェル組み込みコマンド（cd、export、source、alias など）が検出されました。組み込みコマンドは実行したプロセス内にのみ影響し、現在のシェルセッションを変更することはできません。" +
+		"組み込みコマンドをコマンドシーケンスの一部として使用するには、シェルを -c フラグで明示的に呼び出してコマンドをチェーンしてください。" +
+		"-i（インタラクティブモード）を使用すると、シェルのインタラクティブ設定（.zshrc、.bashrc など）を読み込めます — 環境がそれに依存している場合（rift でのディレクトリ移動、nvm、conda など）は必須です。\n\n" +
+		"例:\n  %s",
+	RitualCommandEmpty:                    "rift：リチュアルコマンドは空にできません",
+	RitualExistAndOverrideNotAllowedError: "rift：リチュアル %q は既に存在します — --override を使用して上書きしてください",
+	RiftRitualForgetSuccess:               "rift：リチュアル %q は忘れられました",
+	RiftRitualForgetError:                 "rift：リチュアル %q を忘れることができませんでした、[ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "スペル名：",

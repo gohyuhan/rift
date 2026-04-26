@@ -16,6 +16,7 @@ type LanguageMapping struct {
 	NotFileOrDirError        string
 	InvalidValueProvided     string
 	SkippingDueToExecutorErr string
+	ExecCommandError         string
 
 	// Settings
 	SettingsPathError                 string
@@ -37,6 +38,8 @@ type LanguageMapping struct {
 	SpellDataCorruptedError     string
 	RuneBucketNotFoundError     string
 	RuneDataCorruptedError      string
+	RitualBucketNotFoundError   string
+	RitualDataCorruptedError    string
 
 	// Updater
 	UpdaterDownloadPrompt               string
@@ -87,6 +90,10 @@ type LanguageMapping struct {
 	RiftFlagCastDescription               string
 	RiftFlagRetrieveError                 string
 	RiftRuneDescription                   string
+	RiftInscribeDescription               string
+	RiftFlagRitualOverrideDescription     string
+	RiftRitualDescription                 string
+	RiftFlagRitualForgetDescription       string
 
 	// Spell operations
 	RiftSpellSaved                      string
@@ -105,6 +112,17 @@ type LanguageMapping struct {
 	RiftRuneEngraveSuccessful string
 	RiftRuneEngraveNone       string
 	RiftRuneUpdateError       string
+
+	// Ritual operations
+	RiftRitualSaved                               string
+	RiftRitualDoNotExistsError                    string
+	RiftRitualUpdateError                         string
+	ForbiddenRiftNavigationRitualCommand          string
+	RitualCommandsInvalidDueToShellBuildInCommand string
+	RitualCommandEmpty                            string
+	RitualExistAndOverrideNotAllowedError         string
+	RiftRitualForgetSuccess                       string
+	RiftRitualForgetError                         string
 
 	// Waypoint operations
 	RiftSavedWaypoint                     string

@@ -10,6 +10,7 @@ var zH_HANS = LanguageMapping{
 	NotFileOrDirError:        "指定路径不存在（非文件或目录）",
 	InvalidValueProvided:     "提供的值无效，不允许包含空格 且不能为空",
 	SkippingDueToExecutorErr: "rift：执行器启动失败，符文命令已跳过",
+	ExecCommandError:         "rift：执行器初始化失败",
 
 	// Settings
 	SettingsPathError:                 "无法访问设置目录，[ERROR: %s]",
@@ -31,6 +32,8 @@ var zH_HANS = LanguageMapping{
 	SpellDataCorruptedError:     "咒语 [%s] 的数据已损坏，无法读取",
 	RuneBucketNotFoundError:     "在数据库中找不到符文存储区，请重新运行 `rift awaken`",
 	RuneDataCorruptedError:      "路径 [%s] 的符文数据已损坏，无法读取",
+	RitualBucketNotFoundError:   "在数据库中找不到仪式存储区，请重新运行 `rift awaken`",
+	RitualDataCorruptedError:    "仪式 [%s] 的数据已损坏，无法读取",
 
 	// Updater
 	UpdaterDownloadPrompt:               "发现新版本 %s，是否立即下载？(y/n): ",
@@ -81,6 +84,10 @@ var zH_HANS = LanguageMapping{
 	RiftFlagCastDescription:               "代替导航，在航点路径下施放已习得的咒语或执行命令字符串（例：\"git commit -m 'msg'\"）；命令将以航点路径为工作目录执行",
 	RiftFlagRetrieveError:                 "rift：获取标志 %q 失败，[ERROR: %s]",
 	RiftRuneDescription:                   "为航点绑定进入和离开时的触发命令；当 rift 导航至或离开该航点时自动执行",
+	RiftInscribeDescription:               "通过名称、可选描述和一个或多个命令刻录新仪式；描述可传空字符串（\"\"）跳过；多个命令用真实换行符分隔 — 在 bash/zsh 中使用 $'...' 语法让 \\n 成为真实换行符（例：rift inscribe deploy \"\" $'docker build -t app .\\ndocker run app'）",
+	RiftFlagRitualOverrideDescription:     "覆盖同名的已有仪式",
+	RiftRitualDescription:                 "按名称执行已刻录的仪式",
+	RiftFlagRitualForgetDescription:       "按名称删除一个已刻录的仪式",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：已习得 %q -> %s",
@@ -124,6 +131,20 @@ var zH_HANS = LanguageMapping{
 	RiftRuneEngraveSuccessful: "rift：符文已刻印到航点 %q",
 	RiftRuneEngraveNone:       "rift：未将符文刻印到航点 %q",
 	RiftRuneUpdateError:       "rift：更新路径 %q 的符文失败，[ERROR: %s]",
+
+	// Ritual operations
+	RiftRitualSaved:                      "rift：仪式 %q 已刻录",
+	RiftRitualDoNotExistsError:           "rift：仪式 %q 不存在",
+	RiftRitualUpdateError:                "rift：更新仪式 %q 失败，[ERROR: %s]",
+	ForbiddenRiftNavigationRitualCommand: "rift：rift 路径导航命令（如 rift <路径点名称>）不支持在仪式中使用 — 如需在特定目录运行命令，请改用 `rift <路径点名称> --cast <咒语名称>`。",
+	RitualCommandsInvalidDueToShellBuildInCommand: "检测到仪式使用了 Shell 内建命令（如 cd、export、source、alias）——内建命令只影响执行它们的进程，无法修改当前 Shell 会话。" +
+		"如需在命令序列中使用内建命令，请使用 Shell 的 -c 参数显式调用 Shell 并链接命令。" +
+		"使用 -i（交互模式）可加载 Shell 的交互配置（.zshrc、.bashrc 等）——若环境依赖其中内容（如使用 rift 切换目录、nvm、conda）则必须使用此选项。\n\n" +
+		"示例:\n  %s",
+	RitualCommandEmpty:                    "rift：仪式命令不能为空",
+	RitualExistAndOverrideNotAllowedError: "rift：仪式 %q 已存在 — 使用 --override 覆盖",
+	RiftRitualForgetSuccess:               "rift：仪式 %q 已被遗忘",
+	RiftRitualForgetError:                 "rift：遗忘仪式 %q 失败，[ERROR: %s]",
 
 	// Spell detail view
 	RiftSpellDetailName:      "咒语名称：",
