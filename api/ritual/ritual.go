@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 
+	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/executor"
 	"github.com/gohyuhan/rift/i18n"
 	"github.com/gohyuhan/rift/logger"
@@ -46,6 +47,8 @@ func InvokeRitual(ritualName, executionPath string) error {
 	if retrieveErr != nil {
 		return retrieveErr
 	}
+
+	apiUtils.UpdateRitualInvokedCount(ritualName)
 
 	executionDepth := 0
 	if val, ok := os.LookupEnv("RIFT_EXECUTION_DEPTH"); ok {

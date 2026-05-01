@@ -59,6 +59,7 @@ func InitCmdI18n() {
 	initRuneI18n()
 	initInscribeI18n()
 	initRitualI18n()
+	initScrollI18n()
 }
 
 // ----------------------------------

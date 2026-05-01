@@ -88,6 +88,7 @@ var eN = LanguageMapping{
 	RiftFlagRitualOverrideDescription:     "Override an existing ritual with the same name",
 	RiftRitualDescription:                 "Execute an inscribed ritual by name",
 	RiftFlagRitualForgetDescription:       "Remove an inscribed ritual by name",
+	RiftScrollDescription:                 "Start interactive UI for rituals or display info for a specific ritual",
 
 	// Spell operations
 	RiftSpellSaved:            "rift: learned %q -> %s",
@@ -151,6 +152,12 @@ var eN = LanguageMapping{
 	RiftSpellDetailCommand:   "Spell Command:",
 	RiftSpellDetailAddedAt:   "Spell Added At:",
 	RiftSpellDetailCastCount: "Spell Cast Count:",
+
+	// Ritual detail view
+	RiftRitualDetailName:        "Ritual Name:",
+	RiftRitualDetailCommands:    "Ritual Commands:",
+	RiftRitualDetailAddedAt:     "Ritual Added At:",
+	RiftRitualDetailInvokeCount: "Ritual Invoke Count:",
 
 	// Waypoint detail view
 	RiftWaypointDetailName:           "Waypoint Name:",
@@ -246,6 +253,40 @@ var eN = LanguageMapping{
 	RemoveRuneLeaveOptionName:  "Remove On-Leave Rune",
 	RemoveRuneLeaveOptionDesc:  "Clear the commands that run when leaving this waypoint",
 
+	// Scroll interactive UI
+	ScrollInteractiveError:                      "rift: scroll interactive session failed, [ERROR: %s]",
+	RiftRitualRetrieveAllError:                  "rift: failed to retrieve rituals",
+	RitualInfoListTitle:                         "Scroll",
+	RitualUIUpKeyHelp:                           "up",
+	RitualUIUpKeyHelpDescription:                "move the cursor to the previous ritual",
+	RitualUIDownKeyHelp:                         "down",
+	RitualUIDownKeyHelpDescription:              "move the cursor to the next ritual",
+	RitualUIQuitKeyHelp:                         "quit",
+	RitualUIQuitKeyHelpDescription:              "exit scroll interactive UI",
+	RitualUIHelpKeyHelp:                         "help",
+	RitualUIHelpKeyHelpDescription:              "show or hide the full key binding list",
+	RitualInscribeKeyHelp:                       "inscribe",
+	RitualInscribeKeyHelpDescription:            "inscribe a new ritual",
+	RitualInvokeKeyHelp:                         "invoke",
+	RitualInvokeKeyHelpDescription:              "invoke the ritual in the current working directory, or invoke at a discovered waypoint",
+	RitualReinscribeKeyHelp:                     "reinscribe",
+	RitualReinscribeKeyHelpDescription:          "edit the selected ritual",
+	RitualForgetKey:                             "forget",
+	RitualForgetKeyDescription:                  "permanently forget the selected ritual",
+	RitualClosePopUp:                            "close popup",
+	RitualClosePopUpDescription:                 "close the active popup without saving",
+	RitualUIInscribeKeyHelp:                     "inscribe",
+	RitualUINextInputKeyHelp:                    "next input",
+	RitualUIPreviousInputKeyHelp:                "previous input",
+	RitualUIChooseInvokeLocationKeyHelp:         "choose invoke location",
+	RitualUIChooseWaypointInvokeLocationKeyHelp: "choose waypoint to invoke ritual at",
+	RitualNameInputPlaceHolder:                  "Enter a name for the ritual",
+	RitualDescriptionInputPlaceHolder:           "Enter a description for the ritual (optional)",
+	RitualCommandsInputPlaceHolder:              "Enter commands for the ritual",
+	RitualNameInputTitle:                        "Ritual Name:",
+	RitualDescriptionInputTitle:                 "Ritual Description:",
+	RitualCommandsInputTitle:                    "Ritual Commands:",
+
 	// Cast location option popup
 	CastLocationOptionTitle:               "Cast Location",
 	CastLocationOptionCurrent:             "Current Directory",
@@ -253,6 +294,14 @@ var eN = LanguageMapping{
 	CastLocationOptionWaypoint:            "Waypoint",
 	CastLocationOptionWaypointDescription: "Choose from discovered waypoints and cast the spell there",
 	CastWaypointLocationOptionTitle:       "Choose Waypoint",
+
+	// Invoke location option popup
+	InvokeLocationOptionTitle:               "Invoke Location",
+	InvokeLocationOptionCurrent:             "Current Directory",
+	InvokeLocationOptionCurrentDescription:  "Invoke the ritual in the current working directory",
+	InvokeLocationOptionWaypoint:            "Waypoint",
+	InvokeLocationOptionWaypointDescription: "Choose from discovered waypoints and invoke the ritual there",
+	InvokeWaypointLocationOptionTitle:       "Choose Waypoint",
 
 	// Setup
 	CheckAndRunSetupError:  "rift: setup failed, [ERROR: %s]",
