@@ -229,6 +229,14 @@ func handleTypingInteraction(m *ScrollInteractiveModel, msg tea.KeyPressMsg) (*S
 			popUp, ok := m.RitualPopUpModel.(*InscribePopUpModel)
 			if ok {
 				if popUp.RitualCommandsInput.Focused() || popUp.RitualDescriptionInput.Focused() || popUp.RitualNameInput.Focused() || popUp.InscribeDisable.Load() {
+					if popUp.RitualNameInput.Focused() {
+						popUp.RitualNameInput, cmd = popUp.RitualNameInput.Update(msg)
+					} else if popUp.RitualDescriptionInput.Focused() {
+						popUp.RitualDescriptionInput, cmd = popUp.RitualDescriptionInput.Update(msg)
+					} else if popUp.RitualCommandsInput.Focused() {
+						popUp.RitualCommandsInput, cmd = popUp.RitualCommandsInput.Update(msg)
+						validateAndUpdateRitualPopUpState(popUp)
+					}
 					return m, nil
 				}
 				var ritualName string

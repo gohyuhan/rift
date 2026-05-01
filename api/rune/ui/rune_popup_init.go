@@ -103,6 +103,7 @@ func initEngraveRuneCommandsPopUpModel(m *RuneInteractiveModel, runeEngraveOptio
 	runeCommandsTextArea.SetVirtualCursor(true)
 	runeCommandsTextArea.DynamicHeight = true
 	runeCommandsTextArea.MinHeight = 3
+	runeCommandsTextArea.MaxContentHeight = 9999
 	runeCommandsTextArea.MoveToEnd()
 	focusCmd := runeCommandsTextArea.Focus()
 

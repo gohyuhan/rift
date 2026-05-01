@@ -36,6 +36,7 @@ func initInscribePopUpModel(m *ScrollInteractiveModel, ritualName string, edit b
 	ritualDescInput.DynamicHeight = true
 	ritualDescInput.MinHeight = 1
 	ritualDescInput.MaxHeight = 3
+	ritualDescInput.MaxContentHeight = 9999
 
 	ritualCmdsInput := textarea.New()
 	ritualCmdsInput.SetValue("")
@@ -44,6 +45,7 @@ func initInscribePopUpModel(m *ScrollInteractiveModel, ritualName string, edit b
 	ritualCmdsInput.DynamicHeight = true
 	ritualCmdsInput.MinHeight = 3
 	ritualCmdsInput.MaxHeight = 7
+	ritualCmdsInput.MaxContentHeight = 9999
 
 	var focusCmd tea.Cmd
 	if edit {
