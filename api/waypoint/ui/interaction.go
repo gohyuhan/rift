@@ -46,7 +46,7 @@ func handleNonTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg
 			m.ShowPopUp.Store(true)
 			m.IsTypingMode.Store(true)
 			m.PopUpType = RebindPopUp
-			initRebindPopUp(m, parsedWaypointName)
+			return m, initRebindPopUp(m, parsedWaypointName)
 		}
 		return m, nil
 	case "R":
@@ -57,7 +57,7 @@ func handleNonTypingInteraction(m *WaypointInteractiveModel, msg tea.KeyPressMsg
 			m.ShowPopUp.Store(true)
 			m.IsTypingMode.Store(true)
 			m.PopUpType = ReforgePopUp
-			initReforgePopUp(m, parsedWaypointName)
+			return m, initReforgePopUp(m, parsedWaypointName)
 		}
 		return m, nil
 	case "u", "U":

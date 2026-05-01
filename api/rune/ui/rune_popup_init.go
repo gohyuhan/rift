@@ -89,7 +89,7 @@ func initChooseRuneEngraveOptionPopUpModel(m *RuneInteractiveModel) tea.Cmd {
 //	the textarea contains at least one valid non-cd command.
 //
 // ----------------------------------
-func initEngraveRuneCommandsPopUpModel(m *RuneInteractiveModel, runeEngraveOptionType string) {
+func initEngraveRuneCommandsPopUpModel(m *RuneInteractiveModel, runeEngraveOptionType string) tea.Cmd {
 	var value string
 	switch runeEngraveOptionType {
 	case EngraveRuneEnterType:
@@ -100,8 +100,8 @@ func initEngraveRuneCommandsPopUpModel(m *RuneInteractiveModel, runeEngraveOptio
 	runeCommandsTextArea := textarea.New()
 	runeCommandsTextArea.SetValue(value)
 	runeCommandsTextArea.Placeholder = i18n.LANGUAGEMAPPING.RuneCommandsPlaceHolder
-	runeCommandsTextArea.Focus()
 	runeCommandsTextArea.SetVirtualCursor(true)
+	focusCmd := runeCommandsTextArea.Focus()
 
 	popUpModel := &EngraveRuneCommandsPopUpModel{
 		RuneCommandsTextArea:  runeCommandsTextArea,
@@ -113,4 +113,5 @@ func initEngraveRuneCommandsPopUpModel(m *RuneInteractiveModel, runeEngraveOptio
 	validateAndUpdateRunePopUpState(popUpModel)
 
 	m.RunePopUpModel = popUpModel
+	return focusCmd
 }
