@@ -68,6 +68,7 @@ func initInscribePopUpModel(m *ScrollInteractiveModel, ritualName string, edit b
 	}
 
 	m.RitualPopUpModel = popUpModel
+	validateAndUpdateRitualPopUpState(popUpModel)
 	return focusCmd
 }
 

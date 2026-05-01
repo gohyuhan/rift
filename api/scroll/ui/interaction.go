@@ -204,7 +204,7 @@ func handleTypingInteraction(m *ScrollInteractiveModel, msg tea.KeyPressMsg) (*S
 						popUp.RitualDescriptionInput, cmd = popUp.RitualDescriptionInput.Update(msg)
 					case 1:
 						popUp.RitualCommandsInput, cmd = popUp.RitualCommandsInput.Update(msg)
-						validateAndUpdateRunePopUpState(popUp)
+						validateAndUpdateRitualPopUpState(popUp)
 					}
 				} else {
 					switch popUp.CurrentFocusInputIndex {
@@ -214,7 +214,7 @@ func handleTypingInteraction(m *ScrollInteractiveModel, msg tea.KeyPressMsg) (*S
 						popUp.RitualDescriptionInput, cmd = popUp.RitualDescriptionInput.Update(msg)
 					case 2:
 						popUp.RitualCommandsInput, cmd = popUp.RitualCommandsInput.Update(msg)
-						validateAndUpdateRunePopUpState(popUp)
+						validateAndUpdateRitualPopUpState(popUp)
 					}
 				}
 			}
@@ -343,7 +343,7 @@ func handleTypingInteraction(m *ScrollInteractiveModel, msg tea.KeyPressMsg) (*S
 					popUp.RitualDescriptionInput, cmd = popUp.RitualDescriptionInput.Update(msg)
 				case 1:
 					popUp.RitualCommandsInput, cmd = popUp.RitualCommandsInput.Update(msg)
-					validateAndUpdateRunePopUpState(popUp)
+					validateAndUpdateRitualPopUpState(popUp)
 				}
 			} else {
 				switch popUp.CurrentFocusInputIndex {
@@ -353,7 +353,7 @@ func handleTypingInteraction(m *ScrollInteractiveModel, msg tea.KeyPressMsg) (*S
 					popUp.RitualDescriptionInput, cmd = popUp.RitualDescriptionInput.Update(msg)
 				case 2:
 					popUp.RitualCommandsInput, cmd = popUp.RitualCommandsInput.Update(msg)
-					validateAndUpdateRunePopUpState(popUp)
+					validateAndUpdateRitualPopUpState(popUp)
 				}
 			}
 			return m, cmd
@@ -362,7 +362,7 @@ func handleTypingInteraction(m *ScrollInteractiveModel, msg tea.KeyPressMsg) (*S
 	return m, nil
 }
 
-func validateAndUpdateRunePopUpState(popUp *InscribePopUpModel) {
+func validateAndUpdateRitualPopUpState(popUp *InscribePopUpModel) {
 	normCmds, err := apiUtils.NormalizeAndCheckRitualCommandsAreValid(popUp.RitualCommandsInput.Value())
 	if err != nil {
 		popUp.Error = err
