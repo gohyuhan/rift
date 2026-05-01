@@ -75,7 +75,7 @@ func renderEngraveRuneCommandsPopUp(m *RuneInteractiveModel) string {
 
 		textAreaHeight := int(float64(maxHeight) * 0.65)
 		popUp.RuneCommandsTextArea.SetWidth(maxWidth - TextInputWidthPad)
-		popUp.RuneCommandsTextArea.SetHeight(textAreaHeight)
+		popUp.RuneCommandsTextArea.MaxHeight = textAreaHeight
 		var title string
 		switch popUp.RuneEngraveOptionType {
 		case EngraveRuneEnterType:
