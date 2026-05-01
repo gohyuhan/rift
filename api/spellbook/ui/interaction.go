@@ -67,7 +67,7 @@ func handleNonTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMs
 			m.PopUpType = LearnPopUp
 			m.ShowPopUp.Store(true)
 			m.IsTypingMode.Store(true)
-			initLearnPopUpModel(m)
+			return m, initLearnPopUpModel(m)
 		}
 	case "?":
 		m.ShowPopUp.Store(true)
@@ -220,7 +220,7 @@ func handleTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMsg) 
 				case 0:
 					popUp.CurrentFocusInputIndex = 1
 					popUp.SpellNameInput.Blur()
-					popUp.SpellCommandInput.Focus()
+					cmd = popUp.SpellCommandInput.Focus()
 				case 1:
 					// does nothing
 				}
@@ -238,7 +238,7 @@ func handleTypingInteraction(m *SpellbookInteractiveModel, msg tea.KeyPressMsg) 
 					// does nothing
 				case 1:
 					popUp.CurrentFocusInputIndex = 0
-					popUp.SpellNameInput.Focus()
+					cmd = popUp.SpellNameInput.Focus()
 					popUp.SpellCommandInput.Blur()
 				}
 				return m, cmd

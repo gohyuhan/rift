@@ -3,6 +3,7 @@ package ui
 import (
 	"charm.land/bubbles/v2/list"
 	"charm.land/bubbles/v2/textinput"
+	tea "charm.land/bubbletea/v2"
 	"github.com/charmbracelet/x/ansi"
 	"github.com/gohyuhan/rift/api/learn"
 	apiUtils "github.com/gohyuhan/rift/api/utils"
@@ -19,12 +20,12 @@ import (
 //	to the database
 //
 // ----------------------------------
-func initLearnPopUpModel(m *SpellbookInteractiveModel) {
+func initLearnPopUpModel(m *SpellbookInteractiveModel) tea.Cmd {
 	spellNameInput := textinput.New()
 	spellNameInput.SetValue("")
 	spellNameInput.Placeholder = i18n.LANGUAGEMAPPING.SpellNameInputPlaceHolder
-	spellNameInput.Focus()
 	spellNameInput.SetVirtualCursor(true)
+	focusCmd := spellNameInput.Focus()
 
 	spellCmdInput := textinput.New()
 	spellCmdInput.SetValue("")
@@ -41,6 +42,7 @@ func initLearnPopUpModel(m *SpellbookInteractiveModel) {
 	}
 
 	m.SpellPopUpModel = popUpModel
+	return focusCmd
 }
 
 // ----------------------------------

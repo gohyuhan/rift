@@ -2,6 +2,7 @@ package ui
 
 import (
 	"charm.land/bubbles/v2/textinput"
+	tea "charm.land/bubbletea/v2"
 	"github.com/gohyuhan/rift/api/waypoint/features"
 	"github.com/gohyuhan/rift/i18n"
 )
@@ -14,12 +15,12 @@ import (
 //	RebindWaypoint trigger function) on m.WaypointPopUpModel ready for render
 //
 // ----------------------------------
-func initRebindPopUp(m *WaypointInteractiveModel, waypointName string) {
+func initRebindPopUp(m *WaypointInteractiveModel, waypointName string) tea.Cmd {
 	rebindPathInput := textinput.New()
 	rebindPathInput.SetValue("")
 	rebindPathInput.Placeholder = i18n.LANGUAGEMAPPING.RebindPathInputPlaceHolder
-	rebindPathInput.Focus()
 	rebindPathInput.SetVirtualCursor(true)
+	focusCmd := rebindPathInput.Focus()
 
 	popUpModel := &RebindPopUpModel{
 		RebindPathInput:    rebindPathInput,
@@ -29,6 +30,7 @@ func initRebindPopUp(m *WaypointInteractiveModel, waypointName string) {
 	}
 
 	m.WaypointPopUpModel = popUpModel
+	return focusCmd
 }
 
 // ----------------------------------
@@ -39,12 +41,12 @@ func initRebindPopUp(m *WaypointInteractiveModel, waypointName string) {
 //	ReforgeWaypoint trigger function) on m.WaypointPopUpModel ready for render
 //
 // ----------------------------------
-func initReforgePopUp(m *WaypointInteractiveModel, waypointName string) {
+func initReforgePopUp(m *WaypointInteractiveModel, waypointName string) tea.Cmd {
 	reforgeWaypointNameInput := textinput.New()
 	reforgeWaypointNameInput.SetValue("")
 	reforgeWaypointNameInput.Placeholder = i18n.LANGUAGEMAPPING.ReforgeWaypointNameInputPlaceHolder
-	reforgeWaypointNameInput.Focus()
 	reforgeWaypointNameInput.SetVirtualCursor(true)
+	focusCmd := reforgeWaypointNameInput.Focus()
 
 	popUpModel := &ReforgePopUpModel{
 		ReforgeWaypointNameInput: reforgeWaypointNameInput,
@@ -54,4 +56,5 @@ func initReforgePopUp(m *WaypointInteractiveModel, waypointName string) {
 	}
 
 	m.WaypointPopUpModel = popUpModel
+	return focusCmd
 }

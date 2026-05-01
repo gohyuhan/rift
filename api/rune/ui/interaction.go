@@ -42,11 +42,11 @@ func handleNonTypingInteraction(m *RuneInteractiveModel, msg tea.KeyPressMsg) (*
 					case EngraveRuneEnterType:
 						m.PopUpType = EngraveRuneCommandsPopUp
 						m.IsTypingMode.Store(true)
-						initEngraveRuneCommandsPopUpModel(m, EngraveRuneEnterType)
+						cmd = initEngraveRuneCommandsPopUpModel(m, EngraveRuneEnterType)
 					case EngraveRuneLeaveType:
 						m.PopUpType = EngraveRuneCommandsPopUp
 						m.IsTypingMode.Store(true)
-						initEngraveRuneCommandsPopUpModel(m, EngraveRuneLeaveType)
+						cmd = initEngraveRuneCommandsPopUpModel(m, EngraveRuneLeaveType)
 					case RemoveRuneEnterType:
 						apiUtils.RemoveEnterRuneCmds(m.ChosenWaypointPath)
 						cmd = initChooseRuneEngraveOptionPopUpModel(m)
