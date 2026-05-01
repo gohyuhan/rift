@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"charm.land/lipgloss/v2"
 	apiUtils "github.com/gohyuhan/rift/api/utils"
 	"github.com/gohyuhan/rift/db"
 	"github.com/gohyuhan/rift/i18n"
@@ -81,7 +82,7 @@ func RetrieveRitualInfoDetail(ritualName string) ([]string, error) {
 				if i == 0 {
 					ritualDetailInfo = append(ritualDetailInfo, paddedLabels[1]+"  "+normalizedCommands[i])
 				} else {
-					ritualDetailInfo = append(ritualDetailInfo, strings.Repeat(" ", len(paddedLabels[1]))+"  "+normalizedCommands[i])
+					ritualDetailInfo = append(ritualDetailInfo, strings.Repeat(" ", lipgloss.Width(paddedLabels[1]))+"  "+normalizedCommands[i])
 				}
 			}
 
