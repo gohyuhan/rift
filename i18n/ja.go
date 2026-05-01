@@ -88,6 +88,7 @@ var jA = LanguageMapping{
 	RiftFlagRitualOverrideDescription:     "同名の既存リチュアルを上書きします",
 	RiftRitualDescription:                 "刻まれたリチュアルを名前で実行します",
 	RiftFlagRitualForgetDescription:       "名前を指定して刻まれたリチュアルを削除します",
+	RiftScrollDescription:                 "リチュアルのインタラクティブUIを起動するか、特定のリチュアルの情報を表示します",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：%q -> %s を習得しました",
@@ -151,6 +152,12 @@ var jA = LanguageMapping{
 	RiftSpellDetailCommand:   "スペルコマンド：",
 	RiftSpellDetailAddedAt:   "スペル追加日時：",
 	RiftSpellDetailCastCount: "スペルキャスト回数：",
+
+	// Ritual detail view
+	RiftRitualDetailName:        "リチュアル名：",
+	RiftRitualDetailCommands:    "リチュアルコマンド：",
+	RiftRitualDetailAddedAt:     "リチュアル追加日時：",
+	RiftRitualDetailInvokeCount: "リチュアル実行回数：",
 
 	// Waypoint detail view
 	RiftWaypointDetailName:           "ウェイポイント名：",
@@ -246,6 +253,40 @@ var jA = LanguageMapping{
 	RemoveRuneLeaveOptionName:  "離脱時ルーンを削除する",
 	RemoveRuneLeaveOptionDesc:  "このウェイポイントから離脱した際に実行するコマンドを削除する",
 
+	// Scroll interactive UI
+	ScrollInteractiveError:                      "rift：スクロールインタラクティブセッションの起動に失敗しました、[ERROR: %s]",
+	RiftRitualRetrieveAllError:                  "rift：リチュアルの取得に失敗しました",
+	RitualInfoListTitle:                         "スクロール",
+	RitualUIUpKeyHelp:                           "上へ",
+	RitualUIUpKeyHelpDescription:                "前のリチュアルにカーソルを移動する",
+	RitualUIDownKeyHelp:                         "下へ",
+	RitualUIDownKeyHelpDescription:              "次のリチュアルにカーソルを移動する",
+	RitualUIQuitKeyHelp:                         "終了",
+	RitualUIQuitKeyHelpDescription:              "スクロールインタラクティブUIを終了する",
+	RitualUIHelpKeyHelp:                         "ヘルプ",
+	RitualUIHelpKeyHelpDescription:              "キーバインド一覧の表示・非表示を切り替える",
+	RitualInscribeKeyHelp:                       "刻む",
+	RitualInscribeKeyHelpDescription:            "新しいリチュアルを刻む",
+	RitualInvokeKeyHelp:                         "実行",
+	RitualInvokeKeyHelpDescription:              "現在の作業ディレクトリでリチュアルを実行する、またはウェイポイントで実行する",
+	RitualReinscribeKeyHelp:                     "再刻印",
+	RitualReinscribeKeyHelpDescription:          "選択したリチュアルを編集する",
+	RitualForgetKey:                             "忘却",
+	RitualForgetKeyDescription:                  "選択したリチュアルを完全に忘却する",
+	RitualClosePopUp:                            "ポップアップを閉じる",
+	RitualClosePopUpDescription:                 "保存せずに現在のポップアップを閉じる",
+	RitualUIInscribeKeyHelp:                     "刻む",
+	RitualUINextInputKeyHelp:                    "次の入力",
+	RitualUIPreviousInputKeyHelp:                "前の入力",
+	RitualUIChooseInvokeLocationKeyHelp:         "実行場所を選択",
+	RitualUIChooseWaypointInvokeLocationKeyHelp: "リチュアルを実行するウェイポイントを選択",
+	RitualNameInputPlaceHolder:                  "リチュアルの名前を入力してください",
+	RitualDescriptionInputPlaceHolder:           "リチュアルの説明を入力してください（任意）",
+	RitualCommandsInputPlaceHolder:              "リチュアルのコマンドを入力してください",
+	RitualNameInputTitle:                        "リチュアル名：",
+	RitualDescriptionInputTitle:                 "リチュアルの説明：",
+	RitualCommandsInputTitle:                    "リチュアルコマンド：",
+
 	// Cast location option popup
 	CastLocationOptionTitle:               "詠唱場所",
 	CastLocationOptionCurrent:             "現在のディレクトリ",
@@ -253,6 +294,14 @@ var jA = LanguageMapping{
 	CastLocationOptionWaypoint:            "ウェイポイント",
 	CastLocationOptionWaypointDescription: "発見済みのウェイポイントから選択し、そこでスペルを詠唱する",
 	CastWaypointLocationOptionTitle:       "ウェイポイントを選択",
+
+	// Invoke location option popup
+	InvokeLocationOptionTitle:               "実行場所",
+	InvokeLocationOptionCurrent:             "現在のディレクトリ",
+	InvokeLocationOptionCurrentDescription:  "現在の作業ディレクトリでリチュアルを実行する",
+	InvokeLocationOptionWaypoint:            "ウェイポイント",
+	InvokeLocationOptionWaypointDescription: "発見済みのウェイポイントから選択し、そこでリチュアルを実行する",
+	InvokeWaypointLocationOptionTitle:       "ウェイポイントを選択",
 
 	// Setup
 	CheckAndRunSetupError:  "rift：セットアップに失敗しました、[ERROR: %s]",

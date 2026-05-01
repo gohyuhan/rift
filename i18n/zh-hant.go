@@ -88,6 +88,7 @@ var zH_HANT = LanguageMapping{
 	RiftFlagRitualOverrideDescription:     "覆蓋同名的已存在儀式",
 	RiftRitualDescription:                 "依名稱執行已刻錄的儀式",
 	RiftFlagRitualForgetDescription:       "依名稱移除一個已刻錄的儀式",
+	RiftScrollDescription:                 "啟動儀式互動介面或顯示指定儀式的詳情",
 
 	// Spell operations
 	RiftSpellSaved:            "rift：已習得 %q -> %s",
@@ -151,6 +152,12 @@ var zH_HANT = LanguageMapping{
 	RiftSpellDetailCommand:   "咒語命令：",
 	RiftSpellDetailAddedAt:   "咒語新增時間：",
 	RiftSpellDetailCastCount: "咒語施放次數：",
+
+	// Ritual detail view
+	RiftRitualDetailName:        "儀式名稱：",
+	RiftRitualDetailCommands:    "儀式命令：",
+	RiftRitualDetailAddedAt:     "儀式新增時間：",
+	RiftRitualDetailInvokeCount: "儀式執行次數：",
 
 	// Waypoint detail view
 	RiftWaypointDetailName:           "航點名稱：",
@@ -246,6 +253,40 @@ var zH_HANT = LanguageMapping{
 	RemoveRuneLeaveOptionName:  "移除離開時符文",
 	RemoveRuneLeaveOptionDesc:  "清除離開此航點時執行的命令",
 
+	// Scroll interactive UI
+	ScrollInteractiveError:                      "rift：儀式卷軸互動介面啟動失敗，[ERROR: %s]",
+	RiftRitualRetrieveAllError:                  "rift：取得儀式失敗",
+	RitualInfoListTitle:                         "儀式卷軸",
+	RitualUIUpKeyHelp:                           "上移",
+	RitualUIUpKeyHelpDescription:                "將游標移至上一個儀式",
+	RitualUIDownKeyHelp:                         "下移",
+	RitualUIDownKeyHelpDescription:              "將游標移至下一個儀式",
+	RitualUIQuitKeyHelp:                         "退出",
+	RitualUIQuitKeyHelpDescription:              "退出儀式卷軸互動介面",
+	RitualUIHelpKeyHelp:                         "說明",
+	RitualUIHelpKeyHelpDescription:              "顯示或隱藏完整的快捷鍵列表",
+	RitualInscribeKeyHelp:                       "刻錄",
+	RitualInscribeKeyHelpDescription:            "刻錄一個新儀式",
+	RitualInvokeKeyHelp:                         "執行",
+	RitualInvokeKeyHelpDescription:              "在目前工作目錄執行儀式，或在已發現的航點處執行",
+	RitualReinscribeKeyHelp:                     "重新刻錄",
+	RitualReinscribeKeyHelpDescription:          "編輯所選儀式",
+	RitualForgetKey:                             "遺忘",
+	RitualForgetKeyDescription:                  "永久遺忘所選儀式",
+	RitualClosePopUp:                            "關閉彈窗",
+	RitualClosePopUpDescription:                 "關閉目前彈窗而不儲存",
+	RitualUIInscribeKeyHelp:                     "刻錄",
+	RitualUINextInputKeyHelp:                    "下一個輸入",
+	RitualUIPreviousInputKeyHelp:                "上一個輸入",
+	RitualUIChooseInvokeLocationKeyHelp:         "選擇執行位置",
+	RitualUIChooseWaypointInvokeLocationKeyHelp: "選擇執行儀式的航點",
+	RitualNameInputPlaceHolder:                  "輸入儀式的名稱",
+	RitualDescriptionInputPlaceHolder:           "輸入儀式的描述（可選）",
+	RitualCommandsInputPlaceHolder:              "輸入儀式的命令",
+	RitualNameInputTitle:                        "儀式名稱：",
+	RitualDescriptionInputTitle:                 "儀式描述：",
+	RitualCommandsInputTitle:                    "儀式命令：",
+
 	// Cast location option popup
 	CastLocationOptionTitle:               "施放位置",
 	CastLocationOptionCurrent:             "當前目錄",
@@ -253,6 +294,14 @@ var zH_HANT = LanguageMapping{
 	CastLocationOptionWaypoint:            "航點",
 	CastLocationOptionWaypointDescription: "從已發現的航點中選擇並在那裡施放咒語",
 	CastWaypointLocationOptionTitle:       "選擇航點",
+
+	// Invoke location option popup
+	InvokeLocationOptionTitle:               "執行位置",
+	InvokeLocationOptionCurrent:             "當前目錄",
+	InvokeLocationOptionCurrentDescription:  "在當前工作目錄中執行儀式",
+	InvokeLocationOptionWaypoint:            "航點",
+	InvokeLocationOptionWaypointDescription: "從已發現的航點中選擇並在那裡執行儀式",
+	InvokeWaypointLocationOptionTitle:       "選擇航點",
 
 	// Setup
 	CheckAndRunSetupError:  "rift：設定失敗，[ERROR: %s]",

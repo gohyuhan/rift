@@ -94,6 +94,7 @@ type LanguageMapping struct {
 	RiftFlagRitualOverrideDescription     string
 	RiftRitualDescription                 string
 	RiftFlagRitualForgetDescription       string
+	RiftScrollDescription                 string
 
 	// Spell operations
 	RiftSpellSaved                      string
@@ -146,6 +147,12 @@ type LanguageMapping struct {
 	RiftSpellDetailCommand   string
 	RiftSpellDetailAddedAt   string
 	RiftSpellDetailCastCount string
+
+	// Ritual detail view
+	RiftRitualDetailName        string
+	RiftRitualDetailCommands    string
+	RiftRitualDetailAddedAt     string
+	RiftRitualDetailInvokeCount string
 
 	// Waypoint detail view
 	RiftWaypointDetailName           string
@@ -238,6 +245,40 @@ type LanguageMapping struct {
 	RemoveRuneLeaveOptionName                   string
 	RemoveRuneLeaveOptionDesc                   string
 
+	// Scroll interactive UI
+	ScrollInteractiveError                      string
+	RiftRitualRetrieveAllError                  string
+	RitualInfoListTitle                         string
+	RitualUIUpKeyHelp                           string
+	RitualUIUpKeyHelpDescription                string
+	RitualUIDownKeyHelp                         string
+	RitualUIDownKeyHelpDescription              string
+	RitualUIQuitKeyHelp                         string
+	RitualUIQuitKeyHelpDescription              string
+	RitualUIHelpKeyHelp                         string
+	RitualUIHelpKeyHelpDescription              string
+	RitualInscribeKeyHelp                       string
+	RitualInscribeKeyHelpDescription            string
+	RitualInvokeKeyHelp                         string
+	RitualInvokeKeyHelpDescription              string
+	RitualReinscribeKeyHelp                     string
+	RitualReinscribeKeyHelpDescription          string
+	RitualForgetKey                             string
+	RitualForgetKeyDescription                  string
+	RitualClosePopUp                            string
+	RitualClosePopUpDescription                 string
+	RitualUIInscribeKeyHelp                     string
+	RitualUINextInputKeyHelp                    string
+	RitualUIPreviousInputKeyHelp                string
+	RitualUIChooseInvokeLocationKeyHelp         string
+	RitualUIChooseWaypointInvokeLocationKeyHelp string
+	RitualNameInputPlaceHolder                  string
+	RitualDescriptionInputPlaceHolder           string
+	RitualCommandsInputPlaceHolder              string
+	RitualNameInputTitle                        string
+	RitualDescriptionInputTitle                 string
+	RitualCommandsInputTitle                    string
+
 	// Cast location option popup
 	CastLocationOptionTitle               string
 	CastLocationOptionCurrent             string
@@ -245,6 +286,14 @@ type LanguageMapping struct {
 	CastLocationOptionWaypoint            string
 	CastLocationOptionWaypointDescription string
 	CastWaypointLocationOptionTitle       string
+
+	// Invoke location option popup
+	InvokeLocationOptionTitle               string
+	InvokeLocationOptionCurrent             string
+	InvokeLocationOptionCurrentDescription  string
+	InvokeLocationOptionWaypoint            string
+	InvokeLocationOptionWaypointDescription string
+	InvokeWaypointLocationOptionTitle       string
 
 	// Setup
 	CheckAndRunSetupError  string
