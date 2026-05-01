@@ -101,6 +101,9 @@ func initEngraveRuneCommandsPopUpModel(m *RuneInteractiveModel, runeEngraveOptio
 	runeCommandsTextArea.SetValue(value)
 	runeCommandsTextArea.Placeholder = i18n.LANGUAGEMAPPING.RuneCommandsPlaceHolder
 	runeCommandsTextArea.SetVirtualCursor(true)
+	runeCommandsTextArea.DynamicHeight = true
+	runeCommandsTextArea.MinHeight = 3
+	runeCommandsTextArea.MoveToEnd()
 	focusCmd := runeCommandsTextArea.Focus()
 
 	popUpModel := &EngraveRuneCommandsPopUpModel{

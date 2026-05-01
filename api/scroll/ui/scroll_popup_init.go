@@ -33,21 +33,26 @@ func initInscribePopUpModel(m *ScrollInteractiveModel, ritualName string, edit b
 	ritualDescInput.SetValue("")
 	ritualDescInput.Placeholder = i18n.LANGUAGEMAPPING.RitualDescriptionInputPlaceHolder
 	ritualDescInput.SetVirtualCursor(true)
-	ritualDescInput.SetHeight(3)
+	ritualDescInput.DynamicHeight = true
+	ritualDescInput.MinHeight = 1
+	ritualDescInput.MaxHeight = 3
 
 	ritualCmdsInput := textarea.New()
 	ritualCmdsInput.SetValue("")
 	ritualCmdsInput.Placeholder = i18n.LANGUAGEMAPPING.RitualCommandsInputPlaceHolder
 	ritualCmdsInput.SetVirtualCursor(true)
-	ritualCmdsInput.SetHeight(7)
+	ritualCmdsInput.DynamicHeight = true
+	ritualCmdsInput.MinHeight = 3
+	ritualCmdsInput.MaxHeight = 7
 
 	var focusCmd tea.Cmd
 	if edit {
 		ritualInfoForEdit, viewErr := features.RetrieveRitualInfoDetailForEdit(ritualName)
 		if viewErr == nil {
-			ritualNameInput.SetValue(ritualInfoForEdit.RitualName)
 			ritualDescInput.SetValue(ritualInfoForEdit.RitualDesc)
 			ritualCmdsInput.SetValue(apiUtils.ParseRitualCommandsToString(ritualInfoForEdit.RitualCmds))
+			ritualDescInput.MoveToEnd()
+			ritualCmdsInput.MoveToEnd()
 		}
 		focusCmd = ritualDescInput.Focus()
 		totalInputField = 3 // if in edit mode, only 3 input fields are needed since the ritual name cannot be changed
